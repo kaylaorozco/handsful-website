@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../sections/Hero.astro';
+import Problem from '../sections/Problem.astro';
+import Features from '../sections/Features.astro';
+import SocialProof from '../sections/SocialProof.astro';
+import Faq from '../sections/Faq.astro';
+import FinalCta from '../sections/FinalCta.astro';
+import { SITE } from '../config';
+import { FAQ_ITEMS } from '../data/faq';
+
+// --- Structured data ---------------------------------------------------
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: SITE.name,
+  url: SITE.url,
+  logo: `${SITE.url}/apple-touch-icon.png`,
+  email: SITE.contactEmail,
+  slogan: SITE.tagline,
+};
+
+const appSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: SITE.name,
+  applicationCategory: 'LifestyleApplication',
+  operatingSystem: 'iOS, Android',
+  description: SITE.description,
+  url: SITE.url,
+  // Pre-launch: no offers/ratings yet. Add an AggregateRating and Offer
+  // (price, priceCurrency) once the app is live and has real reviews.
+  releaseNotes: 'Coming soon — join the waitlist at handsful.app',
+};
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_ITEMS.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer },
+  })),
+};
+---
+
+<BaseLayout structuredData={[organizationSchema, appSchema, faqSchema]}>
+  <Hero />
+  <Problem />
+  <Features />
+  <SocialProof />
+  <Faq />
+  <FinalCta />
+</BaseLayout>

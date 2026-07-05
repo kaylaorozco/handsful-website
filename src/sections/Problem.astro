@@ -1,0 +1,82 @@
+---
+const pains = [
+  {
+    title: 'Log it twice. Or three times.',
+    body: 'Single-baby apps make you switch profiles for every feed, nap and diaper. At 3am. With a bottle in each hand.',
+  },
+  {
+    title: 'Comparison by mental math',
+    body: 'Is she eating less than her brother this week? Flip to one profile, memorize, flip back, squint. That’s not a comparison view — that’s a memory test.',
+  },
+  {
+    title: 'Handoff chaos',
+    body: 'Your partner takes the night shift, grandma covers the morning — and nobody’s sure who fed whom. The data lives in one person’s phone, or nowhere.',
+  },
+];
+---
+
+<section class="problem section">
+  <div class="container--narrow problem__intro">
+    <h2>Every baby app assumes one baby</h2>
+    <p class="problem__lede">
+      Trackers built for singletons treat your second (and third) baby like an add-on.
+      Parents of multiples deserve better than a workaround.
+    </p>
+  </div>
+  <div class="container problem__grid">
+    {
+      pains.map((pain) => (
+        <article class="problem__card">
+          <h3 class="problem__card-title">{pain.title}</h3>
+          <p class="problem__card-body">{pain.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .problem {
+    background: var(--warm-bg);
+  }
+  .problem__intro {
+    text-align: center;
+  }
+  .problem__intro h2 {
+    color: var(--teal);
+  }
+  .problem__lede {
+    margin-top: var(--space-4);
+    color: var(--taupe);
+    font-size: 19px;
+    line-height: 28px;
+  }
+  .problem__grid {
+    margin-top: var(--space-12);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+  .problem__card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    box-shadow: 0 2px 12px rgba(34, 32, 29, 0.06);
+  }
+  .problem__card-title {
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 600;
+  }
+  .problem__card-body {
+    margin-top: var(--space-3);
+    color: var(--taupe);
+    font-size: 15px;
+    line-height: 22px;
+  }
+  @media (max-width: 800px) {
+    .problem__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

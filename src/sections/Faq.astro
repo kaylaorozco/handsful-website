@@ -1,0 +1,83 @@
+---
+/**
+ * FAQ accordion — native <details>/<summary>, zero JavaScript.
+ * The same FAQ_ITEMS data feeds the FAQPage structured data on the homepage.
+ */
+import { FAQ_ITEMS } from '../data/faq';
+---
+
+<section class="faq section" id="faq">
+  <div class="container--narrow">
+    <h2 class="faq__title">Questions from tired parents</h2>
+    <div class="faq__list">
+      {
+        FAQ_ITEMS.map((item) => (
+          <details class="faq__item">
+            <summary class="faq__question">
+              <h3 class="faq__question-text">{item.question}</h3>
+              <span class="faq__marker" aria-hidden="true" />
+            </summary>
+            <p class="faq__answer">{item.answer}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq {
+    background: #fff;
+  }
+  .faq__title {
+    text-align: center;
+    color: var(--teal);
+  }
+  .faq__list {
+    margin-top: var(--space-12);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .faq__item {
+    background: var(--warm-bg);
+    border-radius: var(--radius-md);
+    padding-inline: var(--space-6);
+  }
+  .faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    min-height: 44px;
+    padding-block: var(--space-4);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq__question::-webkit-details-marker {
+    display: none;
+  }
+  .faq__question-text {
+    font-family: var(--font-body); /* FAQ questions are functional copy, not headlines */
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 700;
+    margin: 0;
+  }
+  .faq__marker {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid var(--sky);
+    border-bottom: 2px solid var(--sky);
+    transform: rotate(45deg);
+    transition: transform 150ms ease;
+  }
+  details[open] .faq__marker {
+    transform: rotate(-135deg);
+  }
+  .faq__answer {
+    padding-bottom: var(--space-6);
+    color: var(--taupe-dark);
+  }
+</style>

@@ -1,0 +1,135 @@
+---
+import Wordmark from './Wordmark.astro';
+import { SITE, SOCIAL } from '../config';
+
+const year = new Date().getFullYear();
+
+const socials = [
+  { label: 'Instagram', url: SOCIAL.instagram },
+  { label: 'TikTok', url: SOCIAL.tiktok },
+  { label: 'X', url: SOCIAL.x },
+];
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <a href="/" aria-label="Handsful home" class="footer__logo">
+        <Wordmark />
+      </a>
+      <p class="footer__tagline">{SITE.tagline}</p>
+    </div>
+
+    <nav class="footer__col" aria-label="Product">
+      <h4 class="footer__heading">Product</h4>
+      <a href="/#features">Features</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/#waitlist">Join the waitlist</a>
+    </nav>
+
+    <nav class="footer__col" aria-label="Legal">
+      <h4 class="footer__heading">Legal</h4>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/cookie-policy">Cookie Policy</a>
+      <a href="/terms-of-service">Terms of Service</a>
+    </nav>
+
+    <div class="footer__col">
+      <h4 class="footer__heading">Say hi</h4>
+      <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
+      <ul class="footer__social" aria-label="Social media">
+        {
+          socials.map(({ label, url }) =>
+            url ? (
+              <li>
+                <a href={url} rel="me noopener">
+                  {label}
+                </a>
+              </li>
+            ) : (
+              <li>
+                {/* Placeholder until the profile exists — set the URL in src/config.ts */}
+                <span class="footer__social-soon">{label} · soon</span>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer__legalline">
+    <p>© {year} Handsful. Made with love (and very little sleep).</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--ink);
+    color: var(--warm-bg);
+    padding-block: var(--space-16) var(--space-8);
+  }
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: var(--space-8);
+  }
+  .footer__logo {
+    display: inline-block;
+    color: var(--warm-bg);
+  }
+  .footer__tagline {
+    margin-top: var(--space-4);
+    color: rgba(250, 247, 242, 0.75);
+    font-size: 15px;
+    line-height: 22px;
+    max-width: 32ch;
+  }
+  .footer__heading {
+    color: var(--butter);
+    margin-bottom: var(--space-3);
+  }
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .footer__col a {
+    color: var(--warm-bg);
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 22px;
+    padding-block: var(--space-1);
+  }
+  .footer__col a:hover {
+    color: var(--butter);
+  }
+  .footer__social {
+    list-style: none;
+    margin: var(--space-2) 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .footer__social-soon {
+    color: rgba(250, 247, 242, 0.45);
+    font-size: 15px;
+  }
+  .footer__legalline {
+    margin-top: var(--space-12);
+    padding-top: var(--space-6);
+    border-top: 1px solid rgba(250, 247, 242, 0.15);
+    color: rgba(250, 247, 242, 0.6);
+    font-size: 13px;
+    line-height: 18px;
+  }
+  @media (max-width: 800px) {
+    .footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

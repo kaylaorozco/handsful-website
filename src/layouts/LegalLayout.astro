@@ -1,0 +1,81 @@
+---
+/**
+ * Shared layout for legal pages. While `placeholder` is true the page shows a
+ * prominent pending-copy notice and is noindex'd (and excluded from the
+ * sitemap — see astro.config.mjs). When final legal copy lands:
+ *   1. Replace the page content.
+ *   2. Set placeholder={false} on that page.
+ *   3. Remove the page from the sitemap filter in astro.config.mjs.
+ */
+import BaseLayout from './BaseLayout.astro';
+import { SITE } from '../config';
+
+interface Props {
+  title: string;
+  description: string;
+  placeholder?: boolean;
+  lastUpdated?: string;
+}
+
+const { title, description, placeholder = true, lastUpdated } = Astro.props;
+---
+
+<BaseLayout title={`${title} — ${SITE.name}`} description={description} noindex={placeholder}>
+  <article class="legal section">
+    <div class="container--narrow">
+      <h1>{title}</h1>
+      {lastUpdated && <p class="legal__updated">Last updated: {lastUpdated}</p>}
+
+      {
+        placeholder && (
+          <div class="legal__placeholder" role="note">
+            <strong>Placeholder — final legal copy pending.</strong>
+            <p>
+              This page is a structural placeholder. The final {title} will be published here
+              before Handsful launches. Questions in the meantime? Email{' '}
+              <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>.
+            </p>
+          </div>
+        )
+      }
+
+      <div class="legal__body">
+        <slot />
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal__updated {
+    margin-top: var(--space-3);
+    color: var(--taupe);
+    font-size: 15px;
+  }
+  .legal__placeholder {
+    margin-top: var(--space-8);
+    padding: var(--space-6);
+    background: #fff7e8;
+    border: 2px solid var(--butter);
+    border-radius: var(--radius-md);
+  }
+  .legal__placeholder p {
+    margin-top: var(--space-2);
+    font-size: 15px;
+    line-height: 22px;
+    color: var(--taupe-dark);
+  }
+  .legal__body {
+    margin-top: var(--space-8);
+  }
+  .legal__body :global(h2) {
+    margin-top: var(--space-8);
+    font-size: 24px;
+    line-height: 30px;
+  }
+  .legal__body :global(p),
+  .legal__body :global(li) {
+    margin-top: var(--space-3);
+    color: var(--taupe-dark);
+  }
+</style>

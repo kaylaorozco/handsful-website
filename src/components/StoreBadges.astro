@@ -1,0 +1,58 @@
+---
+/**
+ * App Store / Play Store badges — rendered by WaitlistCta when CTA.mode is
+ * 'stores'. Before flipping the mode:
+ *
+ *  1. Set CTA.appStoreUrl / CTA.playStoreUrl in src/config.ts.
+ *  2. Download the OFFICIAL badge artwork (required by both stores' brand rules —
+ *     don't redraw them):
+ *       Apple:  https://developer.apple.com/app-store/marketing/guidelines/  → "Download on the App Store" SVG
+ *       Google: https://play.google.com/intl/en_us/badges/                   → "Get it on Google Play" PNG/SVG
+ *  3. Save as public/images/badges/app-store.svg and public/images/badges/google-play.svg.
+ *
+ * A badge renders only when its URL is set, so iOS-first launches work too.
+ */
+import { CTA } from '../config';
+---
+
+<div class="store-badges">
+  {
+    CTA.appStoreUrl && (
+      <a href={CTA.appStoreUrl} class="store-badges__link">
+        <img
+          src="/images/badges/app-store.svg"
+          alt="Download Handsful on the App Store"
+          width="180"
+          height="60"
+          loading="lazy"
+        />
+      </a>
+    )
+  }
+  {
+    CTA.playStoreUrl && (
+      <a href={CTA.playStoreUrl} class="store-badges__link">
+        <img
+          src="/images/badges/google-play.svg"
+          alt="Get Handsful on Google Play"
+          width="202"
+          height="60"
+          loading="lazy"
+        />
+      </a>
+    )
+  }
+</div>
+
+<style>
+  .store-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    align-items: center;
+  }
+  .store-badges__link {
+    display: inline-block;
+    line-height: 0;
+  }
+</style>

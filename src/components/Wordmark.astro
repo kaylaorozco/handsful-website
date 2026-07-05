@@ -1,0 +1,30 @@
+---
+/**
+ * Inline, recolorable Handsful wordmark. The source SVG is filled white;
+ * we swap fills to currentColor so CSS `color` controls it (Ink in the
+ * header, Warm bg in the footer — per approved logo backgrounds).
+ */
+import raw from '../assets/wordmark.svg?raw';
+
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+
+const svg = raw
+  .replace(/fill="white"/g, 'fill="currentColor"')
+  .replace(
+    /<svg width="1024" height="406"/,
+    `<svg class="wordmark ${className}" role="img" aria-label="Handsful"`,
+  );
+---
+
+<Fragment set:html={svg} />
+
+<style is:global>
+  .wordmark {
+    display: block;
+    height: 34px;
+    width: auto;
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+import { FEATURES } from '../data/features';
+---
+
+<section class="features section" id="features">
+  <div class="container--narrow features__intro">
+    <h2>Built for your kind of busy</h2>
+    <p class="features__lede">
+      Everything in Handsful starts from one assumption: there's more than one baby.
+    </p>
+  </div>
+  <div class="container features__grid">
+    {
+      FEATURES.map((feature) => (
+        <article class="features__card">
+          {/* Brand icon spec: 24px grid, 1.5px stroke, rounded caps/joins, single color */}
+          <span class="features__icon" aria-hidden="true">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              {feature.iconPaths.map((d) => (
+                <path d={d} />
+              ))}
+            </svg>
+          </span>
+          <h3 class="features__card-title">{feature.title}</h3>
+          <p class="features__card-body">{feature.description}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .features {
+    background: #fff;
+  }
+  .features__intro {
+    text-align: center;
+  }
+  .features__intro h2 {
+    color: var(--teal);
+  }
+  .features__lede {
+    margin-top: var(--space-4);
+    color: var(--taupe);
+    font-size: 19px;
+    line-height: 28px;
+  }
+  .features__grid {
+    margin-top: var(--space-12);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+  .features__card {
+    background: var(--warm-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+  }
+  .features__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    background: var(--gradient-action);
+    color: #fff;
+    margin-bottom: var(--space-4);
+  }
+  .features__card-title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .features__card-body {
+    margin-top: var(--space-3);
+    color: var(--taupe);
+  }
+  @media (max-width: 800px) {
+    .features__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

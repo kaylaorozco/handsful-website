@@ -1,0 +1,19 @@
+# build output
+dist/
+.vercel/
+.astro/
+
+# dependencies
+node_modules/
+
+# environment — real secrets live in Vercel project settings / .env
+.env
+.env.*
+!.env.example
+
+# generated at build time by scripts/generate-og.mjs
+public/images/og.png
+
+# OS / editor
+.DS_Store
+*.log

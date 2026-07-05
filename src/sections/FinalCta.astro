@@ -1,0 +1,42 @@
+---
+import WaitlistCta from '../components/WaitlistCta.astro';
+---
+
+<section class="final-cta section">
+  <div class="container final-cta__inner">
+    <h2 class="final-cta__title">Two hands. However many babies.<br />One tracker.</h2>
+    <p class="final-cta__sub">
+      Be first in line when Handsful launches — waitlist members get access before everyone else.
+    </p>
+    <div class="final-cta__form">
+      <WaitlistCta variant="on-gradient" formId="waitlist-email-footer" source="footer-cta" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .final-cta {
+    background: var(--gradient-action); /* two-tone action gradient — short copy only */
+    color: #fff;
+  }
+  .final-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .final-cta__title {
+    color: #fff;
+  }
+  .final-cta__sub {
+    margin-top: var(--space-4);
+    margin-bottom: var(--space-8);
+    font-size: 19px;
+    line-height: 28px;
+    max-width: 46ch;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .final-cta__form :global(.waitlist-form__row) {
+    justify-content: center;
+  }
+</style>

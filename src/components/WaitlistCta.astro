@@ -1,0 +1,175 @@
+---
+/**
+ * The primary conversion component. Renders one of two modes from src/config.ts:
+ *
+ *   CTA.mode === 'waitlist' → email capture form posting to /api/subscribe
+ *   CTA.mode === 'stores'   → App Store / Play Store badges (pre-order/launch)
+ *
+ * The swap is a one-line config change; both modes share the same slot in
+ * every section, so no redesign is needed at launch.
+ *
+ * `variant` adapts styling to its background:
+ *   'on-gradient' → hero (solid Butter button per brand content-on-gradient rule)
+ *   'on-solid'    → cream/white sections (action-gradient button)
+ */
+import { CTA } from '../config';
+import StoreBadges from './StoreBadges.astro';
+
+interface Props {
+  variant?: 'on-gradient' | 'on-solid';
+  /** Unique per instance — keeps input ids/labels valid with multiple forms per page. */
+  formId: string;
+  /** Passed through to the API for attribution (e.g. "hero", "footer-cta"). */
+  source: string;
+}
+
+const { variant = 'on-solid', formId, source } = Astro.props;
+---
+
+{
+  CTA.mode === 'stores' ? (
+    <StoreBadges />
+  ) : (
+    <form
+      class={`waitlist-form waitlist-form--${variant}`}
+      method="POST"
+      action="/api/subscribe"
+      data-waitlist-form
+      novalidate
+    >
+      <div class="waitlist-form__row">
+        <label class="visually-hidden" for={formId}>
+          Email address
+        </label>
+        <input
+          id={formId}
+          class="waitlist-form__input"
+          type="email"
+          name="email"
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+        {/* Honeypot — humans never see or fill this */}
+        <input
+          class="waitlist-form__hp"
+          type="text"
+          name="nickname"
+          tabindex="-1"
+          autocomplete="off"
+          aria-hidden="true"
+        />
+        <input type="hidden" name="source" value={source} />
+        <button
+          class={`btn ${variant === 'on-gradient' ? 'btn--solid' : 'btn--primary'}`}
+          type="submit"
+        >
+          Join the waitlist
+        </button>
+      </div>
+      <p class="waitlist-form__note" data-note>
+        Launching soon on iOS &amp; Android. No spam — just a heads-up when we're live.
+      </p>
+      <p class="waitlist-form__status" data-status role="status" aria-live="polite"></p>
+    </form>
+  )
+}
+
+<script>
+  // Progressive enhancement: without JS the form still POSTs to /api/subscribe
+  // (which returns JSON); with JS we submit inline and show friendly states.
+  document.querySelectorAll<HTMLFormElement>('[data-waitlist-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const note = form.querySelector<HTMLElement>('[data-note]')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const email = form.querySelector<HTMLInputElement>('input[type="email"]')!;
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      status.textContent = '';
+      if (!email.value || !email.checkValidity()) {
+        status.textContent = 'That email looks a little off — mind checking it?';
+        email.focus();
+        return;
+      }
+
+      button.disabled = true;
+      const originalLabel = button.textContent;
+      button.textContent = 'Joining…';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        form.querySelector('.waitlist-form__row')!.setAttribute('hidden', '');
+        note.hidden = true;
+        status.textContent = "You're on the list! We'll email you the moment Handsful is ready. 🎉";
+      } catch {
+        status.textContent = "That didn't go through — your typing's fine, just try again.";
+        button.disabled = false;
+        button.textContent = originalLabel;
+      }
+    });
+  });
+</script>
+
+<style>
+  .waitlist-form {
+    max-width: 480px;
+  }
+  .waitlist-form__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  .waitlist-form__input {
+    flex: 1 1 220px;
+    min-height: 48px;
+    padding: var(--space-3) var(--space-4);
+    border: 2px solid transparent;
+    border-radius: var(--radius-pill);
+    background: #fff;
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+  }
+  .waitlist-form--on-solid .waitlist-form__input {
+    border-color: rgba(34, 32, 29, 0.15);
+  }
+  .waitlist-form__input:focus-visible {
+    outline: none;
+    border-color: var(--butter);
+  }
+  .waitlist-form__hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  .waitlist-form__note {
+    margin-top: var(--space-3);
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .waitlist-form--on-gradient .waitlist-form__note {
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .waitlist-form--on-solid .waitlist-form__note {
+    color: var(--taupe);
+  }
+  .waitlist-form__status {
+    margin-top: var(--space-3);
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  .waitlist-form--on-gradient .waitlist-form__status {
+    color: #fff;
+  }
+  .waitlist-form--on-solid .waitlist-form__status {
+    color: var(--teal);
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+import WaitlistCta from '../components/WaitlistCta.astro';
+import { SITE } from '../config';
+import hMark from '../assets/h-mark.svg?raw';
+
+const decorativeMark = hMark.replace(
+  /<svg width="1024" height="1024"/,
+  '<svg class="hero__mark" aria-hidden="true"',
+);
+---
+
+<!-- Signature gradient: approved for marketing hero. Copy stays short per the
+     "never behind long text" rule; headline is large-text white per the brand's
+     accessible-pairings table. -->
+<section class="hero" id="waitlist">
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <p class="hero__eyebrow">{SITE.tagline}</p>
+      <h1 class="hero__title">The baby tracker built for twins, triplets&nbsp;&amp;&nbsp;more</h1>
+      <p class="hero__sub">
+        One tap logs a feed for everyone. One screen shows who ate, who slept, who's due.
+        Finally — a tracker that starts where your family does.
+      </p>
+      <WaitlistCta variant="on-gradient" formId="waitlist-email-hero" source="hero" />
+    </div>
+    <div class="hero__art" aria-hidden="true">
+      <Fragment set:html={decorativeMark} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    background: var(--gradient-signature);
+    color: #fff;
+    overflow: hidden;
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    align-items: center;
+    gap: var(--space-8);
+    padding-block: clamp(var(--space-12), 9vw, var(--space-24));
+  }
+  .hero__eyebrow {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--butter);
+    margin-bottom: var(--space-4);
+  }
+  .hero__title {
+    color: #fff;
+    max-width: 15ch;
+  }
+  .hero__sub {
+    margin-block: var(--space-6);
+    font-size: 19px;
+    line-height: 28px;
+    font-weight: 500;
+    max-width: 46ch;
+  }
+  .hero__art {
+    display: flex;
+    justify-content: center;
+  }
+  .hero__art :global(.hero__mark) {
+    width: min(340px, 70%);
+    height: auto;
+    filter: drop-shadow(0 12px 40px rgba(34, 32, 29, 0.25));
+  }
+  @media (max-width: 800px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+    }
+    .hero__art {
+      order: -1;
+    }
+    .hero__art :global(.hero__mark) {
+      width: 140px;
+    }
+  }
+</style>

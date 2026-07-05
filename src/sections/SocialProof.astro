@@ -1,0 +1,102 @@
+---
+/**
+ * Social proof — testimonials + press. Fully structured but renders NOTHING
+ * while src/data/testimonials.ts is empty, so the live page never shows fake
+ * quotes. Add real entries there and this section appears, no markup changes.
+ */
+import { TESTIMONIALS, PRESS } from '../data/testimonials';
+
+const hasContent = TESTIMONIALS.length > 0 || PRESS.length > 0;
+---
+
+{
+  hasContent && (
+    <section class="proof section" id="loved-by">
+      <div class="container--narrow proof__intro">
+        <h2>Loved by parents of multiples</h2>
+      </div>
+
+      {TESTIMONIALS.length > 0 && (
+        <div class="container proof__grid">
+          {TESTIMONIALS.map((t) => (
+            <figure class="proof__card">
+              <blockquote class="proof__quote">“{t.quote}”</blockquote>
+              <figcaption class="proof__attribution">
+                <strong>{t.name}</strong> · {t.detail}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      )}
+
+      {PRESS.length > 0 && (
+        <ul class="container proof__press" aria-label="Press coverage">
+          {PRESS.map((p) => (
+            <li>
+              <a href={p.url} rel="noopener">
+                {p.logo ? <img src={p.logo} alt={p.outlet} height="28" loading="lazy" /> : p.outlet}
+                <span class="proof__press-quote">“{p.quote}”</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  )
+}
+
+<style>
+  .proof {
+    background: var(--warm-bg);
+  }
+  .proof__intro {
+    text-align: center;
+  }
+  .proof__intro h2 {
+    color: var(--teal);
+  }
+  .proof__grid {
+    margin-top: var(--space-12);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-6);
+  }
+  .proof__card {
+    margin: 0;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    box-shadow: 0 2px 12px rgba(34, 32, 29, 0.06);
+  }
+  .proof__quote {
+    margin: 0;
+    font-size: 17px;
+    line-height: 26px;
+  }
+  .proof__attribution {
+    margin-top: var(--space-4);
+    color: var(--taupe);
+    font-size: 15px;
+  }
+  .proof__press {
+    margin: var(--space-12) auto 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-8);
+  }
+  .proof__press a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+    color: var(--taupe-dark);
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .proof__press-quote {
+    font-weight: 400;
+    color: var(--taupe);
+  }
+</style>

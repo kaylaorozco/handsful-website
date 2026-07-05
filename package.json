@@ -1,0 +1,22 @@
+{
+  "name": "handsful-website",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Marketing site for Handsful — the baby tracker built for twins, triplets & multiples. https://handsful.app",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "npm run og && astro build",
+    "preview": "astro preview",
+    "og": "node scripts/generate-og.mjs",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.0",
+    "@astrojs/vercel": "^8.0.0",
+    "@fontsource-variable/fredoka": "^5.1.0",
+    "@fontsource-variable/karla": "^5.1.0",
+    "astro": "^5.1.0",
+    "sharp": "^0.33.0"
+  }
+}

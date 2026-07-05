@@ -1,0 +1,58 @@
+---
+import Wordmark from './Wordmark.astro';
+---
+
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="header__logo" aria-label="Handsful home">
+      <Wordmark />
+    </a>
+    <nav class="header__nav" aria-label="Primary">
+      <a href="/#features">Features</a>
+      <a href="/#faq">FAQ</a>
+      <a href="/#waitlist" class="btn btn--primary header__cta">Join the waitlist</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .header {
+    background: var(--warm-bg);
+    border-bottom: 1px solid rgba(34, 32, 29, 0.08);
+  }
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding-block: var(--space-4);
+  }
+  .header__logo {
+    color: var(--ink);
+  }
+  .header__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .header__nav a:not(.btn) {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    text-decoration: none;
+    padding: var(--space-2) 0; /* keep ≥44px effective tap area with line-height */
+  }
+  .header__nav a:not(.btn):hover {
+    color: var(--sky);
+  }
+  .header__cta {
+    min-height: 44px;
+    padding-block: var(--space-2);
+  }
+  @media (max-width: 560px) {
+    .header__nav a:not(.btn) {
+      display: none; /* on small screens: logo + CTA only */
+    }
+  }
+</style>
