@@ -1,14 +1,15 @@
 # Handoff notes — what's left to do
 
 Status as of 2026-07-05: site is built, verified locally, and pushed to
-GitHub (`kaylaorozco/handsful-website`, private). **Not yet deployed.**
+GitHub (`mesquite-thorn/handsful-website`, private). **Not yet deployed.**
 This file is the to-do list from here; `LAUNCH-CHECKLIST.md` covers the
 launch-day flips (store badges, legal copy going final, etc.).
 
 ## 1. Deploy to Vercel (~3 min)
 
 - [ ] Go to <https://vercel.com/new>, sign in with GitHub, import
-      `kaylaorozco/handsful-website`. No build settings needed — the
+      `mesquite-thorn/handsful-website` (grant Vercel access to the
+      mesquite-thorn org when prompted). No build settings needed — the
       `@astrojs/vercel` adapter is preconfigured.
 - [ ] Every push to `main` auto-deploys after this; branches get preview URLs.
 
