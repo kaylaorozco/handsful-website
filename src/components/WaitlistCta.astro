@@ -67,8 +67,12 @@ const { variant = 'on-solid', formId, source } = Astro.props;
           Join the waitlist
         </button>
       </div>
+      {/* Consent language deliberately covers marketing emails (launch news, tips,
+          offers) so the list can be used beyond a single launch announcement.
+          Keep this in sync with the Privacy Policy's marketing section. */}
       <p class="waitlist-form__note" data-note>
-        Launching soon on iOS &amp; Android. No spam — just a heads-up when we're live.
+        Launching soon on iOS &amp; Android. We'll send launch news, early access, and the
+        occasional tip for parents of multiples — unsubscribe anytime.
       </p>
       <p class="waitlist-form__status" data-status role="status" aria-live="polite"></p>
     </form>

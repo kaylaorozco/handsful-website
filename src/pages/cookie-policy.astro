@@ -1,5 +1,6 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { EMAILS } from '../config';
 ---
 
 <LegalLayout
@@ -23,5 +24,7 @@ import LegalLayout from '../layouts/LegalLayout.astro';
   <p>[Pending final copy — how to change your consent choice and browser-level controls.]</p>
 
   <h2>4. Contact</h2>
-  <p>[Pending final copy.]</p>
+  <p>
+    Cookie and privacy questions: <a href={`mailto:${EMAILS.privacy}`}>{EMAILS.privacy}</a>
+  </p>
 </LegalLayout>

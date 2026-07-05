@@ -1,5 +1,6 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { EMAILS } from '../config';
 ---
 
 <LegalLayout
@@ -24,6 +25,16 @@ import LegalLayout from '../layouts/LegalLayout.astro';
   <h2>5. Your rights</h2>
   <p>[Pending final copy — access, correction, deletion, portability, complaints.]</p>
 
-  <h2>6. Contact</h2>
-  <p>[Pending final copy — data controller identity and contact details.]</p>
+  <h2>6. Marketing emails</h2>
+  <p>
+    [Pending final copy — waitlist signups consent to launch news, early access and
+    occasional marketing emails; every email includes an unsubscribe link. Keep in sync
+    with the waitlist form microcopy.]
+  </p>
+
+  <h2>7. Contact</h2>
+  <p>
+    [Pending final copy — data controller identity.] Privacy questions and data requests:
+    <a href={`mailto:${EMAILS.privacy}`}>{EMAILS.privacy}</a>
+  </p>
 </LegalLayout>

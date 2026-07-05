@@ -17,6 +17,17 @@ export const SITE = {
   ogImage: '/images/og.png',
 } as const;
 
+/**
+ * Role-based inboxes. These must actually exist (or forward) at your mail/domain
+ * provider before the pages referencing them go live — most registrars and
+ * Google Workspace/Fastmail support alias forwarding to one inbox.
+ */
+export const EMAILS = {
+  hello: 'hello@handsful.app', // general contact (footer)
+  privacy: 'privacy@handsful.app', // data/privacy requests (Privacy & Cookie Policy)
+  support: 'support@handsful.app', // app support once launched
+} as const;
+
 export const CTA = {
   /**
    * 'waitlist' → email capture form (pre-launch).

@@ -2,6 +2,13 @@
 
 Everything that changes when Handsful goes from waitlist → live app.
 
+## Domain email
+
+- [ ] Set up role inboxes (or aliases forwarding to one inbox) at the mail/domain
+      provider for every address in `EMAILS` in `src/config.ts`:
+      `hello@`, `privacy@`, `support@handsful.app`
+- [ ] Send a test email to each before the pages referencing them go live
+
 ## 2–4 weeks out: pre-order / pre-registration goes live
 
 - [ ] Download official badge artwork (both stores require unmodified official art):
