@@ -1,12 +1,7 @@
 ---
 import WaitlistCta from '../components/WaitlistCta.astro';
+import AppPeek from '../components/AppPeek.astro';
 import { SITE } from '../config';
-import hMark from '../assets/h-mark.svg?raw';
-
-const decorativeMark = hMark.replace(
-  /<svg width="1024" height="1024"/,
-  '<svg class="hero__mark" aria-hidden="true"',
-);
 ---
 
 <!-- Signature gradient: approved for marketing hero. Copy stays short per the
@@ -23,8 +18,8 @@ const decorativeMark = hMark.replace(
       </p>
       <WaitlistCta variant="on-gradient" formId="waitlist-email-hero" source="hero" />
     </div>
-    <div class="hero__art" aria-hidden="true">
-      <Fragment set:html={decorativeMark} />
+    <div class="hero__art">
+      <AppPeek />
     </div>
   </div>
 </section>
@@ -65,20 +60,14 @@ const decorativeMark = hMark.replace(
     display: flex;
     justify-content: center;
   }
-  .hero__art :global(.hero__mark) {
-    width: min(340px, 70%);
-    height: auto;
-    filter: drop-shadow(0 12px 40px rgba(34, 32, 29, 0.25));
-  }
   @media (max-width: 800px) {
     .hero__inner {
       grid-template-columns: 1fr;
     }
+    /* Copy + form stay first on mobile so the CTA is reachable fast;
+       the app peek follows below. */
     .hero__art {
-      order: -1;
-    }
-    .hero__art :global(.hero__mark) {
-      width: 140px;
+      margin-top: var(--space-4);
     }
   }
 </style>

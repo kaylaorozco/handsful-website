@@ -1,0 +1,215 @@
+---
+/**
+ * Stylized mock of the app's side-by-side comparison view, used as hero art.
+ * Pure HTML/CSS (no screenshot, no JS) so it loads instantly and can't drift
+ * from brand — colors, icon style (24px grid / 1.5px stroke feel) and baby
+ * identity colors (Sky = first, Teal-green = second) come straight from the
+ * style guide. It's a *sketch* of the UI, not a promise: the caption says so.
+ *
+ * When real screenshots exist, swap this component out in Hero.astro
+ * (see docs/LAUNCH-CHECKLIST.md).
+ */
+
+interface LogChip {
+  icon: 'feed' | 'nap' | 'diaper';
+  label: string;
+  /** 'due' renders the coral "attention" treatment */
+  tone?: 'default' | 'due';
+}
+
+const ICON_PATHS: Record<LogChip['icon'], string> = {
+  feed: 'M9 2h6M10 2v3h4V2M8 8a4 4 0 0 1 8 0v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z', // bottle
+  nap: 'M17 12a7 7 0 0 1-9.5 6.5A8 8 0 0 0 15 5.2 7 7 0 0 1 17 12z', // moon
+  diaper: 'M4 8h16v4a8 8 0 0 1-6 7.7V16h-4v3.7A8 8 0 0 1 4 12z', // diaper
+};
+
+const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
+  {
+    name: 'Baby A',
+    colorVar: 'var(--sky)',
+    chips: [
+      { icon: 'feed', label: 'Fed · 6:45a' },
+      { icon: 'nap', label: 'Nap · 8:10a' },
+      { icon: 'diaper', label: 'Change · 9:05a' },
+    ],
+  },
+  {
+    name: 'Baby B',
+    colorVar: 'var(--teal)',
+    chips: [
+      { icon: 'feed', label: 'Fed · 6:45a' },
+      { icon: 'nap', label: 'Nap · 8:32a' },
+      { icon: 'diaper', label: 'Due soon', tone: 'due' },
+    ],
+  },
+];
+---
+
+<figure class="peek">
+  <div
+    class="peek__card"
+    role="img"
+    aria-label="Preview of Handsful: feeds, naps and diapers for two babies shown side by side, with one button that logs a feed for everyone at once"
+  >
+    <div class="peek__topbar">
+      <span class="peek__title">Today</span>
+      <span class="peek__badge">One tap · logged for both</span>
+    </div>
+
+    <div class="peek__columns">
+      {
+        babies.map((baby) => (
+          <div class="peek__col">
+            <div class="peek__baby">
+              <span class="peek__avatar" style={`background:${baby.colorVar}`} />
+              <span class="peek__name">{baby.name}</span>
+            </div>
+            {baby.chips.map((chip) => (
+              <span class={`peek__chip ${chip.tone === 'due' ? 'peek__chip--due' : ''}`}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d={ICON_PATHS[chip.icon]} />
+                </svg>
+                {chip.label}
+              </span>
+            ))}
+          </div>
+        ))
+      }
+    </div>
+
+    <span class="peek__cta">Log a feed for everyone</span>
+  </div>
+  <figcaption class="peek__hint">psst — a peek at Handsful, mid-build</figcaption>
+</figure>
+
+<style>
+  .peek {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  /* Solid card on the gradient (per content-on-gradient rules); the gradient
+     button INSIDE it sits on a solid background, which is allowed. */
+  .peek__card {
+    width: min(360px, 100%);
+    background: var(--warm-bg);
+    border-radius: 28px;
+    padding: var(--space-6);
+    box-shadow: 0 16px 48px rgba(34, 32, 29, 0.28);
+    transform: rotate(2deg);
+  }
+
+  .peek__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .peek__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--ink);
+  }
+  .peek__badge {
+    background: var(--butter);
+    color: var(--ink);
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    padding: 6px 10px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+  }
+
+  .peek__columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+  .peek__col {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+  }
+  .peek__baby {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-1);
+  }
+  .peek__avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .peek__name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .peek__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--warm-bg);
+    color: var(--taupe-dark);
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 700;
+    padding: 7px 10px;
+    border-radius: var(--radius-pill);
+  }
+  .peek__chip svg {
+    flex-shrink: 0;
+    color: var(--sky);
+  }
+  .peek__chip--due {
+    background: rgba(255, 115, 87, 0.14);
+    color: #8a4a3f; /* darkened coral from the brand ramp — readable at 12px */
+  }
+  .peek__chip--due svg {
+    color: #b5514a;
+  }
+
+  .peek__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--space-4);
+    min-height: 44px;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-action);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  .peek__hint {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.92);
+    transform: rotate(-1.5deg);
+  }
+</style>
