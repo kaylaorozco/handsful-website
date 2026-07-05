@@ -5,7 +5,7 @@
  * `color` controls them (Ink in the header, Warm bg in the footer).
  *
  * `onDark`: on dark backgrounds (Ink footer) the ink dot would vanish, so we
- * swap just that dot to Warm bg. The coral dot works on every approved
+ * swap just that dot to Teal-green. The coral dot works on every approved
  * background and is left alone.
  */
 import raw from '../assets/wordmark.svg?raw';
@@ -24,7 +24,7 @@ let svg = raw
   );
 
 if (onDark) {
-  svg = svg.replace(/fill="#22201D"/g, 'fill="#FAF7F2"');
+  svg = svg.replace(/fill="#22201D"/g, 'fill="#2F7D6B"');
 }
 ---
 
