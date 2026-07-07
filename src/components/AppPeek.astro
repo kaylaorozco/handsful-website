@@ -19,28 +19,29 @@ interface LogChip {
   tone?: 'default' | 'due';
 }
 
-const ICON_PATHS: Record<LogChip['icon'], string> = {
+const ICON_PATHS = {
   feed: 'M9 2h6M10 2v3h4V2M8 8a4 4 0 0 1 8 0v10a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2z', // bottle
   nap: 'M17 12a7 7 0 0 1-9.5 6.5A8 8 0 0 0 15 5.2 7 7 0 0 1 17 12z', // moon
   diaper: 'M4 8h16v4a8 8 0 0 1-6 7.7V16h-4v3.7A8 8 0 0 1 4 12z', // diaper
-};
+  clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2', // clock
+} satisfies Record<LogChip['icon'] | 'clock', string>;
 
 const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
   {
     name: 'Baby A',
     colorVar: 'var(--sky)',
     chips: [
-      { icon: 'feed', label: 'Fed · 6:45a' },
-      { icon: 'nap', label: 'Nap · 8:10a' },
-      { icon: 'diaper', label: 'Change · 9:05a' },
+      { icon: 'feed', label: 'Fed · 6:45am' },
+      { icon: 'nap', label: 'Nap · 8:10am' },
+      { icon: 'diaper', label: 'Change · 9:05am' },
     ],
   },
   {
     name: 'Baby B',
     colorVar: 'var(--teal)',
     chips: [
-      { icon: 'feed', label: 'Fed · 6:45a' },
-      { icon: 'nap', label: 'Nap · 8:32a' },
+      { icon: 'feed', label: 'Fed · 6:45am' },
+      { icon: 'nap', label: 'Nap · 8:32am' },
       { icon: 'diaper', label: 'Due soon', tone: 'due' },
     ],
   },
@@ -86,6 +87,22 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
           </div>
         ))
       }
+    </div>
+
+    <div class="peek__next">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d={ICON_PATHS.clock} />
+      </svg>
+      Up next · 11:30am — bottles for both
     </div>
 
     <span class="peek__cta">Log a feed for everyone</span>
@@ -145,7 +162,27 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  /* Shared schedule strip — fills the card and hints at the app thinking
+     ahead for the whole crew */
+  .peek__next {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 700;
+    color: var(--taupe-dark);
     margin-bottom: var(--space-4);
+  }
+  .peek__next svg {
+    flex-shrink: 0;
+    color: var(--sky);
   }
   .peek__col {
     display: flex;
@@ -175,17 +212,21 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
   .peek__chip {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     background: var(--warm-bg);
     color: var(--taupe-dark);
-    font-size: 12px;
+    font-size: 11.5px;
     line-height: 1;
     font-weight: 700;
-    padding: 7px 10px;
+    padding: 7px 8px;
     border-radius: var(--radius-pill);
+    /* the longest label ("Change · 9:05am") must not wrap inside its chip */
+    white-space: nowrap;
   }
   .peek__chip svg {
     flex-shrink: 0;
+    width: 14px;
+    height: 14px;
     color: var(--sky);
   }
   .peek__chip--due {

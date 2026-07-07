@@ -312,6 +312,17 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   }
 
   @media (max-width: 800px) {
+    /* Phones: the hero owns the visible screen (svh ignores the URL-bar
+       dance) with the copy vertically centered — otherwise the content
+       hugs the top and the tagline's center-stage moment can land under
+       browser chrome / the cookie banner on short viewports. */
+    .hero__inner {
+      min-height: calc(100vh - 80px); /* fallback; 80px ≈ sticky header */
+      min-height: calc(100svh - 80px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
     /* Narrow screens: copy spans the full width, so push the glows further
        off-canvas — color stays visible at the edges, never behind text. */
     .hero__glow--coral {
