@@ -1,0 +1,47 @@
+---
+/**
+ * "See it in action" — home of the stylized app mock since the blob intro
+ * took over as the hero visual. Flow: the hero hooks attention with motion
+ * and a sparse pitch; this section delivers the one-tap story + proof right
+ * after (the lede used to be the hero subhead).
+ */
+import AppPeek from '../components/AppPeek.astro';
+---
+
+<section class="action section">
+  <div class="container--narrow action__intro">
+    <h2>See it in action</h2>
+    <p class="action__lede">
+      One tap logs a feed for everyone. One screen shows who ate, who slept, who's due.
+      Finally — a tracker that starts where your family does.
+    </p>
+  </div>
+  <div class="container action__peek">
+    <AppPeek />
+  </div>
+</section>
+
+<style>
+  /* White, so the warm-bg mock card reads against it (hero and Problem
+     around this section are both warm-bg). */
+  .action {
+    background: #fff;
+  }
+  .action__intro {
+    text-align: center;
+  }
+  .action__intro h2 {
+    color: var(--teal);
+  }
+  .action__lede {
+    margin-top: var(--space-4);
+    color: var(--taupe);
+    font-size: 19px;
+    line-height: 28px;
+  }
+  .action__peek {
+    margin-top: var(--space-12);
+    display: flex;
+    justify-content: center;
+  }
+</style>

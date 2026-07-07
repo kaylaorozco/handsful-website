@@ -126,6 +126,9 @@ const { variant = 'on-solid', formId, source } = Astro.props;
   .waitlist-form__row {
     display: flex;
     flex-wrap: wrap;
+    /* When the button wraps under the input (narrow screens) it should
+       center — both hosts (hero, final CTA) are centered layouts. */
+    justify-content: center;
     gap: var(--space-2);
   }
   .waitlist-form__input {
