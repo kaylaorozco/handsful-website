@@ -1,6 +1,6 @@
 /**
- * Generates the morph-target paths for the "Twin Blobs" hero animation
- * (src/components/TwinBlobs.astro).
+ * Generates the morph-target paths for the hero's blob-intro animation
+ * (src/sections/Hero.astro).
  *
  * Every variant of a blob is built from the SAME number of anchor points and
  * the SAME command structure (M + 8 C segments + Z), which is what lets CSS
@@ -12,7 +12,7 @@
  * a closed Catmull-Rom → cubic-bezier conversion.
  *
  * Deterministic (seeded PRNG) so re-runs reproduce the committed paths.
- * Usage: node scripts/generate-blobs.mjs  → paste output into TwinBlobs.astro
+ * Usage: node scripts/generate-blobs.mjs  → paste output into Hero.astro
  */
 
 // mulberry32 — tiny seeded PRNG, deterministic across runs

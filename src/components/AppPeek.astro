@@ -1,15 +1,13 @@
 ---
 /**
- * Stylized mock of the app's side-by-side comparison view, shown in the
- * "See it in action" section (it was the hero art until the Twin Blobs
- * animation took over the hero).
+ * Stylized mock of the app's side-by-side comparison view, used as hero art.
  * Pure HTML/CSS (no screenshot, no JS) so it loads instantly and can't drift
  * from brand — colors, icon style (24px grid / 1.5px stroke feel) and baby
  * identity colors (Sky = first, Teal-green = second) come straight from the
  * style guide. It's a *sketch* of the UI, not a promise: the caption says so.
  *
- * When real screenshots exist, swap this component out in
- * src/sections/SeeItInAction.astro (see docs/LAUNCH-CHECKLIST.md).
+ * When real screenshots exist, swap this component out in Hero.astro
+ * (see docs/LAUNCH-CHECKLIST.md).
  */
 
 interface LogChip {
@@ -102,14 +100,14 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
     gap: var(--space-4);
   }
 
-  /* Solid card; the gradient button INSIDE it sits on a solid background,
-     which is allowed by the brand rules. */
+  /* Solid card on the gradient (per content-on-gradient rules); the gradient
+     button INSIDE it sits on a solid background, which is allowed. */
   .peek__card {
     width: min(360px, 100%);
     background: var(--warm-bg);
     border-radius: 28px;
     padding: var(--space-6);
-    box-shadow: 0 16px 48px rgba(34, 32, 29, 0.16);
+    box-shadow: 0 16px 48px rgba(34, 32, 29, 0.28);
   }
 
   .peek__topbar {
@@ -210,6 +208,6 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
     line-height: 20px;
     font-weight: 500;
     font-style: italic;
-    color: var(--taupe);
+    color: rgba(255, 255, 255, 0.92);
   }
 </style>

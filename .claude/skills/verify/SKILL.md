@@ -45,4 +45,8 @@ npx astro dev --port 4399   # background it; ready in ~2s, http://localhost:4399
 - Animations: sample `getComputedStyle(el).getPropertyValue('d')` /
   `.transform` twice a few seconds apart to prove motion; emulate
   `reducedMotion: 'reduce'` to prove the global freeze rule applies.
+- One-shot sequences (e.g. the hero intro): capture deterministic frames by
+  seeking every CSS animation via WAAPI instead of racing wall-clock time:
+  `page.evaluate(t => document.getAnimations().forEach(a => { a.pause(); a.currentTime = t; }), ms)`
+  then screenshot at each phase timestamp.
 - Mobile: 390×844 viewport — copy/CTA must come before the hero art.

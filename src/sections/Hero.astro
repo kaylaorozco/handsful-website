@@ -1,14 +1,63 @@
 ---
 import WaitlistCta from '../components/WaitlistCta.astro';
-import TwinBlobs from '../components/TwinBlobs.astro';
+import AppPeek from '../components/AppPeek.astro';
 import { SITE } from '../config';
 ---
 
-<!-- Warm background + Ink text per the style guide; the Twin Blobs animation
-     (two independent shapes, one shared breathing pulse) is the dominant
-     visual — a wordless nod to multi-baby tracking. The app mock that used
-     to live here moved to the "See it in action" section below. -->
+<!-- Signature gradient: approved for marketing hero. Copy stays short per the
+     "never behind long text" rule; headline is large-text white per the brand's
+     accessible-pairings table.
+
+     One-time intro ("Blob Intro → Gradient Reveal"): an overlay opens on two
+     small morphing blobs, then Blob A scales up until its gradient fills the
+     frame and the overlay crossfades away to this — the real, static hero —
+     while the content staggers in. Everything below the overlay is the exact
+     hero design users already responded well to; the intro only ever paints
+     on top of it, so the end state can't drift.
+
+     Sequence (all CSS, all transform/opacity/d — no JS, no layout thrash):
+       0–2.4s  blobs morph (CSS `d: path()` between matched-point variants
+               from scripts/generate-blobs.mjs — same technique as the
+               Framer Motion path tween in the brief, minus the React
+               runtime this Astro site doesn't ship)
+       1–2.5s  Blob A scales ×15, ease-in (hero overflow:hidden clips it);
+               Blob B fades out
+       2.2–2.8s overlay crossfades to the real gradient (also covers ultra-
+               wide viewports where a fixed scale can't guarantee full-bleed)
+       2.45–3.45s eyebrow → headline → sub → form → app card reveal, staggered
+
+     Plays once per page load (CSS animations don't re-trigger on scroll).
+     prefers-reduced-motion: the overlay is display:none and reveals are
+     animation:none — straight to the static hero. -->
 <section class="hero" id="waitlist">
+  <div class="hero__intro" aria-hidden="true">
+    <svg class="hero__intro-blobs" viewBox="0 0 640 520" fill="none" role="presentation">
+      <defs>
+        <!-- Signature gradient, transcribed from --gradient-signature (160deg) -->
+        <linearGradient id="hero-intro-grad-a" x1="0.15" y1="0" x2="0.75" y2="1">
+          <stop offset="0" stop-color="#3ea6c2"></stop>
+          <stop offset="0.55" stop-color="#2f7d6b"></stop>
+          <stop offset="1" stop-color="#ffcb57"></stop>
+        </linearGradient>
+        <!-- Sibling palette: Coral → Teal-green -->
+        <linearGradient id="hero-intro-grad-b" x1="0.2" y1="0.05" x2="0.7" y2="1">
+          <stop offset="0" stop-color="#ff7357"></stop>
+          <stop offset="1" stop-color="#2f7d6b"></stop>
+        </linearGradient>
+      </defs>
+      <path
+        class="hero__intro-blob hero__intro-blob--b"
+        fill="url(#hero-intro-grad-b)"
+        d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
+      ></path>
+      <path
+        class="hero__intro-blob hero__intro-blob--a"
+        fill="url(#hero-intro-grad-a)"
+        d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
+      ></path>
+    </svg>
+  </div>
+
   <div class="container hero__inner">
     <div class="hero__copy">
       <p class="hero__eyebrow">{SITE.tagline}</p>
@@ -17,23 +66,25 @@ import { SITE } from '../config';
         One tap logs a feed for everyone. One screen shows who ate, who slept, who's due.
         Finally — a tracker that starts where your family does.
       </p>
-      <WaitlistCta variant="on-solid" formId="waitlist-email-hero" source="hero" />
+      <WaitlistCta variant="on-gradient" formId="waitlist-email-hero" source="hero" />
     </div>
     <div class="hero__art">
-      <TwinBlobs />
+      <AppPeek />
     </div>
   </div>
 </section>
 
 <style>
   .hero {
-    background: var(--warm-bg);
-    color: var(--ink);
+    position: relative;
+    background: var(--gradient-signature);
+    color: #fff;
+    /* Also what clips Blob A as it scales past the edges */
     overflow: hidden;
   }
   .hero__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
     align-items: center;
     gap: var(--space-8);
     padding-block: clamp(var(--space-12), 9vw, var(--space-24));
@@ -43,16 +94,15 @@ import { SITE } from '../config';
     font-size: 15px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--teal);
+    color: var(--butter);
     margin-bottom: var(--space-4);
   }
   .hero__title {
-    color: var(--ink);
+    color: #fff;
     max-width: 15ch;
   }
   .hero__sub {
     margin-block: var(--space-6);
-    color: var(--taupe-dark);
     font-size: 19px;
     line-height: 28px;
     font-weight: 500;
@@ -67,9 +117,141 @@ import { SITE } from '../config';
       grid-template-columns: 1fr;
     }
     /* Copy + form stay first on mobile so the CTA is reachable fast;
-       the blobs follow below. */
+       the app peek follows below. */
     .hero__art {
       margin-top: var(--space-4);
+    }
+  }
+
+  /* ---- Intro overlay ------------------------------------------------- */
+
+  .hero__intro {
+    /* Morph targets from scripts/generate-blobs.mjs — regenerate there,
+       don't hand-edit (variants must keep one command structure to tween). */
+    --blob-a-0: path('M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z');
+    --blob-a-1: path('M379.6 230.4 C384.2 264.7 371.6 326.1 346.7 352.3 C321.8 378.5 268.8 386.4 230.2 387.7 C191.7 388.9 144.3 382.0 115.5 360.1 C86.8 338.2 55.6 297.3 57.9 256.1 C60.2 214.9 101.9 141.4 129.3 113.0 C156.7 84.6 190.7 80.0 222.4 85.5 C254.0 91.0 293.1 121.9 319.3 146.0 C345.5 170.2 375.0 196.0 379.6 230.4 Z');
+    --blob-a-2: path('M418.6 268.6 C419.4 307.8 374.3 317.7 341.1 339.4 C308.0 361.1 257.0 395.2 219.7 399.0 C182.4 402.9 137.9 390.5 117.6 362.3 C97.3 334.1 95.8 272.2 97.9 230.0 C100.0 187.7 108.4 127.4 130.2 108.8 C152.0 90.1 194.3 118.7 228.6 118.0 C262.9 117.3 304.4 79.6 336.1 104.7 C367.7 129.8 417.7 229.5 418.6 268.6 Z');
+    --blob-b-0: path('M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z');
+    --blob-b-1: path('M562.3 302.3 C565.6 332.8 553.8 373.2 532.5 388.6 C511.3 404.1 465.8 395.5 434.6 395.1 C403.5 394.6 365.2 406.2 345.8 385.8 C326.3 365.4 312.1 302.1 317.9 272.6 C323.6 243.1 355.4 230.5 380.2 208.8 C405.0 187.1 444.5 142.9 466.6 142.4 C488.8 141.9 497.1 179.2 513.0 205.9 C529.0 232.5 559.1 271.9 562.3 302.3 Z');
+    --blob-b-2: path('M557.3 281.5 C558.8 309.3 565.2 332.6 546.3 352.4 C527.3 372.2 473.8 394.8 443.5 400.2 C413.2 405.7 384.6 405.3 364.4 385.1 C344.2 365.0 324.0 306.5 322.3 279.2 C320.7 251.9 336.5 243.4 354.4 221.3 C372.4 199.2 399.6 152.7 430.1 146.8 C460.6 140.8 516.3 163.1 537.5 185.6 C558.7 208.0 555.9 253.7 557.3 281.5 Z');
+
+    position: absolute;
+    inset: 0;
+    /* Above the hero content (some of which is positioned) until it fades;
+       still below the sticky header (40) and cookie banner (50). */
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: var(--warm-bg);
+    pointer-events: none;
+    animation: intro-vanish 0.6s ease 2.2s both;
+  }
+
+  .hero__intro-blobs {
+    width: min(400px, 68%);
+    height: auto;
+    margin-top: clamp(32px, 10vh, 110px);
+    /* Let Blob A grow past the small SVG canvas; .hero clips it instead */
+    overflow: visible;
+  }
+
+  .hero__intro-blob {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .hero__intro-blob--a {
+    animation:
+      intro-a-morph 2.4s ease-in-out both,
+      intro-a-takeover 1.5s cubic-bezier(0.42, 0, 1, 1) 1s both;
+    will-change: transform;
+  }
+  .hero__intro-blob--b {
+    animation:
+      intro-b-morph 2s ease-in-out both,
+      intro-b-fade 0.8s ease-out 1s both;
+  }
+
+  @keyframes intro-vanish {
+    to {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+  @keyframes intro-a-takeover {
+    to {
+      transform: scale(15);
+    }
+  }
+  @keyframes intro-b-fade {
+    to {
+      opacity: 0;
+    }
+  }
+  @keyframes intro-a-morph {
+    0% {
+      d: var(--blob-a-0);
+    }
+    50% {
+      d: var(--blob-a-1);
+    }
+    100% {
+      d: var(--blob-a-2);
+    }
+  }
+  @keyframes intro-b-morph {
+    0% {
+      d: var(--blob-b-0);
+    }
+    50% {
+      d: var(--blob-b-1);
+    }
+    100% {
+      d: var(--blob-b-2);
+    }
+  }
+
+  /* ---- Content reveal (phase 3) --------------------------------------
+     :global() because .hero__copy's children include the WaitlistCta form,
+     which doesn't carry this component's scope attribute. */
+
+  .hero__copy > :global(*),
+  .hero__art {
+    animation: hero-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .hero__copy > :global(*:nth-child(1)) {
+    animation-delay: 2.45s;
+  }
+  .hero__copy > :global(*:nth-child(2)) {
+    animation-delay: 2.55s;
+  }
+  .hero__copy > :global(*:nth-child(3)) {
+    animation-delay: 2.65s;
+  }
+  .hero__copy > :global(*:nth-child(4)) {
+    animation-delay: 2.75s;
+  }
+  .hero__art {
+    animation-delay: 2.85s;
+  }
+
+  @keyframes hero-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+
+  /* Skip the whole intro: straight to the static hero. Needed explicitly —
+     global.css only zeroes animation *durations*, which would leave the
+     2.45s+ reveal delays as seconds of invisible content. */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__intro {
+      display: none;
+    }
+    .hero__copy > :global(*),
+    .hero__art {
+      animation: none;
     }
   }
 </style>
