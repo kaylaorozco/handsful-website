@@ -21,10 +21,11 @@ import { SITE } from '../config';
                (butter follows), where Blob B used to be.
        1.75–2.25s the sticky header (hidden until now — see the is:global
                style block) slides down as the gradient finishes filling.
-       2.2–3.0s the tagline fades in CENTERED on the settled gradient — the
-               brand speaks first — holds through ~4s…
-       4.0–4.7s …then glides left to its docked position while
-       4.2–6.0s headline → sub → form stagger in beneath it, 0.5s apart.
+       2.2–3.0s the tagline fades in CENTERED on the settled gradient at
+               ~1.9× size — the brand speaks first — holds through ~4s…
+       4.0–5.2s …then glides left, shrinking into its docked eyebrow size,
+       4.6–8.0s while headline → sub → form stagger in beneath it, an
+               unhurried 0.7s apart.
 
      Ambient state (after the intro, runs indefinitely): two soft warm
      regions — coral in the top-right corner (Blob B's resting place) and
@@ -310,16 +311,16 @@ import { SITE } from '../config';
      which doesn't carry this component's scope attribute. */
 
   .hero__copy > :global(*) {
-    animation: hero-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: hero-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .hero__copy > :global(*:nth-child(2)) {
-    animation-delay: 4.2s;
+    animation-delay: 4.6s;
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: 4.7s;
+    animation-delay: 5.3s;
   }
   .hero__copy > :global(*:nth-child(4)) {
-    animation-delay: 5.2s;
+    animation-delay: 6s;
   }
 
   @keyframes hero-reveal {
@@ -330,37 +331,48 @@ import { SITE } from '../config';
   }
 
   /* Tagline: the brand speaks first. Enters centered on the settled
-     gradient, holds a beat, then docks to its left-aligned home as the
-     headline builds beneath it. inline-block + relative `left` so both the
-     centered and docked positions are width-agnostic; this rule sits after
-     the .hero__copy > * reveal rule so its animation list wins. */
+     gradient at stage scale (title-sized), holds a beat, then glides to its
+     left-aligned home while shrinking into the eyebrow it becomes.
+     inline-block + relative `left` keeps both positions width-agnostic;
+     scale (not font-size) keeps it layout-stable and compositor-cheap.
+     This rule sits after the .hero__copy > * reveal rule so its animation
+     list wins. */
   .hero__eyebrow {
+    --tagline-stage-scale: 1.9;
     position: relative;
     display: inline-block;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(var(--tagline-stage-scale));
     animation:
       tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.2s both,
-      tagline-dock 0.7s cubic-bezier(0.22, 1, 0.36, 1) 4s both;
+      tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 4s both;
   }
   @keyframes tagline-enter {
     from {
       opacity: 0;
-      transform: translate(-50%, 14px);
+      transform: translate(-50%, 14px) scale(var(--tagline-stage-scale));
     }
     to {
       opacity: 1;
-      transform: translate(-50%, 0);
+      transform: translate(-50%, 0) scale(var(--tagline-stage-scale));
     }
   }
   @keyframes tagline-dock {
     from {
       left: 50%;
-      transform: translateX(-50%);
+      transform: translateX(-50%) scale(var(--tagline-stage-scale));
     }
     to {
       left: 0;
       transform: none;
+    }
+  }
+  @media (max-width: 800px) {
+    /* Narrow screens can't fit the full 1.9× line — a gentler stage size
+       still reads as "bigger, then settles" (1.1 keeps the 15px line
+       inside a 390px viewport). */
+    .hero__eyebrow {
+      --tagline-stage-scale: 1.1;
     }
   }
 
