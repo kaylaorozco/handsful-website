@@ -1,6 +1,5 @@
 ---
 import WaitlistCta from '../components/WaitlistCta.astro';
-import { SITE } from '../config';
 ---
 
 <!-- Signature gradient hero with a one-time blob intro and a living coral
@@ -19,11 +18,13 @@ import { SITE } from '../config';
                breath with no coral at all…
        2.1–3.5s …then coral re-emerges into the hero as the ambient glow
                (butter follows), where Blob B used to be.
-       1.75–2.25s the sticky header (hidden until now — see the is:global
-               style block) slides down as the gradient finishes filling.
-       2.2–3.0s the tagline fades in CENTERED on the settled gradient at
-               ~1.9× size — the brand speaks first — holds through ~4s…
-       4.0–5.2s …then glides left, shrinking into its docked eyebrow size,
+       2.4–2.9s the sticky header (hidden until now — see the is:global
+               style block) slides down once the gradient has filled.
+       2.2–3.0s the tagline fades in DEAD-CENTER on the settled gradient
+               (vertically + horizontally, all viewports) at ~1.9× size —
+               the brand speaks first — holds through ~4s…
+       4.0–5.2s …then rises to its slot at the top of the centered copy
+               block, shrinking into its docked eyebrow size,
        4.6–8.0s while headline → sub → form stagger in beneath it, an
                unhurried 0.7s apart.
 
@@ -36,10 +37,11 @@ import { SITE } from '../config';
      falloff, no blur filters, so it's compositor-cheap.
 
      BRAND NOTE: coral inside the hero gradient is a deliberate extension of
-     the signature 3-stop, approved by Kayla (2026-07-06) — the glows hug the
-     right edge so white copy on the left never sits on coral/butter (their
-     white-text contrast is too low; same corner rule the butter stop already
-     follows).
+     the signature 3-stop, approved by Kayla (2026-07-06). The copy is
+     CENTERED (Kayla's call, 2026-07-06), so the glows are pinned to the
+     top-right/bottom-right corners with restrained sweep — white copy must
+     never sit on meaningful coral/butter (their white-text contrast is too
+     low; same corner rule the butter stop already follows).
 
      prefers-reduced-motion: no intro, no drift — straight to the static
      hero with the coral glow present but still. -->
@@ -82,7 +84,9 @@ import { SITE } from '../config';
 
   <div class="container hero__inner">
     <div class="hero__copy">
-      <p class="hero__eyebrow">{SITE.tagline}</p>
+      <!-- SITE.tagline, hardcoded here for the presentational line break —
+           keep the words in sync with src/config.ts -->
+      <p class="hero__eyebrow">You've got your hands full.<br />We've got you.</p>
       <h1 class="hero__title">The baby tracker built for twins, triplets&nbsp;&amp;&nbsp;more</h1>
       <p class="hero__sub">
         One tap logs a feed for everyone. One screen shows who ate, who slept, who's due.
@@ -92,6 +96,28 @@ import { SITE } from '../config';
     </div>
   </div>
 </section>
+
+<script>
+  // Measures how far the tagline's stage entrance (hero dead-center) is from
+  // its laid-out slot, and hands the offset to the CSS animation via
+  // --tagline-stage-y. Runs once at load: the stage moment is over within
+  // seconds, so a mid-intro resize isn't worth handling. Suspend the
+  // element's animations while measuring (they win over inline styles), and
+  // note the reveal keeps the tagline invisible until 2.2s, so this can't
+  // cause a flash.
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const tagline = document.querySelector<HTMLElement>('.hero__eyebrow');
+  if (hero && tagline && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    tagline.style.animation = 'none';
+    tagline.style.transform = 'none';
+    const heroBox = hero.getBoundingClientRect();
+    const slotBox = tagline.getBoundingClientRect();
+    tagline.style.animation = '';
+    tagline.style.transform = '';
+    const dy = heroBox.top + heroBox.height / 2 - (slotBox.top + slotBox.height / 2);
+    tagline.style.setProperty('--tagline-stage-y', `${Math.round(dy)}px`);
+  }
+</script>
 
 <style>
   .hero {
@@ -106,6 +132,14 @@ import { SITE } from '../config';
     position: relative;
     padding-block: clamp(var(--space-16), 11vw, calc(var(--space-24) + var(--space-8)));
   }
+  /* Centered hero copy (Kayla's call): every block centers itself, and the
+     form (a child component) is centered via the :global margin rule. */
+  .hero__copy {
+    text-align: center;
+  }
+  .hero__copy > :global(*) {
+    margin-inline: auto;
+  }
   .hero__eyebrow {
     font-weight: 700;
     font-size: 15px;
@@ -116,7 +150,7 @@ import { SITE } from '../config';
   }
   .hero__title {
     color: #fff;
-    max-width: 15ch;
+    max-width: 18ch;
   }
   .hero__sub {
     margin-block: var(--space-6);
@@ -142,9 +176,9 @@ import { SITE } from '../config';
   /* …while each drifts to its own slow, offset cycle. Both hug the right
      edge, clear of the white copy (contrast rule — see brand note above). */
   .hero__glow--coral {
-    width: clamp(460px, 54vw, 860px);
-    top: -16%;
-    right: -14%;
+    width: clamp(420px, 48vw, 760px);
+    top: -22%;
+    right: -16%;
     background: radial-gradient(
       closest-side,
       rgba(255, 115, 87, 0.62),
@@ -155,9 +189,9 @@ import { SITE } from '../config';
       drift-coral 9s ease-in-out -3s infinite alternate;
   }
   .hero__glow--butter {
-    width: clamp(380px, 42vw, 680px);
-    bottom: -32%;
-    right: -6%;
+    width: clamp(360px, 40vw, 640px);
+    bottom: -30%;
+    right: -8%;
     background: radial-gradient(
       closest-side,
       rgba(255, 203, 87, 0.52),
@@ -182,16 +216,17 @@ import { SITE } from '../config';
       opacity: 0;
     }
   }
-  /* Both glows sweep INTO the teal midfield (where warm color actually
-     contrasts — butter drifting over the butter corner was invisible) and
-     swell as they move, so the motion reads at a glance. Different periods
-     + offsets keep their peaks from coinciding. */
+  /* Both glows sweep toward the teal (where warm color actually contrasts)
+     and swell as they move, so the motion reads at a glance — but the sweep
+     is restrained now that the copy is centered: meaningful color must stay
+     clear of the text column. Different periods + offsets keep their peaks
+     from coinciding. */
   @keyframes drift-coral {
     from {
       transform: translate3d(0, 0, 0) scale(1);
     }
     to {
-      transform: translate3d(-18%, 14%, 0) scale(1.22);
+      transform: translate3d(-9%, 12%, 0) scale(1.2);
     }
   }
   @keyframes drift-butter {
@@ -199,7 +234,7 @@ import { SITE } from '../config';
       transform: translate3d(0, 0, 0) scale(1);
     }
     to {
-      transform: translate3d(-16%, -10%, 0) scale(1.18);
+      transform: translate3d(-8%, -8%, 0) scale(1.16);
     }
   }
 
@@ -330,19 +365,21 @@ import { SITE } from '../config';
     }
   }
 
-  /* Tagline: the brand speaks first. Enters centered on the settled
-     gradient at stage scale (title-sized), holds a beat, then glides to its
-     left-aligned home while shrinking into the eyebrow it becomes.
-     inline-block + relative `left` keeps both positions width-agnostic;
-     scale (not font-size) keeps it layout-stable and compositor-cheap.
-     This rule sits after the .hero__copy > * reveal rule so its animation
-     list wins. */
+  /* Tagline: the brand speaks first. Enters title-sized at the hero's
+     dead center — horizontal centering comes from the copy's text-align;
+     vertical centering is a transform offset (--tagline-stage-y) measured
+     once by the script below, since percentage `top` on relative elements
+     resolves against the wrong box in Chromium. It holds a beat, then
+     rises to its slot while shrinking into the eyebrow it becomes.
+     Transform-only, so nothing reflows; without JS the stage-y stays 0 and
+     the tagline simply plays its beat in its slot (still centered
+     horizontally). This rule sits after the .hero__copy > * reveal rule so
+     its animation list wins. */
   .hero__eyebrow {
     --tagline-stage-scale: 1.9;
-    position: relative;
+    --tagline-stage-y: 0px;
     display: inline-block;
-    left: 50%;
-    transform: translateX(-50%) scale(var(--tagline-stage-scale));
+    transform: translateY(var(--tagline-stage-y)) scale(var(--tagline-stage-scale));
     animation:
       tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.2s both,
       tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 4s both;
@@ -350,29 +387,27 @@ import { SITE } from '../config';
   @keyframes tagline-enter {
     from {
       opacity: 0;
-      transform: translate(-50%, 14px) scale(var(--tagline-stage-scale));
+      transform: translateY(calc(var(--tagline-stage-y) + 14px))
+        scale(var(--tagline-stage-scale));
     }
     to {
       opacity: 1;
-      transform: translate(-50%, 0) scale(var(--tagline-stage-scale));
+      transform: translateY(var(--tagline-stage-y)) scale(var(--tagline-stage-scale));
     }
   }
   @keyframes tagline-dock {
     from {
-      left: 50%;
-      transform: translateX(-50%) scale(var(--tagline-stage-scale));
+      transform: translateY(var(--tagline-stage-y)) scale(var(--tagline-stage-scale));
     }
     to {
-      left: 0;
-      transform: none;
+      transform: translateY(0px) scale(1);
     }
   }
   @media (max-width: 800px) {
-    /* Narrow screens can't fit the full 1.9× line — a gentler stage size
-       still reads as "bigger, then settles" (1.1 keeps the 15px line
-       inside a 390px viewport). */
+    /* The line break keeps each line short, but 1.9× is still too wide for
+       a 390px viewport — 1.6× reads as a title without clipping. */
     .hero__eyebrow {
-      --tagline-stage-scale: 1.1;
+      --tagline-stage-scale: 1.6;
     }
   }
 
@@ -392,7 +427,6 @@ import { SITE } from '../config';
        animations off it must be pinned to the docked state instead. */
     .hero__eyebrow {
       animation: none;
-      left: 0;
       transform: none;
     }
   }
@@ -400,13 +434,14 @@ import { SITE } from '../config';
 
 <style is:global>
   /* Part of the hero intro, but reaching outside the component: the sticky
-     header stays hidden while the blobs open, then slides down as the
-     gradient finishes filling (~1.75s). Global on purpose — Header.astro is
-     rendered by the layout, but because this rule ships with Hero.astro it
-     only exists on pages that have the hero (the landing page); the header
-     appears instantly everywhere else. Delete alongside the intro. */
+     header stays hidden while the blobs open, then slides down once the
+     gradient has fully filled the hero (~2.4s, after the overlay crossfade
+     completes). Global on purpose — Header.astro is rendered by the layout,
+     but because this rule ships with Hero.astro it only exists on pages
+     that have the hero (the landing page); the header appears instantly
+     everywhere else. Delete alongside the intro. */
   .header {
-    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.75s both;
+    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.4s both;
   }
   @keyframes header-reveal {
     from {
