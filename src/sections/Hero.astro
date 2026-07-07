@@ -17,6 +17,8 @@ import { SITE } from '../config';
                top, it swells and thins, dissolving INTO that background…
        1.6–2.4s …as the overlay crossfades away, handing Blob B off to the
                ambient coral glow below, which fades in at the same region.
+       1.75–2.25s the sticky header (hidden until now — see the is:global
+               style block) slides down as the gradient finishes filling.
        2.05–2.95s eyebrow → headline → sub → form stagger in.
 
      Ambient state (after the intro, runs indefinitely): two soft warm
@@ -139,12 +141,12 @@ import { SITE } from '../config';
     right: -14%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 115, 87, 0.55),
+      rgba(255, 115, 87, 0.62),
       rgba(255, 115, 87, 0) 70%
     );
     animation:
       glow-appear 0.8s ease 1.6s both,
-      drift-coral 15s ease-in-out -5s infinite alternate;
+      drift-coral 9s ease-in-out -3s infinite alternate;
   }
   .hero__glow--butter {
     width: clamp(380px, 42vw, 680px);
@@ -152,12 +154,12 @@ import { SITE } from '../config';
     right: -6%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 203, 87, 0.45),
+      rgba(255, 203, 87, 0.52),
       rgba(255, 203, 87, 0) 70%
     );
     animation:
       glow-appear 0.8s ease 1.9s both,
-      drift-butter 21s ease-in-out -13s infinite alternate;
+      drift-butter 13s ease-in-out -8s infinite alternate;
   }
 
   @keyframes ambient-breathe {
@@ -174,15 +176,16 @@ import { SITE } from '../config';
       opacity: 0;
     }
   }
-  /* Drift targets diverge (coral sweeps down-left, butter right-up) so the
-     corners never crowd each other mid-cycle; each also swells as it moves
-     so the motion reads at a glance, not only on a long stare. */
+  /* Both glows sweep INTO the teal midfield (where warm color actually
+     contrasts — butter drifting over the butter corner was invisible) and
+     swell as they move, so the motion reads at a glance. Different periods
+     + offsets keep their peaks from coinciding. */
   @keyframes drift-coral {
     from {
       transform: translate3d(0, 0, 0) scale(1);
     }
     to {
-      transform: translate3d(-12%, 10%, 0) scale(1.15);
+      transform: translate3d(-18%, 14%, 0) scale(1.22);
     }
   }
   @keyframes drift-butter {
@@ -190,7 +193,7 @@ import { SITE } from '../config';
       transform: translate3d(0, 0, 0) scale(1);
     }
     to {
-      transform: translate3d(9%, -8%, 0) scale(1.12);
+      transform: translate3d(-16%, -10%, 0) scale(1.18);
     }
   }
 
@@ -334,6 +337,29 @@ import { SITE } from '../config';
     .hero__ambient,
     .hero__glow,
     .hero__copy > :global(*) {
+      animation: none;
+    }
+  }
+</style>
+
+<style is:global>
+  /* Part of the hero intro, but reaching outside the component: the sticky
+     header stays hidden while the blobs open, then slides down as the
+     gradient finishes filling (~1.75s). Global on purpose — Header.astro is
+     rendered by the layout, but because this rule ships with Hero.astro it
+     only exists on pages that have the hero (the landing page); the header
+     appears instantly everywhere else. Delete alongside the intro. */
+  .header {
+    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.75s both;
+  }
+  @keyframes header-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .header {
       animation: none;
     }
   }
