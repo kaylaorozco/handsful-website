@@ -65,9 +65,10 @@ marketing emails the signup copy now promises.
   "· soon" placeholders until then).
 - Legal copy: three placeholder pages, `noindex`'d and out of the sitemap.
   Un-flagging steps are at the top of `src/layouts/LegalLayout.astro`.
-- App mock: swap `src/components/AppPeek.astro` (now in the "See it in
-  action" section, `src/sections/SeeItInAction.astro`) for real screenshots
-  when app screens are final (and remove the "psst — mid-build" caption).
+- App mocks: swap `src/components/AppPeek.astro` and
+  `src/components/NotesPeek.astro` (both in the "See it in action" section,
+  `src/sections/SeeItInAction.astro`) for real screenshots when app screens
+  are final (and rework the captions).
 
 ## Then: launch time
 

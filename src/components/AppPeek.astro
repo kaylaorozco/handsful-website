@@ -6,7 +6,7 @@
  * Pure HTML/CSS (no screenshot, no JS) so it loads instantly and can't drift
  * from brand — colors, icon style (24px grid / 1.5px stroke feel) and baby
  * identity colors (Sky = first, Teal-green = second) come straight from the
- * style guide. It's a *sketch* of the UI, not a promise: the caption says so.
+ * style guide. It's a *sketch* of the UI, not a promise.
  *
  * When real screenshots exist, swap this component out in
  * src/sections/SeeItInAction.astro (see docs/LAUNCH-CHECKLIST.md).
@@ -90,7 +90,7 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
 
     <span class="peek__cta">Log a feed for everyone</span>
   </div>
-  <figcaption class="peek__hint">psst — a peek at Handsful, mid-build</figcaption>
+  <figcaption class="peek__hint">today at a glance — both babies, side by side</figcaption>
 </figure>
 
 <style>
@@ -103,13 +103,17 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
   }
 
   /* Solid card; the gradient button INSIDE it sits on a solid background,
-     which is allowed by the brand rules. */
+     which is allowed by the brand rules. Flex column + grow so the card
+     matches its sibling mock's height, with the CTA pinned to the bottom. */
   .peek__card {
     width: min(360px, 100%);
     background: var(--warm-bg);
     border-radius: 28px;
     padding: var(--space-6);
     box-shadow: 0 16px 48px rgba(34, 32, 29, 0.16);
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
   }
 
   .peek__topbar {
@@ -141,6 +145,7 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-3);
+    margin-bottom: var(--space-4);
   }
   .peek__col {
     display: flex;
@@ -195,7 +200,9 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: var(--space-4);
+    /* auto margin pins the CTA to the card bottom when the card is
+       stretched to match the sibling mock (columns carry the min gap) */
+    margin-top: auto;
     min-height: 44px;
     border-radius: var(--radius-pill);
     background: var(--gradient-action);
