@@ -13,13 +13,16 @@ import { SITE } from '../config';
        0–2s    two small sibling blobs morph (CSS `d: path()` between
                matched-point variants from scripts/generate-blobs.mjs)
        0.6–1.9s Blob A scales ×15, ease-in, clipped by the hero — its gradient
-               becomes the background. Blob B (coral) doesn't die: drawn on
-               top, it swells and thins, dissolving INTO that background…
-       1.6–2.4s …as the overlay crossfades away, handing Blob B off to the
-               ambient coral glow below, which fades in at the same region.
+               becomes the background. Blob B (coral) swells and fades out
+               completely while A takes over (gone by ~1.7s)…
+       1.8–2.4s …the overlay crossfades away to the settled gradient — a
+               breath with no coral at all…
+       2.1–3.5s …then coral re-emerges into the hero as the ambient glow
+               (butter follows), where Blob B used to be.
        1.75–2.25s the sticky header (hidden until now — see the is:global
                style block) slides down as the gradient finishes filling.
-       2.05–2.95s eyebrow → headline → sub → form stagger in.
+       2.2–4.5s eyebrow → headline → sub → form stagger in, an unhurried
+               0.5s apart.
 
      Ambient state (after the intro, runs indefinitely): two soft warm
      regions — coral in the top-right corner (Blob B's resting place) and
@@ -145,7 +148,7 @@ import { SITE } from '../config';
       rgba(255, 115, 87, 0) 70%
     );
     animation:
-      glow-appear 0.8s ease 1.6s both,
+      glow-appear 1.1s ease 2.1s both,
       drift-coral 9s ease-in-out -3s infinite alternate;
   }
   .hero__glow--butter {
@@ -158,7 +161,7 @@ import { SITE } from '../config';
       rgba(255, 203, 87, 0) 70%
     );
     animation:
-      glow-appear 0.8s ease 1.9s both,
+      glow-appear 1.1s ease 2.4s both,
       drift-butter 13s ease-in-out -8s infinite alternate;
   }
 
@@ -251,12 +254,12 @@ import { SITE } from '../config';
       intro-a-takeover 1.3s cubic-bezier(0.42, 0, 1, 1) 0.6s both;
     will-change: transform;
   }
-  /* Blob B dissolves: swells and thins over the growing gradient, and the
-     overlay crossfade hands it off to .hero__glow--coral underneath. */
+  /* Blob B swells and fades to nothing while A takes over; after a beat of
+     pure gradient, coral re-enters as .hero__glow--coral (2.1s). */
   .hero__intro-blob--b {
     animation:
       intro-b-morph 2s ease-in-out both,
-      intro-b-dissolve 1.2s cubic-bezier(0.42, 0, 1, 1) 0.7s both;
+      intro-b-dissolve 1s cubic-bezier(0.42, 0, 1, 1) 0.7s both;
     will-change: transform, opacity;
   }
 
@@ -274,7 +277,7 @@ import { SITE } from '../config';
   @keyframes intro-b-dissolve {
     to {
       transform: scale(6);
-      opacity: 0.6;
+      opacity: 0;
     }
   }
   @keyframes intro-a-morph {
@@ -305,19 +308,19 @@ import { SITE } from '../config';
      which doesn't carry this component's scope attribute. */
 
   .hero__copy > :global(*) {
-    animation: hero-reveal 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: hero-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .hero__copy > :global(*:nth-child(1)) {
-    animation-delay: 2.05s;
+    animation-delay: 2.2s;
   }
   .hero__copy > :global(*:nth-child(2)) {
-    animation-delay: 2.15s;
+    animation-delay: 2.7s;
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: 2.25s;
+    animation-delay: 3.2s;
   }
   .hero__copy > :global(*:nth-child(4)) {
-    animation-delay: 2.35s;
+    animation-delay: 3.7s;
   }
 
   @keyframes hero-reveal {
