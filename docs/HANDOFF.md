@@ -68,7 +68,7 @@ marketing emails the signup copy now promises.
 - App mocks: swap `src/components/AppPeek.astro` and
   `src/components/NotesPeek.astro` (both in the "See it in action" section,
   `src/sections/SeeItInAction.astro`) for real screenshots when app screens
-  are final (and remove the mid-build captions).
+  are final (and rework the captions).
 
 ## Then: launch time
 

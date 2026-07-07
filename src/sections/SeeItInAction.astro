@@ -47,7 +47,9 @@ import NotesPeek from '../components/NotesPeek.astro';
     display: flex;
     flex-wrap: wrap; /* cards sit side by side, stacking on narrow screens */
     justify-content: center;
-    align-items: flex-start;
+    /* Stretch so both figures (and via flex-grow, both cards) match the
+       taller one's height — the two mocks should read as equals. */
+    align-items: stretch;
     gap: var(--space-8);
   }
 </style>
