@@ -29,10 +29,11 @@ import WaitlistCta from '../components/WaitlistCta.astro';
        4.6–8.0s while headline → sub → form stagger in beneath it, an
                unhurried 0.7s apart.
 
-     Ambient state (after the intro, runs indefinitely): a lava lamp. Three
-     soft regions — coral top-right (Blob B's resting place), butter
-     bottom-right, and a faint sky bloom in the bottom-left corner — each
-     wander a closed multi-waypoint path with asymmetric squish
+     Ambient state (after the intro, runs indefinitely): a lava lamp. Four
+     soft regions — coral top-right (Blob B's resting place), a second
+     dimmer coral top-left, butter bottom-right, and a faint sky bloom in
+     the bottom-left corner — each wander a closed multi-waypoint path with
+     asymmetric squish
      (scale(x, y) per waypoint, like a lava blob elongating as it floats),
      on different periods and offsets so the field never repeats visibly.
      All three share one 4s breathing pulse on their parent: independent
@@ -52,6 +53,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
 <section class="hero" id="waitlist">
   <div class="hero__ambient" aria-hidden="true">
     <div class="hero__glow hero__glow--coral"></div>
+    <div class="hero__glow hero__glow--coral2"></div>
     <div class="hero__glow hero__glow--butter"></div>
     <div class="hero__glow hero__glow--sky"></div>
   </div>
@@ -183,7 +185,23 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 2.1s both,
-      drift-coral 21s ease-in-out -6s infinite;
+      drift-coral 17s ease-in-out -6s infinite;
+  }
+  /* Second coral, top-left: dimmer sibling of the main coral so the warm
+     color frames both sides. Its sweep heads down-right into the teal but
+     stays shy of the centered headline's left edge. */
+  .hero__glow--coral2 {
+    width: clamp(340px, 36vw, 600px);
+    top: -16%;
+    left: -14%;
+    background: radial-gradient(
+      closest-side,
+      rgba(255, 115, 87, 0.42),
+      rgba(255, 115, 87, 0) 70%
+    );
+    animation:
+      glow-appear 1.1s ease 2.5s both,
+      drift-coral2 20s ease-in-out -9s infinite;
   }
   .hero__glow--butter {
     width: clamp(360px, 40vw, 640px);
@@ -196,7 +214,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 2.4s both,
-      drift-butter 27s ease-in-out -15s infinite;
+      drift-butter 22s ease-in-out -15s infinite;
   }
   /* Faint cool bloom, pinned to the bottom-left corner: its meaningful
      color must stay below/left of the centered form (white small text over
@@ -212,7 +230,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 2.7s both,
-      drift-sky 33s ease-in-out -11s infinite;
+      drift-sky 27s ease-in-out -11s infinite;
   }
 
   @keyframes ambient-breathe {
@@ -241,13 +259,28 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     30% {
-      transform: translate3d(-7%, 9%, 0) scale(1.12, 0.95);
+      transform: translate3d(-9%, 11%, 0) scale(1.14, 0.94);
     }
     60% {
-      transform: translate3d(-12%, 3%, 0) scale(1.22, 1.1);
+      transform: translate3d(-15%, 4%, 0) scale(1.24, 1.08);
     }
     80% {
-      transform: translate3d(-4%, -6%, 0) scale(1.02, 1.16);
+      transform: translate3d(-5%, -8%, 0) scale(1, 1.18);
+    }
+  }
+  @keyframes drift-coral2 {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    35% {
+      transform: translate3d(8%, 9%, 0) scale(1.14, 0.95);
+    }
+    65% {
+      transform: translate3d(12%, 2%, 0) scale(1.04, 1.18);
+    }
+    85% {
+      transform: translate3d(3%, -6%, 0) scale(1.16, 1);
     }
   }
   @keyframes drift-butter {
@@ -256,13 +289,13 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     25% {
-      transform: translate3d(-8%, -7%, 0) scale(1.14, 0.92);
+      transform: translate3d(-10%, -9%, 0) scale(1.16, 0.9);
     }
     55% {
-      transform: translate3d(-3%, -13%, 0) scale(1.02, 1.18);
+      transform: translate3d(-4%, -16%, 0) scale(1, 1.2);
     }
     75% {
-      transform: translate3d(6%, -4%, 0) scale(1.15, 1.04);
+      transform: translate3d(8%, -6%, 0) scale(1.17, 1.02);
     }
   }
   @keyframes drift-sky {
@@ -271,10 +304,10 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     40% {
-      transform: translate3d(6%, -9%, 0) scale(1.18, 1.02);
+      transform: translate3d(8%, -12%, 0) scale(1.2, 1);
     }
     70% {
-      transform: translate3d(10%, -2%, 0) scale(0.96, 1.2);
+      transform: translate3d(13%, -3%, 0) scale(0.94, 1.22);
     }
   }
 
@@ -283,6 +316,9 @@ import WaitlistCta from '../components/WaitlistCta.astro';
        off-canvas — color stays visible at the edges, never behind text. */
     .hero__glow--coral {
       right: -35%;
+    }
+    .hero__glow--coral2 {
+      left: -32%;
     }
     .hero__glow--butter {
       right: -25%;
@@ -451,9 +487,10 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   }
   @media (max-width: 800px) {
     /* The line break keeps each line short, but 1.9× is still too wide for
-       a 390px viewport — 1.6× reads as a title without clipping. */
+       a 390px viewport — 1.4× reads as a title while keeping ~30px of
+       breathing room to each edge. */
     .hero__eyebrow {
-      --tagline-stage-scale: 1.6;
+      --tagline-stage-scale: 1.4;
     }
   }
 
@@ -489,6 +526,14 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   .header {
     animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.4s both;
   }
+  /* Same beat for everything else that peeks into the first paint: the
+     sections below the hero (its siblings inside <main>) and the cookie
+     banner — otherwise they sit fully rendered next to a bare intro. The
+     banner keeps its own `hidden` logic; this only times its entrance. */
+  main > .hero ~ *,
+  .cookie-banner {
+    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.4s both;
+  }
   @keyframes header-reveal {
     from {
       opacity: 0;
@@ -496,7 +541,9 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .header {
+    .header,
+    main > .hero ~ *,
+    .cookie-banner {
       animation: none;
     }
   }
