@@ -1,12 +1,13 @@
 ---
 import WaitlistCta from '../components/WaitlistCta.astro';
-import AppPeek from '../components/AppPeek.astro';
+import TwinBlobs from '../components/TwinBlobs.astro';
 import { SITE } from '../config';
 ---
 
-<!-- Signature gradient: approved for marketing hero. Copy stays short per the
-     "never behind long text" rule; headline is large-text white per the brand's
-     accessible-pairings table. -->
+<!-- Warm background + Ink text per the style guide; the Twin Blobs animation
+     (two independent shapes, one shared breathing pulse) is the dominant
+     visual — a wordless nod to multi-baby tracking. The app mock that used
+     to live here moved to the "See it in action" section below. -->
 <section class="hero" id="waitlist">
   <div class="container hero__inner">
     <div class="hero__copy">
@@ -16,23 +17,23 @@ import { SITE } from '../config';
         One tap logs a feed for everyone. One screen shows who ate, who slept, who's due.
         Finally — a tracker that starts where your family does.
       </p>
-      <WaitlistCta variant="on-gradient" formId="waitlist-email-hero" source="hero" />
+      <WaitlistCta variant="on-solid" formId="waitlist-email-hero" source="hero" />
     </div>
     <div class="hero__art">
-      <AppPeek />
+      <TwinBlobs />
     </div>
   </div>
 </section>
 
 <style>
   .hero {
-    background: var(--gradient-signature);
-    color: #fff;
+    background: var(--warm-bg);
+    color: var(--ink);
     overflow: hidden;
   }
   .hero__inner {
     display: grid;
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     align-items: center;
     gap: var(--space-8);
     padding-block: clamp(var(--space-12), 9vw, var(--space-24));
@@ -42,15 +43,16 @@ import { SITE } from '../config';
     font-size: 15px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--butter);
+    color: var(--teal);
     margin-bottom: var(--space-4);
   }
   .hero__title {
-    color: #fff;
+    color: var(--ink);
     max-width: 15ch;
   }
   .hero__sub {
     margin-block: var(--space-6);
+    color: var(--taupe-dark);
     font-size: 19px;
     line-height: 28px;
     font-weight: 500;
@@ -65,7 +67,7 @@ import { SITE } from '../config';
       grid-template-columns: 1fr;
     }
     /* Copy + form stay first on mobile so the CTA is reachable fast;
-       the app peek follows below. */
+       the blobs follow below. */
     .hero__art {
       margin-top: var(--space-4);
     }
