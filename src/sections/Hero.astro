@@ -21,8 +21,10 @@ import { SITE } from '../config';
                (butter follows), where Blob B used to be.
        1.75–2.25s the sticky header (hidden until now — see the is:global
                style block) slides down as the gradient finishes filling.
-       2.2–4.5s eyebrow → headline → sub → form stagger in, an unhurried
-               0.5s apart.
+       2.2–3.0s the tagline fades in CENTERED on the settled gradient — the
+               brand speaks first — holds through ~4s…
+       4.0–4.7s …then glides left to its docked position while
+       4.2–6.0s headline → sub → form stagger in beneath it, 0.5s apart.
 
      Ambient state (after the intro, runs indefinitely): two soft warm
      regions — coral in the top-right corner (Blob B's resting place) and
@@ -310,23 +312,55 @@ import { SITE } from '../config';
   .hero__copy > :global(*) {
     animation: hero-reveal 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
-  .hero__copy > :global(*:nth-child(1)) {
-    animation-delay: 2.2s;
-  }
   .hero__copy > :global(*:nth-child(2)) {
-    animation-delay: 2.7s;
+    animation-delay: 4.2s;
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: 3.2s;
+    animation-delay: 4.7s;
   }
   .hero__copy > :global(*:nth-child(4)) {
-    animation-delay: 3.7s;
+    animation-delay: 5.2s;
   }
 
   @keyframes hero-reveal {
     from {
       opacity: 0;
       transform: translateY(14px);
+    }
+  }
+
+  /* Tagline: the brand speaks first. Enters centered on the settled
+     gradient, holds a beat, then docks to its left-aligned home as the
+     headline builds beneath it. inline-block + relative `left` so both the
+     centered and docked positions are width-agnostic; this rule sits after
+     the .hero__copy > * reveal rule so its animation list wins. */
+  .hero__eyebrow {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+    animation:
+      tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.2s both,
+      tagline-dock 0.7s cubic-bezier(0.22, 1, 0.36, 1) 4s both;
+  }
+  @keyframes tagline-enter {
+    from {
+      opacity: 0;
+      transform: translate(-50%, 14px);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+  @keyframes tagline-dock {
+    from {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    to {
+      left: 0;
+      transform: none;
     }
   }
 
@@ -341,6 +375,13 @@ import { SITE } from '../config';
     .hero__glow,
     .hero__copy > :global(*) {
       animation: none;
+    }
+    /* The tagline's resting styles are its centered stage position; with
+       animations off it must be pinned to the docked state instead. */
+    .hero__eyebrow {
+      animation: none;
+      left: 0;
+      transform: none;
     }
   }
 </style>
