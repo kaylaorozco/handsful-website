@@ -1,0 +1,190 @@
+---
+/**
+ * Stylized mock of the AI visit-summary view ("pediatrician-ready notes"),
+ * shown beside AppPeek in the "See it in action" section — the second
+ * standout feature after one-tap logging.
+ * Same rules as AppPeek: pure HTML/CSS (no screenshot, no JS), colors and
+ * type straight from the style guide, and it's a *sketch* of the UI, not a
+ * promise — the caption keeps the mid-build tone. When real screenshots
+ * exist, swap this out alongside AppPeek (see docs/LAUNCH-CHECKLIST.md).
+ */
+
+const stats = [
+  { label: 'Feeds', value: '7–8× a day' },
+  { label: 'Sleep', value: '14h 20m avg' },
+  { label: 'Diapers', value: '6 wet · 2 dirty' },
+  { label: 'Weight', value: '+180 g this week' },
+];
+---
+
+<figure class="notes">
+  <div
+    class="notes__card"
+    role="img"
+    aria-label="Preview of Handsful's AI visit summary: feeding, sleep, diaper and weight stats for one baby over the last two weeks, with a short written summary ready to share with your pediatrician"
+  >
+    <div class="notes__topbar">
+      <span class="notes__title">Visit summary</span>
+      <span class="notes__badge">AI · pediatrician-ready</span>
+    </div>
+
+    <div class="notes__baby">
+      <span class="notes__avatar"></span>
+      <span class="notes__name">Baby A</span>
+      <span class="notes__range">4-week check · last 14 days</span>
+    </div>
+
+    <dl class="notes__stats">
+      {
+        stats.map((stat) => (
+          <div class="notes__stat">
+            <dt>{stat.label}</dt>
+            <dd>{stat.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    <p class="notes__summary">
+      “Feeding every 3–4 hours with longer stretches at night. Wet diapers on
+      track; steady weight gain since the last visit.”
+    </p>
+
+    <span class="notes__cta">Share with your pediatrician</span>
+  </div>
+  <figcaption class="notes__hint">the 4-week visit, already written up</figcaption>
+</figure>
+
+<style>
+  .notes {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    /* Cap the figure itself: as a flex item it would otherwise size to the
+       summary paragraph's single-line max-content and force a wrap. */
+    width: min(360px, 100%);
+  }
+
+  .notes__card {
+    width: min(360px, 100%);
+    background: var(--warm-bg);
+    border-radius: 28px;
+    padding: var(--space-6);
+    box-shadow: 0 16px 48px rgba(34, 32, 29, 0.16);
+  }
+
+  .notes__topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+  .notes__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--ink);
+  }
+  .notes__badge {
+    background: var(--butter);
+    color: var(--ink);
+    font-size: 11px;
+    line-height: 1;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    padding: 6px 10px;
+    border-radius: var(--radius-pill);
+    white-space: nowrap;
+  }
+
+  .notes__baby {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+  .notes__avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: var(--sky); /* Baby identity: Sky = first baby */
+  }
+  .notes__name {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .notes__range {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--taupe);
+    white-space: nowrap;
+  }
+
+  .notes__stats {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+  .notes__stat {
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-3);
+  }
+  .notes__stat dt {
+    font-size: 11px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--taupe);
+  }
+  .notes__stat dd {
+    margin: 0;
+    font-size: 13px;
+    line-height: 18px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+
+  /* The AI-written note itself — the payoff of the card */
+  .notes__summary {
+    margin-top: var(--space-3);
+    background: #fff;
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--taupe-dark);
+  }
+
+  .notes__cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: var(--space-4);
+    min-height: 44px;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-action);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.01em;
+  }
+
+  .notes__hint {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    font-style: italic;
+    color: var(--taupe);
+  }
+</style>

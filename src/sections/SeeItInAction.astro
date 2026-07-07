@@ -1,11 +1,13 @@
 ---
 /**
- * "See it in action" — home of the stylized app mock since the blob intro
+ * "See it in action" — home of the stylized app mocks since the blob intro
  * took over as the hero visual. Flow: the hero hooks attention with motion
- * and a sparse pitch; this section delivers the one-tap story + proof right
- * after (the lede used to be the hero subhead).
+ * and a sparse pitch; this section delivers the proof right after — the
+ * one-tap logging view (lede text was the old hero subhead) and the AI
+ * pediatrician-ready visit summary, the app's two standout features.
  */
 import AppPeek from '../components/AppPeek.astro';
+import NotesPeek from '../components/NotesPeek.astro';
 ---
 
 <section class="action section">
@@ -16,8 +18,9 @@ import AppPeek from '../components/AppPeek.astro';
       Finally — a tracker that starts where your family does.
     </p>
   </div>
-  <div class="container action__peek">
+  <div class="container action__peeks">
     <AppPeek />
+    <NotesPeek />
   </div>
 </section>
 
@@ -39,9 +42,12 @@ import AppPeek from '../components/AppPeek.astro';
     font-size: 19px;
     line-height: 28px;
   }
-  .action__peek {
+  .action__peeks {
     margin-top: var(--space-12);
     display: flex;
+    flex-wrap: wrap; /* cards sit side by side, stacking on narrow screens */
     justify-content: center;
+    align-items: flex-start;
+    gap: var(--space-8);
   }
 </style>

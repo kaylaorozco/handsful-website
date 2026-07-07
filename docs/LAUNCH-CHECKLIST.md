@@ -43,6 +43,7 @@ Everything that changes when Handsful goes from waitlist → live app.
 - [ ] Add `Offer` (price) and later `AggregateRating` to the SoftwareApplication
       schema in `src/pages/index.astro`
 - [ ] Fill in social profile URLs in `src/config.ts` (footer placeholders become links)
-- [ ] Swap the stylized UI mock (`src/components/AppPeek.astro`, used in
-      `src/sections/SeeItInAction.astro`) for real app screenshots once screens
-      are final — and remove its "mid-build" caption
+- [ ] Swap the stylized UI mocks (`src/components/AppPeek.astro` and
+      `src/components/NotesPeek.astro`, used in `src/sections/SeeItInAction.astro`)
+      for real app screenshots once screens are final — and remove their
+      "mid-build" captions
