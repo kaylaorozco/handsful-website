@@ -152,11 +152,32 @@ const FLIPS: Flip[] = [
     justify-content: center;
     width: 48px;
     height: 48px;
-    /* Soft organic blob instead of a rounded square — the brand motif */
+    /* Soft organic blob instead of a rounded square — the brand motif —
+       morphing lazily; offsets below keep the three out of sync (the
+       global reduced-motion rule freezes this automatically) */
     border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
     background: var(--gradient-action);
     color: #fff;
     margin-bottom: var(--space-4);
+    animation: flips-icon-morph 9s ease-in-out infinite;
+  }
+  .flips__card:nth-child(2) .flips__icon {
+    animation-delay: -3s;
+  }
+  .flips__card:nth-child(3) .flips__icon {
+    animation-delay: -6s;
+  }
+  @keyframes flips-icon-morph {
+    0%,
+    100% {
+      border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
+    }
+    33% {
+      border-radius: 56% 44% 52% 48% / 46% 58% 42% 54%;
+    }
+    66% {
+      border-radius: 44% 56% 58% 42% / 56% 44% 52% 48%;
+    }
   }
   .flips__title {
     font-size: 22px;
