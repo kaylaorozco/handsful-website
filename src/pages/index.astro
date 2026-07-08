@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../sections/Hero.astro';
 import SeeItInAction from '../sections/SeeItInAction.astro';
-import Problem from '../sections/Problem.astro';
-import Features from '../sections/Features.astro';
+import ProblemSolution from '../sections/ProblemSolution.astro';
+import FounderStory from '../sections/FounderStory.astro';
 import SocialProof from '../sections/SocialProof.astro';
 import Faq from '../sections/Faq.astro';
 import FinalCta from '../sections/FinalCta.astro';
@@ -48,8 +48,8 @@ const faqSchema = {
 <BaseLayout structuredData={[organizationSchema, appSchema, faqSchema]}>
   <Hero />
   <SeeItInAction />
-  <Problem />
-  <Features />
+  <ProblemSolution />
+  <FounderStory />
   <SocialProof />
   <Faq />
   <FinalCta />

@@ -1,0 +1,124 @@
+---
+/**
+ * Founder story — Kayla and her twins. Pre-launch this doubles as the
+ * site's social proof: a real parent of multiples building the thing she
+ * couldn't find. Deep Teal-green background (the brand's dark surface
+ * color) sets it apart from the warm/white rhythm and lets the
+ * black-and-white photo carry the emotion; the blob mask on the photo ties
+ * the hero's blob motif back to the two humans that inspired it.
+ */
+---
+
+<section class="story section">
+  <div class="container story__inner">
+    <figure class="story__photo">
+      <img
+        src="/images/twins.jpg"
+        alt="Kayla resting with her newborn twins asleep on her chest"
+        width="1080"
+        height="1350"
+        loading="lazy"
+      />
+      <figcaption class="story__caption">week one, hands full</figcaption>
+    </figure>
+    <div class="story__copy">
+      <p class="story__eyebrow">Why Handsful exists</p>
+      <h2 class="story__title">Built by a mom who lived the blur</h2>
+      <p>
+        When my twins arrived, I went looking for an app to help us keep up — and there
+        wasn't one. I downloaded the best singleton tracker I could find and spent months
+        fighting it: switching profiles for every feed, double-logging at 3am, never quite
+        sure what I'd saved for whom. It was never what I needed.
+      </p>
+      <p>
+        That first season was a blur. No sleep, no mental clarity, leaning on my community
+        for everything. An app can't hold a baby — but the right one would have made the
+        hard parts simpler: night feedings half-asleep, pediatrician visits where every
+        question starts with "how often…", the quiet reassurance that everyone's okay.
+      </p>
+      <p>
+        Nothing was designed for parents like me, caring for more than one baby at once.
+        So I'm building the thing I searched for that first night home: a tracker that
+        starts where families like ours do.
+      </p>
+      <p class="story__signature">— Kayla, mom of twins</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Dark surface per the brand palette (Teal-green); white text is 4.9:1
+     on it — passes AA for the body sizes used here. */
+  .story {
+    background: var(--teal);
+    color: #fff;
+  }
+  .story__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    align-items: center;
+    gap: clamp(var(--space-8), 6vw, var(--space-16));
+  }
+
+  .story__photo {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .story__photo img {
+    width: min(380px, 100%);
+    /* Organic blob mask — the hero's motif, back where it came from */
+    border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
+    box-shadow: 0 24px 64px rgba(34, 32, 29, 0.35);
+  }
+  .story__caption {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 500;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .story__eyebrow {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--butter);
+    margin-bottom: var(--space-4);
+  }
+  .story__title {
+    color: #fff;
+    margin-bottom: var(--space-6);
+    max-width: 18ch;
+  }
+  .story__copy p:not(.story__eyebrow):not(.story__signature) {
+    margin-bottom: var(--space-4);
+    font-size: 17px;
+    line-height: 27px;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 52ch;
+  }
+  .story__signature {
+    margin-top: var(--space-6);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    color: var(--butter);
+  }
+
+  @media (max-width: 800px) {
+    .story__inner {
+      grid-template-columns: 1fr;
+    }
+    /* Photo leads on mobile — the image is the hook, the story follows */
+    .story__photo {
+      margin-bottom: var(--space-4);
+    }
+    .story__photo img {
+      width: min(300px, 85%);
+    }
+  }
+</style>
