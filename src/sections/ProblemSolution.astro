@@ -61,7 +61,9 @@ const FLIPS: Flip[] = [
     {
       FLIPS.map((flip) => (
         <article class="flips__card">
+          <p class="flips__label flips__label--pain">With a single-baby app</p>
           <p class="flips__pain">{flip.pain}</p>
+          <p class="flips__label flips__label--answer">With Handsful</p>
           <span class="flips__icon" aria-hidden="true">
             <svg
               width="24"
@@ -116,6 +118,23 @@ const FLIPS: Flip[] = [
     display: flex;
     flex-direction: column;
   }
+  /* Explicit before/after labels so the flip can't be misread */
+  .flips__label {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+  .flips__label--pain {
+    color: #c2543e; /* darkened coral — readable at 12px on white */
+  }
+  .flips__label--answer {
+    color: var(--teal);
+    margin-bottom: var(--space-3);
+    margin-top: auto; /* answer blocks align across cards even if pains differ */
+  }
   /* The setup: how it goes with singleton apps — muted, quoted, coral edge */
   .flips__pain {
     font-size: 15px;
@@ -137,7 +156,6 @@ const FLIPS: Flip[] = [
     background: var(--gradient-action);
     color: #fff;
     margin-bottom: var(--space-4);
-    margin-top: auto; /* answers align across cards even if pains differ */
   }
   .flips__title {
     font-size: 22px;
