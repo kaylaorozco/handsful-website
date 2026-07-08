@@ -23,11 +23,11 @@ import WaitlistCta from '../components/WaitlistCta.astro';
                style block) slides down once the gradient has filled.
        2.2–3.0s the tagline fades in DEAD-CENTER on the settled gradient
                (vertically + horizontally, all viewports) at ~1.9× size —
-               the brand speaks first — holds through ~4s…
-       4.0–5.2s …then rises to its slot at the top of the centered copy
+               the brand speaks first, for a beat…
+       3.0–4.2s …then rises to its slot at the top of the centered copy
                block, shrinking into its docked eyebrow size,
-       4.6–8.0s while headline → sub → form stagger in beneath it, an
-               unhurried 0.7s apart.
+       3.6–5.3s while headline → form stagger in beneath it, an unhurried
+               0.7s apart.
 
      Ambient state (after the intro, runs indefinitely): a lava lamp. Four
      soft regions — coral top-right (Blob B's resting place), a second
@@ -312,6 +312,17 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   }
 
   @media (max-width: 800px) {
+    /* Phones: the hero owns the visible screen (svh ignores the URL-bar
+       dance) with the copy vertically centered — otherwise the content
+       hugs the top and the tagline's center-stage moment can land under
+       browser chrome / the cookie banner on short viewports. */
+    .hero__inner {
+      min-height: calc(100vh - 80px); /* fallback; 80px ≈ sticky header */
+      min-height: calc(100svh - 80px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
     /* Narrow screens: copy spans the full width, so push the glows further
        off-canvas — color stays visible at the edges, never behind text. */
     .hero__glow--coral {
@@ -434,10 +445,10 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     animation: hero-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .hero__copy > :global(*:nth-child(2)) {
-    animation-delay: 4.6s;
+    animation-delay: 3.6s;
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: 5.3s;
+    animation-delay: 4.3s;
   }
 
   @keyframes hero-reveal {
@@ -464,7 +475,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     transform: translateY(var(--tagline-stage-y)) scale(var(--tagline-stage-scale));
     animation:
       tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.2s both,
-      tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 4s both;
+      tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 3s both;
   }
   @keyframes tagline-enter {
     from {

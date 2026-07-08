@@ -35,6 +35,11 @@ export const FAQ_ITEMS: FaqItem[] = [
       'Yes. Handsful generates a clean, exportable visit summary for each baby — feeds, sleep, diapers and growth — so checkup questions get real answers instead of bleary 4am guesses.',
   },
   {
+    question: 'Can I turn the AI features on or off?',
+    answer:
+      'Yes — they’re your choice. Features like AI visit summaries are optional, and you can switch them on or off anytime in settings. Turned off, Handsful is a fast, fully manual tracker: your logging works exactly the same, and your data isn’t sent to any AI service.',
+  },
+  {
     question: 'What can I track in Handsful?',
     answer:
       'Feeds (breast, bottle and pumping), sleep and naps, diapers, growth and milestones — for every baby, together. If it happens in a day with multiples, it’s one tap away.',

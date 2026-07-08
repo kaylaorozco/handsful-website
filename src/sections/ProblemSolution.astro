@@ -1,0 +1,199 @@
+---
+/**
+ * Pain → answer flips. Replaces the old separate Problem and Features
+ * sections, which repeated each other (log-twice ↔ one-tap, mental-math ↔
+ * side-by-side, handoff chaos ↔ whole team). Each card leads with the
+ * singleton-app pain in a muted "old way" quote, then flips to the
+ * Handsful answer. The fourth old feature (pediatrician-ready notes) isn't
+ * a card here — it's showcased with its own mock in "See it in action".
+ *
+ * Keeps id="features" — the header nav links to /#features.
+ */
+
+interface Flip {
+  pain: string;
+  title: string;
+  body: string;
+  /** Inline SVG path(s) on a 24px grid, 1.5px stroke — per brand icon spec. */
+  iconPaths: string[];
+}
+
+const FLIPS: Flip[] = [
+  {
+    pain:
+      'Switch profiles for every feed, nap and diaper — at 3am, with a bottle in each hand.',
+    title: 'One tap logs everyone',
+    body:
+      'Tandem feed? Synced naps? Log it for all your babies in a single tap — not once per profile. Because at 3am, every tap counts.',
+    iconPaths: ['M12 5v14M5 12h14', 'M12 21a9 9 0 1 0-9-9'],
+  },
+  {
+    pain:
+      'Is she eating less than her brother this week? Flip to a profile, memorize, flip back, squint.',
+    title: 'Everyone, side by side',
+    body:
+      'One screen shows every baby’s feeds, sleep and diapers together. Spot who’s cluster feeding and who’s short on sleep — no profile-flipping, no mental math.',
+    iconPaths: ['M4 4h6.5v16H4zM13.5 4H20v16h-6.5z'],
+  },
+  {
+    pain:
+      'Your partner takes the night shift, grandma covers the morning — and nobody’s sure who fed whom.',
+    title: 'Built for the whole team',
+    body:
+      'You, your partner, grandma, the night nurse — everyone logs to one shared record, live. Handoffs without the twenty questions.',
+    iconPaths: [
+      'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20a6 6 0 0 1 12 0',
+      'M16 8a3 3 0 1 1 2 5.2M21 20a6 6 0 0 0-4-5.7',
+    ],
+  },
+];
+---
+
+<section class="flips section" id="features">
+  <div class="container--narrow flips__intro">
+    <h2>Every baby app assumes one baby</h2>
+    <p class="flips__lede">
+      Parents of multiples deserve better than a workaround. Here's what changes when a
+      tracker starts from more than one:
+    </p>
+  </div>
+  <div class="container flips__grid">
+    {
+      FLIPS.map((flip) => (
+        <article class="flips__card">
+          <p class="flips__label flips__label--pain">With a single-baby app</p>
+          <p class="flips__pain">{flip.pain}</p>
+          <p class="flips__label flips__label--answer">With Handsful</p>
+          <span class="flips__icon" aria-hidden="true">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              {flip.iconPaths.map((d) => (
+                <path d={d} />
+              ))}
+            </svg>
+          </span>
+          <h3 class="flips__title">{flip.title}</h3>
+          <p class="flips__body">{flip.body}</p>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .flips {
+    background: var(--warm-bg);
+  }
+  .flips__intro {
+    text-align: center;
+  }
+  .flips__intro h2 {
+    color: var(--teal);
+  }
+  .flips__lede {
+    margin-top: var(--space-4);
+    color: var(--taupe);
+    font-size: 19px;
+    line-height: 28px;
+  }
+  .flips__grid {
+    margin-top: var(--space-12);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+  .flips__card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: var(--space-8) var(--space-6);
+    box-shadow: 0 2px 12px rgba(34, 32, 29, 0.06);
+    display: flex;
+    flex-direction: column;
+  }
+  /* Explicit before/after labels so the flip can't be misread */
+  .flips__label {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+  .flips__label--pain {
+    color: #c2543e; /* darkened coral — readable at 12px on white */
+  }
+  .flips__label--answer {
+    color: var(--teal);
+    margin-bottom: var(--space-3);
+    margin-top: auto; /* answer blocks align across cards even if pains differ */
+  }
+  /* The setup: how it goes with singleton apps — muted, quoted, coral edge */
+  .flips__pain {
+    font-size: 15px;
+    line-height: 22px;
+    font-style: italic;
+    color: var(--taupe);
+    border-left: 3px solid var(--coral);
+    padding-left: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+  /* The punchline: what Handsful does instead */
+  .flips__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    /* Soft organic blob instead of a rounded square — the brand motif —
+       morphing lazily; offsets below keep the three out of sync (the
+       global reduced-motion rule freezes this automatically) */
+    border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
+    background: var(--gradient-action);
+    color: #fff;
+    margin-bottom: var(--space-4);
+    animation: flips-icon-morph 9s ease-in-out infinite;
+  }
+  .flips__card:nth-child(2) .flips__icon {
+    animation-delay: -3s;
+  }
+  .flips__card:nth-child(3) .flips__icon {
+    animation-delay: -6s;
+  }
+  /* Waypoint deltas are 1.5x the original pass — the morph should be
+     plainly visible at a glance, not only on a stare */
+  @keyframes flips-icon-morph {
+    0%,
+    100% {
+      border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
+    }
+    33% {
+      border-radius: 61% 39% 54% 46% / 42% 64% 35% 59%;
+    }
+    66% {
+      border-radius: 43% 57% 63% 37% / 57% 43% 50% 50%;
+    }
+  }
+  .flips__title {
+    font-size: 22px;
+    line-height: 28px;
+  }
+  .flips__body {
+    margin-top: var(--space-3);
+    color: var(--taupe);
+    font-size: 15px;
+    line-height: 22px;
+  }
+  @media (max-width: 800px) {
+    .flips__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

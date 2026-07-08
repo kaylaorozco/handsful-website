@@ -43,8 +43,8 @@ export const CTA = {
 /** Social profiles. Empty string = link hidden in the footer until it exists. */
 export const SOCIAL = {
   instagram: '', // e.g. https://instagram.com/handsful.app
+  facebook: '',
   tiktok: '',
-  x: '',
 } as const;
 
 export const ANALYTICS = {

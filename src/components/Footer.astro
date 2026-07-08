@@ -6,8 +6,8 @@ const year = new Date().getFullYear();
 
 const socials = [
   { label: 'Instagram', url: SOCIAL.instagram },
+  { label: 'Facebook', url: SOCIAL.facebook },
   { label: 'TikTok', url: SOCIAL.tiktok },
-  { label: 'X', url: SOCIAL.x },
 ];
 ---
 
@@ -23,6 +23,7 @@ const socials = [
     <nav class="footer__col" aria-label="Product">
       <h4 class="footer__heading">Product</h4>
       <a href="/#features">Features</a>
+      <a href="/#story">Our story</a>
       <a href="/#faq">FAQ</a>
       <a href="/#waitlist">Join the waitlist</a>
     </nav>
@@ -86,7 +87,9 @@ const socials = [
     max-width: 32ch;
   }
   .footer__heading {
-    color: var(--butter);
+    /* Coral's recurring role site-wide: accent headings (hero glows, the
+       flip-card pain labels, here) — ~6:1 on Ink, AA-safe at this size */
+    color: var(--coral);
     margin-bottom: var(--space-3);
   }
   .footer__col {
