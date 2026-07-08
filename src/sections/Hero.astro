@@ -8,25 +8,32 @@ import WaitlistCta from '../components/WaitlistCta.astro';
      mock lives in the "See it in action" section below, so the hero stays
      uncrowded and the gradient + copy carry it.
 
-     Intro ("Blob Intro → Gradient Reveal", plays once per page load):
-       0–2s    two small sibling blobs morph (CSS `d: path()` between
-               matched-point variants from scripts/generate-blobs.mjs)
-       0.6–2.1s the blobs DISPERSE rather than one conquering: Blob A scales
-               ×15 (ease-in, clipped by the hero) while Blob B swells ×7,
-               blurs, and evaporates on top of it — and the overlay starts
-               crossfading mid-growth (1.5–2.4s), so both blobs melt into
-               the real gradient while still moving. A brief coral-free
-               breath follows…
-       2.1–3.5s …then coral re-emerges into the hero as the ambient glow
+     Intro ("Blob Chase → Gradient Reveal", plays once per page load):
+       0–1.8s  the two sibling blobs CHASE each other, follow-the-leader
+               style: they spring apart onto a wide shared track (a spread
+               layer pushes each outward and shrinks it) and lap it once,
+               unhurried and upright — an inner keel cancels the orbit
+               rotation — B on a faster-starting curve so it visibly closes
+               on A before both bleed speed and flow back together. They
+               wobble lava-lamp style the whole way around (continuous
+               `d: path()` morphs between matched-point variants from
+               scripts/generate-blobs.mjs, a shape change every ~0.5s).
+       1.2–2.7s the lap's momentum flings them into DISPERSAL rather than
+               one conquering: Blob A scales ×15 (ease-in, clipped by the
+               hero) while Blob B swells ×7, blurs, and evaporates on top
+               of it — and the overlay starts crossfading mid-growth
+               (2.1–3.0s), so both blobs melt into the real gradient while
+               still moving. A brief coral-free breath follows…
+       2.7–4.1s …then coral re-emerges into the hero as the ambient glow
                (butter and a faint sky glow follow), where Blob B died.
-       2.4–2.9s the sticky header (hidden until now — see the is:global
+       3.0–3.5s the sticky header (hidden until now — see the is:global
                style block) slides down once the gradient has filled.
-       2.2–3.0s the tagline fades in DEAD-CENTER on the settled gradient
+       2.8–3.6s the tagline fades in DEAD-CENTER on the settled gradient
                (vertically + horizontally, all viewports) at ~1.9× size —
                the brand speaks first, for a beat…
-       3.0–4.2s …then rises to its slot at the top of the centered copy
+       3.6–4.8s …then rises to its slot at the top of the centered copy
                block, shrinking into its docked eyebrow size,
-       3.6–5.3s while headline → form stagger in beneath it, an unhurried
+       4.2–5.9s while headline → form stagger in beneath it, an unhurried
                0.7s apart.
 
      Ambient state (after the intro, runs indefinitely): a lava lamp. Four
@@ -75,17 +82,35 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       </defs>
       <!-- A first, B second: B stays on top while A takes over beneath it,
            so B visibly melts into the new background instead of being
-           swallowed by it. -->
-      <path
-        class="hero__intro-blob hero__intro-blob--a"
-        fill="url(#hero-intro-grad-a)"
-        d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
-      ></path>
-      <path
-        class="hero__intro-blob hero__intro-blob--b"
-        fill="url(#hero-intro-grad-b)"
-        d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
-      ></path>
+           swallowed by it. Four nested layers per blob because animations
+           can't share one element's `transform`: the orbit <g> carries the
+           blob around the shared track, the spread <g> pushes it outward
+           onto a wider lane (and shrinks it) so the pair circles clearly
+           separated, the keel <g> counter-rotates so the blob travels
+           upright instead of pinwheeling, and the path keeps the
+           takeover/dissolve. -->
+      <g class="hero__intro-orbit hero__intro-orbit--a">
+        <g class="hero__intro-spread hero__intro-spread--a">
+          <g class="hero__intro-keel hero__intro-keel--a">
+            <path
+              class="hero__intro-blob hero__intro-blob--a"
+              fill="url(#hero-intro-grad-a)"
+              d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
+            ></path>
+          </g>
+        </g>
+      </g>
+      <g class="hero__intro-orbit hero__intro-orbit--b">
+        <g class="hero__intro-spread hero__intro-spread--b">
+          <g class="hero__intro-keel hero__intro-keel--b">
+            <path
+              class="hero__intro-blob hero__intro-blob--b"
+              fill="url(#hero-intro-grad-b)"
+              d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
+            ></path>
+          </g>
+        </g>
+      </g>
     </svg>
   </div>
 
@@ -108,7 +133,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   // --tagline-stage-y. Runs once at load: the stage moment is over within
   // seconds, so a mid-intro resize isn't worth handling. Suspend the
   // element's animations while measuring (they win over inline styles), and
-  // note the reveal keeps the tagline invisible until 2.2s, so this can't
+  // note the reveal keeps the tagline invisible until 2.8s, so this can't
   // cause a flash.
   const hero = document.querySelector<HTMLElement>('.hero');
   const tagline = document.querySelector<HTMLElement>('.hero__eyebrow');
@@ -184,7 +209,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       rgba(255, 115, 87, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 2.1s both,
+      glow-appear 1.1s ease 2.7s both,
       drift-coral 17s ease-in-out -6s infinite;
   }
   /* Second coral, top-left: dimmer sibling of the main coral so the warm
@@ -200,7 +225,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       rgba(255, 115, 87, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 2.5s both,
+      glow-appear 1.1s ease 3.1s both,
       drift-coral2 20s ease-in-out -9s infinite;
   }
   .hero__glow--butter {
@@ -213,7 +238,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       rgba(255, 203, 87, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 2.4s both,
+      glow-appear 1.1s ease 3s both,
       drift-butter 22s ease-in-out -15s infinite;
   }
   /* Faint cool bloom, pinned to the bottom-left corner: its meaningful
@@ -229,7 +254,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       rgba(62, 166, 194, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 2.7s both,
+      glow-appear 1.1s ease 3.3s both,
       drift-sky 27s ease-in-out -11s infinite;
   }
 
@@ -361,7 +386,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     align-items: flex-start;
     background: var(--warm-bg);
     pointer-events: none;
-    animation: intro-vanish 0.9s ease 1.5s both;
+    animation: intro-vanish 0.9s ease 2.1s both;
   }
 
   .hero__intro-blobs {
@@ -372,27 +397,118 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     overflow: visible;
   }
 
+  /* The chase: follow-the-leader on one shared loop. The orbit groups spin
+     two full turns around the view-box center, which carries the blobs
+     (opposite sides of that center) around the same circular track — and
+     the keel inside each orbit counter-rotates by the exact same curve, so
+     the blobs travel the track UPRIGHT. Without the keels this reads as a
+     rigid pinwheel: shapes and gradients spinning around one visible
+     anchor. Different easing curves per blob are the pursuit: B jumps out
+     fast and closes most of the half-lap gap on A before A pulls away
+     late. Both curves end long and flat, so the loop bleeds momentum right
+     as the takeover (1s) flings the blobs outward — the dispersal looks
+     thrown, not scheduled. Keels use fill-box, so each counter-rotates
+     about its own (orbiting) blob center; A and B keyframe pairs must keep
+     matching beziers or the cancellation drifts. */
+  .hero__intro-orbit,
+  .hero__intro-spread,
+  .hero__intro-keel {
+    will-change: transform;
+  }
+  .hero__intro-orbit {
+    transform-box: view-box;
+    transform-origin: center;
+  }
+  .hero__intro-spread,
+  .hero__intro-keel {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .hero__intro-orbit--a {
+    animation: intro-chase 1.8s cubic-bezier(0.6, 0.02, 0.15, 1) both;
+  }
+  .hero__intro-spread--a {
+    animation: intro-spread-a 1.8s ease-in-out both;
+  }
+  .hero__intro-keel--a {
+    animation: intro-chase-counter 1.8s cubic-bezier(0.6, 0.02, 0.15, 1) both;
+  }
+  .hero__intro-orbit--b {
+    animation: intro-chase 1.8s cubic-bezier(0.3, 0.1, 0.28, 1) both;
+  }
+  .hero__intro-spread--b {
+    animation: intro-spread-b 1.8s ease-in-out both;
+  }
+  .hero__intro-keel--b {
+    animation: intro-chase-counter 1.8s cubic-bezier(0.3, 0.1, 0.28, 1) both;
+  }
+
   .hero__intro-blob {
     transform-box: fill-box;
     transform-origin: center;
   }
   .hero__intro-blob--a {
     animation:
-      intro-a-morph 2.4s ease-in-out both,
-      intro-a-takeover 1.5s cubic-bezier(0.55, 0, 0.85, 0.45) 0.6s both;
+      intro-a-morph 2.6s ease-in-out both,
+      intro-a-takeover 1.5s cubic-bezier(0.55, 0, 0.85, 0.45) 1.2s both;
     will-change: transform;
   }
   /* Blob B disperses: swells, blurs and evaporates on top of the growing
      gradient (still morphing all the while); coral then re-enters as
-     .hero__glow--coral (2.1s). The blur ramp is what sells "dissolving
+     .hero__glow--coral (2.7s). The blur ramp is what sells "dissolving
      into color" — it's a one-time 1.3s cost on a small element. */
   .hero__intro-blob--b {
     animation:
-      intro-b-morph 2.4s ease-in-out both,
-      intro-b-dissolve 1.3s cubic-bezier(0.42, 0, 1, 1) 0.8s both;
+      intro-b-morph 2.6s ease-in-out both,
+      intro-b-dissolve 1.3s cubic-bezier(0.42, 0, 1, 1) 1.4s both;
     will-change: transform, opacity, filter;
   }
 
+  @keyframes intro-chase {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      /* One full lap — visually back where they started, so the dispersal
+         grows from the same composition the intro opened with */
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes intro-chase-counter {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-360deg);
+    }
+  }
+  /* The spread sits between orbit and keel, so its translate happens in
+     the orbit's rotating frame: pushing each blob along its own
+     center-to-blob axis widens the track radius for the whole lap. Paired
+     with the shrink, the two circle clearly separated, then flow back
+     together as the spin dies — right as the takeover starts merging them
+     into the gradient. Vectors are each blob's outward unit axis × 65
+     view-box units. */
+  @keyframes intro-spread-a {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    22%,
+    78% {
+      transform: translate(-64px, -12px) scale(0.82);
+    }
+  }
+  @keyframes intro-spread-b {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    22%,
+    78% {
+      transform: translate(64px, 12px) scale(0.82);
+    }
+  }
   @keyframes intro-vanish {
     to {
       opacity: 0;
@@ -414,11 +530,24 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       filter: blur(18px);
     }
   }
+  /* Lava-lamp morphs: cycle the variants continuously (a shape change
+     every ~0.5s instead of one long two-stop tween) so the blobs visibly
+     wobble the whole way around the track. A and B run different variant
+     orders so their wobbles never rhyme. */
   @keyframes intro-a-morph {
     0% {
       d: var(--blob-a-0);
     }
-    50% {
+    20% {
+      d: var(--blob-a-1);
+    }
+    40% {
+      d: var(--blob-a-2);
+    }
+    60% {
+      d: var(--blob-a-0);
+    }
+    80% {
       d: var(--blob-a-1);
     }
     100% {
@@ -429,11 +558,20 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     0% {
       d: var(--blob-b-0);
     }
-    50% {
+    20% {
+      d: var(--blob-b-2);
+    }
+    40% {
       d: var(--blob-b-1);
     }
-    100% {
+    60% {
+      d: var(--blob-b-0);
+    }
+    80% {
       d: var(--blob-b-2);
+    }
+    100% {
+      d: var(--blob-b-1);
     }
   }
 
@@ -445,10 +583,10 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     animation: hero-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
   .hero__copy > :global(*:nth-child(2)) {
-    animation-delay: 3.6s;
+    animation-delay: 4.2s;
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: 4.3s;
+    animation-delay: 4.9s;
   }
 
   @keyframes hero-reveal {
@@ -474,8 +612,8 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     display: inline-block;
     transform: translateY(var(--tagline-stage-y)) scale(var(--tagline-stage-scale));
     animation:
-      tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.2s both,
-      tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 3s both;
+      tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.8s both,
+      tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 3.6s both;
   }
   @keyframes tagline-enter {
     from {
@@ -535,7 +673,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
      that have the hero (the landing page); the header appears instantly
      everywhere else. Delete alongside the intro. */
   .header {
-    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.4s both;
+    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
   }
   /* Same beat for everything else that peeks into the first paint: the
      sections below the hero (its siblings inside <main>) and the cookie
@@ -543,7 +681,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
      banner keeps its own `hidden` logic; this only times its entrance. */
   main > .hero ~ *,
   .cookie-banner {
-    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 2.4s both;
+    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
   }
   @keyframes header-reveal {
     from {

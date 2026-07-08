@@ -120,5 +120,14 @@
     .story__photo img {
       width: min(300px, 85%);
     }
+    /* Single column: center the copy under the centered photo. The title
+       and paragraphs keep their max-widths, so they also need centering
+       as blocks, not just their text. */
+    .story__copy {
+      text-align: center;
+    }
+    .story__copy > * {
+      margin-inline: auto;
+    }
   }
 </style>
