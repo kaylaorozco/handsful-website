@@ -201,8 +201,13 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
   .peek__avatar {
     width: 18px;
     height: 18px;
-    border-radius: 50%;
+    /* Organic blob, not a uniform circle — the brand motif carried down to
+       the baby identities; each sibling gets their own shape */
+    border-radius: 62% 38% 54% 46% / 48% 60% 40% 52%;
     flex-shrink: 0;
+  }
+  .peek__col:nth-child(2) .peek__avatar {
+    border-radius: 42% 58% 46% 54% / 58% 42% 60% 40%;
   }
   .peek__name {
     font-weight: 700;
