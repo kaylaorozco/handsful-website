@@ -153,13 +153,19 @@ const FLIPS: Flip[] = [
     width: 48px;
     height: 48px;
     /* Soft organic blob instead of a rounded square — the brand motif —
-       morphing lazily; offsets below keep the three out of sync (the
-       global reduced-motion rule freezes this automatically) */
+       morphing lazily while it bobs and squishes (drift below): the
+       border-radius morph alone was invisible at a glance, so the squish
+       carries the motion. Different periods (9s vs 7s) mean the two never
+       sync, and the offsets below keep the three cards out of step (the
+       global reduced-motion rule freezes all of it automatically) */
     border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
     background: var(--gradient-action);
     color: #fff;
     margin-bottom: var(--space-4);
-    animation: flips-icon-morph 9s ease-in-out infinite;
+    animation:
+      flips-icon-morph 9s ease-in-out infinite,
+      flips-icon-drift 7s ease-in-out infinite;
+    will-change: transform;
   }
   .flips__card:nth-child(2) .flips__icon {
     animation-delay: -3s;
@@ -179,6 +185,25 @@ const FLIPS: Flip[] = [
     }
     66% {
       border-radius: 43% 57% 63% 37% / 57% 43% 50% 50%;
+    }
+  }
+  /* Lava-blob drift: a few px of wander plus an asymmetric squish
+     (wide-and-short ↔ tall-and-narrow, like the hero's ambient glows).
+     ±8% on a 48px chip distorts the 24px glyph well under a px, so the
+     icons stay crisp. */
+  @keyframes flips-icon-drift {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1, 1);
+    }
+    25% {
+      transform: translate(2px, -3px) scale(1.09, 0.92);
+    }
+    55% {
+      transform: translate(-2px, 2px) scale(0.93, 1.09);
+    }
+    80% {
+      transform: translate(3px, 1px) scale(1.04, 0.97);
     }
   }
   .flips__title {

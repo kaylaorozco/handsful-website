@@ -9,12 +9,13 @@ import WaitlistCta from '../components/WaitlistCta.astro';
      uncrowded and the gradient + copy carry it.
 
      Intro ("Blob Chase → Gradient Reveal", plays once per page load):
-       0–1.6s  the two sibling blobs CHASE each other: both orbit groups
-               spin 720° around the shared view-box center (the blobs sit
-               on opposite sides of it), B on a faster-starting curve so it
-               visibly closes on A before both bleed speed. They morph the
-               whole time (CSS `d: path()` between matched-point variants
-               from scripts/generate-blobs.mjs).
+       0–1.6s  the two sibling blobs CHASE each other, follow-the-leader
+               style: both lap the same circular track (two laps around the
+               view-box center, upright — an inner keel cancels the orbit
+               rotation), B on a faster-starting curve so it visibly closes
+               on A before both bleed speed. They morph the whole time (CSS
+               `d: path()` between matched-point variants from
+               scripts/generate-blobs.mjs).
        1.0–2.5s the spin's momentum flings them into DISPERSAL rather than
                one conquering: Blob A scales ×15 (ease-in, clipped by the
                hero) while Blob B swells ×7, blurs, and evaporates on top
@@ -79,23 +80,28 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       </defs>
       <!-- A first, B second: B stays on top while A takes over beneath it,
            so B visibly melts into the new background instead of being
-           swallowed by it. Each blob sits in its own orbit <g> so the chase
-           rotation (on the group) composes with the takeover/dissolve
-           transforms (on the path) — two animations can't share one
-           element's `transform`. -->
+           swallowed by it. Three nested layers per blob because animations
+           can't share one element's `transform`: the orbit <g> carries the
+           blob around the shared track, the keel <g> counter-rotates so the
+           blob travels upright instead of pinwheeling, and the path keeps
+           the takeover/dissolve. -->
       <g class="hero__intro-orbit hero__intro-orbit--a">
-        <path
-          class="hero__intro-blob hero__intro-blob--a"
-          fill="url(#hero-intro-grad-a)"
-          d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
-        ></path>
+        <g class="hero__intro-keel hero__intro-keel--a">
+          <path
+            class="hero__intro-blob hero__intro-blob--a"
+            fill="url(#hero-intro-grad-a)"
+            d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
+          ></path>
+        </g>
       </g>
       <g class="hero__intro-orbit hero__intro-orbit--b">
-        <path
-          class="hero__intro-blob hero__intro-blob--b"
-          fill="url(#hero-intro-grad-b)"
-          d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
-        ></path>
+        <g class="hero__intro-keel hero__intro-keel--b">
+          <path
+            class="hero__intro-blob hero__intro-blob--b"
+            fill="url(#hero-intro-grad-b)"
+            d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
+          ></path>
+        </g>
       </g>
     </svg>
   </div>
@@ -383,24 +389,42 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     overflow: visible;
   }
 
-  /* The chase: both orbit groups spin two full turns around the shared
-     view-box center (the blobs sit on opposite sides of it, so they circle
-     each other). Same distance, different easing curves: B jumps out fast
-     and closes the gap while A lags then pulls away late — the relative
-     motion is what reads as a chase, not the rotation itself. Both curves
-     end long and flat, so the spin bleeds momentum right as the takeover
-     (1s) flings the blobs outward — the dispersal looks thrown, not
-     scheduled. */
+  /* The chase: follow-the-leader on one shared loop. The orbit groups spin
+     two full turns around the view-box center, which carries the blobs
+     (opposite sides of that center) around the same circular track — and
+     the keel inside each orbit counter-rotates by the exact same curve, so
+     the blobs travel the track UPRIGHT. Without the keels this reads as a
+     rigid pinwheel: shapes and gradients spinning around one visible
+     anchor. Different easing curves per blob are the pursuit: B jumps out
+     fast and closes most of the half-lap gap on A before A pulls away
+     late. Both curves end long and flat, so the loop bleeds momentum right
+     as the takeover (1s) flings the blobs outward — the dispersal looks
+     thrown, not scheduled. Keels use fill-box, so each counter-rotates
+     about its own (orbiting) blob center; A and B keyframe pairs must keep
+     matching beziers or the cancellation drifts. */
+  .hero__intro-orbit,
+  .hero__intro-keel {
+    will-change: transform;
+  }
   .hero__intro-orbit {
     transform-box: view-box;
     transform-origin: center;
-    will-change: transform;
+  }
+  .hero__intro-keel {
+    transform-box: fill-box;
+    transform-origin: center;
   }
   .hero__intro-orbit--a {
     animation: intro-chase 1.6s cubic-bezier(0.6, 0.05, 0.15, 1) both;
   }
+  .hero__intro-keel--a {
+    animation: intro-chase-counter 1.6s cubic-bezier(0.6, 0.05, 0.15, 1) both;
+  }
   .hero__intro-orbit--b {
     animation: intro-chase 1.6s cubic-bezier(0.25, 0.1, 0.3, 1) both;
+  }
+  .hero__intro-keel--b {
+    animation: intro-chase-counter 1.6s cubic-bezier(0.25, 0.1, 0.3, 1) both;
   }
 
   .hero__intro-blob {
@@ -432,6 +456,14 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       /* 720° — visually back where they started, so the dispersal grows
          from the same composition the intro opened with */
       transform: rotate(720deg);
+    }
+  }
+  @keyframes intro-chase-counter {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(-720deg);
     }
   }
   @keyframes intro-vanish {
