@@ -147,30 +147,41 @@ const FLIPS: Flip[] = [
   }
   /* The punchline: what Handsful does instead */
   .flips__icon {
+    position: relative;
+    /* Keeps the ::before's z-index: -1 inside this element, so the blob
+       slips behind the glyph but not behind the card */
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     width: 48px;
     height: 48px;
-    /* Soft organic blob instead of a rounded square — the brand motif —
-       morphing lazily while it bobs and squishes (drift below): the
-       border-radius morph alone was invisible at a glance, so the squish
-       carries the motion. Different periods (9s vs 7s) mean the two never
-       sync, and the offsets below keep the three cards out of step (the
-       global reduced-motion rule freezes all of it automatically) */
-    border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
-    background: var(--gradient-action);
     color: #fff;
     margin-bottom: var(--space-4);
+  }
+  /* The blob lives on its own layer behind the glyph: the icon stays
+     anchored and crisp while the blob morphs lazily and bobs/squishes
+     around it (drift below) — the border-radius morph alone was invisible
+     at a glance, so the squish carries the motion. Different periods
+     (9s vs 7s) mean the two never sync, and the offsets below keep the
+     three cards out of step (the global reduced-motion rule freezes all
+     of it automatically) */
+  .flips__icon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
+    background: var(--gradient-action);
     animation:
       flips-icon-morph 9s ease-in-out infinite,
       flips-icon-drift 7s ease-in-out infinite;
     will-change: transform;
   }
-  .flips__card:nth-child(2) .flips__icon {
+  .flips__card:nth-child(2) .flips__icon::before {
     animation-delay: -3s;
   }
-  .flips__card:nth-child(3) .flips__icon {
+  .flips__card:nth-child(3) .flips__icon::before {
     animation-delay: -6s;
   }
   /* Waypoint deltas are 1.5x the original pass — the morph should be
@@ -187,23 +198,22 @@ const FLIPS: Flip[] = [
       border-radius: 43% 57% 63% 37% / 57% 43% 50% 50%;
     }
   }
-  /* Lava-blob drift: a few px of wander plus an asymmetric squish
-     (wide-and-short ↔ tall-and-narrow, like the hero's ambient glows).
-     ±8% on a 48px chip distorts the 24px glyph well under a px, so the
-     icons stay crisp. */
+  /* Lava-blob drift: a couple px of wander plus a gentle asymmetric
+     squish (wide-and-short ↔ tall-and-narrow, like the hero's ambient
+     glows). Only the blob layer moves — the glyph on top stays put. */
   @keyframes flips-icon-drift {
     0%,
     100% {
       transform: translate(0, 0) scale(1, 1);
     }
     25% {
-      transform: translate(2px, -3px) scale(1.09, 0.92);
+      transform: translate(1.5px, -2px) scale(1.06, 0.94);
     }
     55% {
-      transform: translate(-2px, 2px) scale(0.93, 1.09);
+      transform: translate(-1.5px, 1.5px) scale(0.95, 1.06);
     }
     80% {
-      transform: translate(3px, 1px) scale(1.04, 0.97);
+      transform: translate(2px, 1px) scale(1.03, 0.98);
     }
   }
   .flips__title {

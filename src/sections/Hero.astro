@@ -10,12 +10,13 @@ import WaitlistCta from '../components/WaitlistCta.astro';
 
      Intro ("Blob Chase → Gradient Reveal", plays once per page load):
        0–1.6s  the two sibling blobs CHASE each other, follow-the-leader
-               style: both lap the same circular track (two laps around the
-               view-box center, upright — an inner keel cancels the orbit
-               rotation), B on a faster-starting curve so it visibly closes
-               on A before both bleed speed. They morph the whole time (CSS
-               `d: path()` between matched-point variants from
-               scripts/generate-blobs.mjs).
+               style: they spring apart onto a wide shared track (a spread
+               layer pushes each outward and shrinks it) and lap it twice,
+               upright — an inner keel cancels the orbit rotation — B on a
+               faster-starting curve so it visibly closes on A before both
+               bleed speed and flow back together. They wobble lava-lamp
+               style the whole time (ping-pong `d: path()` morphs between
+               matched-point variants from scripts/generate-blobs.mjs).
        1.0–2.5s the spin's momentum flings them into DISPERSAL rather than
                one conquering: Blob A scales ×15 (ease-in, clipped by the
                hero) while Blob B swells ×7, blurs, and evaporates on top
@@ -80,27 +81,33 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       </defs>
       <!-- A first, B second: B stays on top while A takes over beneath it,
            so B visibly melts into the new background instead of being
-           swallowed by it. Three nested layers per blob because animations
+           swallowed by it. Four nested layers per blob because animations
            can't share one element's `transform`: the orbit <g> carries the
-           blob around the shared track, the keel <g> counter-rotates so the
-           blob travels upright instead of pinwheeling, and the path keeps
-           the takeover/dissolve. -->
+           blob around the shared track, the spread <g> pushes it outward
+           onto a wider lane (and shrinks it) so the pair circles clearly
+           separated, the keel <g> counter-rotates so the blob travels
+           upright instead of pinwheeling, and the path keeps the
+           takeover/dissolve. -->
       <g class="hero__intro-orbit hero__intro-orbit--a">
-        <g class="hero__intro-keel hero__intro-keel--a">
-          <path
-            class="hero__intro-blob hero__intro-blob--a"
-            fill="url(#hero-intro-grad-a)"
-            d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
-          ></path>
+        <g class="hero__intro-spread hero__intro-spread--a">
+          <g class="hero__intro-keel hero__intro-keel--a">
+            <path
+              class="hero__intro-blob hero__intro-blob--a"
+              fill="url(#hero-intro-grad-a)"
+              d="M394.9 250.8 C395.6 286.0 375.6 344.2 345.0 370.5 C314.5 396.8 245.1 406.8 211.5 408.6 C177.9 410.4 165.5 408.8 143.5 381.2 C121.5 353.6 85.5 285.5 79.7 243.0 C73.8 200.4 83.7 152.5 108.7 125.8 C133.6 99.0 190.7 76.9 229.4 82.5 C268.1 88.0 313.3 131.1 340.9 159.1 C368.5 187.2 394.2 215.5 394.9 250.8 Z"
+            ></path>
+          </g>
         </g>
       </g>
       <g class="hero__intro-orbit hero__intro-orbit--b">
-        <g class="hero__intro-keel hero__intro-keel--b">
-          <path
-            class="hero__intro-blob hero__intro-blob--b"
-            fill="url(#hero-intro-grad-b)"
-            d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
-          ></path>
+        <g class="hero__intro-spread hero__intro-spread--b">
+          <g class="hero__intro-keel hero__intro-keel--b">
+            <path
+              class="hero__intro-blob hero__intro-blob--b"
+              fill="url(#hero-intro-grad-b)"
+              d="M555.4 293.8 C555.6 323.0 556.8 355.8 538.9 376.8 C521.0 397.8 479.4 420.6 448.0 419.9 C416.5 419.2 371.0 390.3 350.1 372.6 C329.2 354.8 320.7 337.8 322.6 313.2 C324.5 288.7 341.8 248.4 361.6 225.4 C381.3 202.4 411.8 179.2 441.1 175.3 C470.4 171.3 518.3 182.0 537.4 201.8 C556.4 221.5 555.1 264.7 555.4 293.8 Z"
+            ></path>
+          </g>
         </g>
       </g>
     </svg>
@@ -403,6 +410,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
      about its own (orbiting) blob center; A and B keyframe pairs must keep
      matching beziers or the cancellation drifts. */
   .hero__intro-orbit,
+  .hero__intro-spread,
   .hero__intro-keel {
     will-change: transform;
   }
@@ -410,21 +418,28 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     transform-box: view-box;
     transform-origin: center;
   }
+  .hero__intro-spread,
   .hero__intro-keel {
     transform-box: fill-box;
     transform-origin: center;
   }
   .hero__intro-orbit--a {
-    animation: intro-chase 1.6s cubic-bezier(0.6, 0.05, 0.15, 1) both;
+    animation: intro-chase 1.6s cubic-bezier(0.55, 0.03, 0.18, 1) both;
+  }
+  .hero__intro-spread--a {
+    animation: intro-spread-a 1.6s ease-in-out both;
   }
   .hero__intro-keel--a {
-    animation: intro-chase-counter 1.6s cubic-bezier(0.6, 0.05, 0.15, 1) both;
+    animation: intro-chase-counter 1.6s cubic-bezier(0.55, 0.03, 0.18, 1) both;
   }
   .hero__intro-orbit--b {
-    animation: intro-chase 1.6s cubic-bezier(0.25, 0.1, 0.3, 1) both;
+    animation: intro-chase 1.6s cubic-bezier(0.42, 0.06, 0.25, 1) both;
+  }
+  .hero__intro-spread--b {
+    animation: intro-spread-b 1.6s ease-in-out both;
   }
   .hero__intro-keel--b {
-    animation: intro-chase-counter 1.6s cubic-bezier(0.25, 0.1, 0.3, 1) both;
+    animation: intro-chase-counter 1.6s cubic-bezier(0.42, 0.06, 0.25, 1) both;
   }
 
   .hero__intro-blob {
@@ -466,6 +481,33 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: rotate(-720deg);
     }
   }
+  /* The spread sits between orbit and keel, so its translate happens in
+     the orbit's rotating frame: pushing each blob along its own
+     center-to-blob axis widens the track radius for the whole lap. Paired
+     with the shrink, the two circle clearly separated, then flow back
+     together as the spin dies — right as the takeover starts merging them
+     into the gradient. Vectors are each blob's outward unit axis × 65
+     view-box units. */
+  @keyframes intro-spread-a {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    22%,
+    78% {
+      transform: translate(-64px, -12px) scale(0.82);
+    }
+  }
+  @keyframes intro-spread-b {
+    0%,
+    100% {
+      transform: translate(0, 0) scale(1);
+    }
+    22%,
+    78% {
+      transform: translate(64px, 12px) scale(0.82);
+    }
+  }
   @keyframes intro-vanish {
     to {
       opacity: 0;
@@ -487,26 +529,39 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       filter: blur(18px);
     }
   }
+  /* Lava-lamp morphs: ping-pong through the variants (a shape change
+     every ~0.6s instead of one long two-stop tween) so the blobs visibly
+     wobble WHILE they lap the track. A and B run different variant orders
+     so their wobbles never rhyme. */
   @keyframes intro-a-morph {
     0% {
       d: var(--blob-a-0);
     }
-    50% {
+    30% {
+      d: var(--blob-a-1);
+    }
+    55% {
+      d: var(--blob-a-2);
+    }
+    80% {
       d: var(--blob-a-1);
     }
     100% {
-      d: var(--blob-a-2);
+      d: var(--blob-a-0);
     }
   }
   @keyframes intro-b-morph {
     0% {
       d: var(--blob-b-0);
     }
-    50% {
+    30% {
+      d: var(--blob-b-2);
+    }
+    60% {
       d: var(--blob-b-1);
     }
     100% {
-      d: var(--blob-b-2);
+      d: var(--blob-b-0);
     }
   }
 
