@@ -167,16 +167,18 @@ const FLIPS: Flip[] = [
   .flips__card:nth-child(3) .flips__icon {
     animation-delay: -6s;
   }
+  /* Waypoint deltas are 1.5x the original pass — the morph should be
+     plainly visible at a glance, not only on a stare */
   @keyframes flips-icon-morph {
     0%,
     100% {
       border-radius: 46% 54% 48% 52% / 54% 46% 56% 44%;
     }
     33% {
-      border-radius: 56% 44% 52% 48% / 46% 58% 42% 54%;
+      border-radius: 61% 39% 54% 46% / 42% 64% 35% 59%;
     }
     66% {
-      border-radius: 44% 56% 58% 42% / 56% 44% 52% 48%;
+      border-radius: 43% 57% 63% 37% / 57% 43% 50% 50%;
     }
   }
   .flips__title {
