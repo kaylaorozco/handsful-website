@@ -1,0 +1,59 @@
+---
+/**
+ * Post-confirmation landing page. Kit's waitlist form is configured (in the
+ * Kit dashboard, not code) to redirect here after a subscriber clicks the
+ * double opt-in link in their email — keeping the confirm moment on-brand
+ * instead of on a Kit-hosted page.
+ *
+ * Only reachable via that email link, so it's noindex'd and excluded from
+ * the sitemap (see astro.config.mjs).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config';
+---
+
+<BaseLayout
+  title={`You're on the list — ${SITE.name}`}
+  description="Your spot on the Handsful waitlist is confirmed."
+  noindex={true}
+>
+  <section class="confirmed section">
+    <div class="container--narrow">
+      <p class="confirmed__eyebrow">Waitlist confirmed</p>
+      <h1>You're officially on the list! 🎉</h1>
+      <p class="confirmed__lead">
+        That's it — no more steps. We'll email you launch news, early access, and the
+        occasional tip for parents of multiples. Until then, go rest those hands.
+      </p>
+      <a class="btn btn--primary" href="/">Back to the site</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .confirmed {
+    text-align: center;
+  }
+  .confirmed__eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .confirmed h1 {
+    margin-top: var(--space-3);
+  }
+  .confirmed__lead {
+    max-width: 520px;
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    color: var(--taupe-dark);
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .confirmed .btn {
+    margin-top: var(--space-8);
+  }
+</style>

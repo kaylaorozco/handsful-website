@@ -15,11 +15,13 @@ export default defineConfig({
   integrations: [
     sitemap({
       // Legal pages are excluded while they hold placeholder copy (they are
-      // also noindex'd). When final legal copy lands, delete this filter and
-      // flip `noindex` off in the three legal pages.
+      // also noindex'd). When final legal copy lands, remove them from this
+      // filter and flip `noindex` off in the three legal pages.
+      // /waitlist-confirmed stays excluded permanently — it's only reachable
+      // from the double opt-in email link and is noindex'd.
       filter: (page) =>
-        !['/privacy-policy', '/cookie-policy', '/terms-of-service'].some((p) =>
-          page.includes(p),
+        !['/privacy-policy', '/cookie-policy', '/terms-of-service', '/waitlist-confirmed'].some(
+          (p) => page.includes(p),
         ),
     }),
   ],
