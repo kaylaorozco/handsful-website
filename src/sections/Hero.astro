@@ -676,11 +676,9 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
   }
   /* Same beat for everything else that peeks into the first paint: the
-     sections below the hero (its siblings inside <main>) and the cookie
-     banner — otherwise they sit fully rendered next to a bare intro. The
-     banner keeps its own `hidden` logic; this only times its entrance. */
-  main > .hero ~ *,
-  .cookie-banner {
+     sections below the hero (its siblings inside <main>) — otherwise they
+     sit fully rendered next to a bare intro. */
+  main > .hero ~ * {
     animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
   }
   @keyframes header-reveal {
@@ -691,8 +689,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   }
   @media (prefers-reduced-motion: reduce) {
     .header,
-    main > .hero ~ *,
-    .cookie-banner {
+    main > .hero ~ * {
       animation: none;
     }
   }

@@ -1,7 +1,7 @@
 /**
  * Site-wide configuration. Everything an editor might need to touch at launch
- * time lives here — CTA mode, store URLs, socials, analytics — so no component
- * surgery is needed for the waitlist → app-store transition.
+ * time lives here — CTA mode, store URLs, socials — so no component surgery
+ * is needed for the waitlist → app-store transition.
  */
 
 export type CtaMode = 'waitlist' | 'stores';
@@ -45,9 +45,4 @@ export const SOCIAL = {
   instagram: '', // e.g. https://instagram.com/handsful.app
   facebook: '',
   tiktok: '',
-} as const;
-
-export const ANALYTICS = {
-  /** GA4 measurement ID. Loaded only after cookie-banner consent. */
-  gaMeasurementId: import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '',
 } as const;
