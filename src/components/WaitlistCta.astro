@@ -82,6 +82,18 @@ const { variant = 'on-solid', formId, source } = Astro.props;
 <script>
   // Progressive enhancement: without JS the form still POSTs to /api/subscribe
   // (which returns JSON); with JS we submit inline and show friendly states.
+  //
+  // Success is deliberately "check your inbox", not "you're on the list" —
+  // Kit's double opt-in means the signup only counts once they click the
+  // confirmation link (which lands them on /waitlist-confirmed).
+  const DONE_MESSAGES: Record<string, string> = {
+    confirmation_sent:
+      'Almost there — check your inbox and click the confirmation link to lock in your spot. 📬',
+    already_subscribed: "Good news: you're already on the list! We'll be in touch. 🎉",
+    already_pending:
+      "You've signed up before but haven't confirmed yet — look for our earlier email (spam folder too) and click the link inside.",
+  };
+
   document.querySelectorAll<HTMLFormElement>('[data-waitlist-form]').forEach((form) => {
     const status = form.querySelector<HTMLElement>('[data-status]')!;
     const note = form.querySelector<HTMLElement>('[data-note]')!;
@@ -106,10 +118,17 @@ const { variant = 'on-solid', formId, source } = Astro.props;
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(Object.fromEntries(new FormData(form))),
         });
-        if (!res.ok) throw new Error(String(res.status));
+        const body = await res.json().catch(() => ({}));
+        if (!res.ok || !body.ok) {
+          status.textContent =
+            body.error ?? "That didn't go through — your typing's fine, just try again.";
+          button.disabled = false;
+          button.textContent = originalLabel;
+          return;
+        }
         form.querySelector('.waitlist-form__row')!.setAttribute('hidden', '');
         note.hidden = true;
-        status.textContent = "You're on the list! We'll email you the moment Handsful is ready. 🎉";
+        status.textContent = DONE_MESSAGES[body.status] ?? DONE_MESSAGES.confirmation_sent;
       } catch {
         status.textContent = "That didn't go through — your typing's fine, just try again.";
         button.disabled = false;
@@ -130,6 +149,11 @@ const { variant = 'on-solid', formId, source } = Astro.props;
        center — both hosts (hero, final CTA) are centered layouts. */
     justify-content: center;
     gap: var(--space-2);
+  }
+  /* display:flex above beats the hidden attribute's UA default; on success
+     the script hides the row via [hidden], so restore that behavior. */
+  .waitlist-form__row[hidden] {
+    display: none;
   }
   .waitlist-form__input {
     flex: 1 1 220px;

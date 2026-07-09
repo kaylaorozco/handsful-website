@@ -26,12 +26,6 @@ Everything that changes when Handsful goes from waitlist → live app.
 - [ ] Remove finished pages from the sitemap `filter` in `astro.config.mjs`
 - [ ] Add a `lastUpdated` date to each page
 
-## Analytics
-
-- [ ] Set `PUBLIC_GA_MEASUREMENT_ID` in Vercel env vars (all environments)
-- [ ] Verify: GA network requests fire only AFTER accepting the cookie banner
-- [ ] Update `/cookie-policy` with the actual GA4 cookie table
-
 ## Social proof
 
 - [ ] Add real testimonials to `src/data/testimonials.ts` (section auto-appears)

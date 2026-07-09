@@ -13,16 +13,23 @@ launch-day flips (store badges, legal copy going final, etc.).
       `@astrojs/vercel` adapter is preconfigured.
 - [ ] Every push to `main` auto-deploys after this; branches get preview URLs.
 
-## 2. Environment variables (Vercel → Project → Settings → Environment Variables)
+## 2. Kit (ConvertKit) setup + environment variables
 
-- [ ] `WAITLIST_WEBHOOK_URL` — where `/api/subscribe` forwards signups as JSON
-      `{ email, source, timestamp }`. Quickest zero-code option: a Zapier/Make
-      webhook or Google Apps Script that appends to a sheet. Until this is set,
-      signups only appear in Vercel function logs (form still works, but
-      **emails aren't stored** — set this before sharing the URL anywhere).
-- [ ] `PUBLIC_GA_MEASUREMENT_ID` — GA4 ID (`G-XXXXXXXXXX`). Create the GA4
-      property first. Analytics stays completely off until this is set, and
-      even then only loads after a visitor accepts the cookie banner.
+One-time setup in the Kit dashboard:
+
+- [ ] Create the Handsful waitlist form in Kit.
+- [ ] Enable **double opt-in** on that form (Kit sends the confirmation email).
+- [ ] Set the form's confirmation redirect URL to
+      `https://handsful.app/waitlist-confirmed` so confirming stays on-brand.
+- [ ] Create a v4 API key: app.kit.com → Account settings → Developer.
+
+Then in Vercel → Project → Settings → Environment Variables:
+
+- [ ] `KIT_API_KEY` — the v4 API key (server-side only; never exposed to the
+      client).
+- [ ] `KIT_FORM_ID` — the numeric ID of the waitlist form. Until both are set,
+      `/api/subscribe` returns a "briefly unavailable" error (it never fakes
+      success) — set them before sharing the URL anywhere.
 
 ## 3. Domain
 
@@ -42,20 +49,19 @@ launch-day flips (store badges, legal copy going final, etc.).
 
 ## 5. Verify the live site (once deployed)
 
-- [ ] Submit the waitlist form with a real email → confirm it reaches the
-      webhook destination (check `source` field says `hero` or `footer-cta`).
-- [ ] Accept the cookie banner → confirm GA requests fire only *after* accepting.
+- [ ] Submit the waitlist form with a real email → Kit's confirmation email
+      arrives → click the link → land on `/waitlist-confirmed` → the
+      subscriber shows as confirmed on the Kit form (referrer notes `hero` or
+      `footer-cta`).
+- [ ] Submit the same email again → the form shows the friendly
+      "already on the list" message, not an error.
 - [ ] Share the URL in iMessage/Slack → confirm the OG card image shows.
 
-## 6. Pick an email provider (whenever)
+## 6. Cookie consent (Termly)
 
-Mailchimp / ConvertKit / Supabase — two integration options, both small:
-- Keep the webhook pattern (point `WAITLIST_WEBHOOK_URL` at their incoming
-  webhook/automation endpoint), or
-- Replace the single `forward()` function in `src/pages/api/subscribe.ts`
-  with a native API call.
-Turn on **double opt-in** in the provider — keeps consent airtight for the
-marketing emails the signup copy now promises.
+- [ ] Add Termly's consent script/embed to the site (Kayla, separate from the
+      codebase changes). The site itself sets no tracking cookies and ships no
+      cookie banner of its own.
 
 ## 7. Content that's stubbed and waiting
 

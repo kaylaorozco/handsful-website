@@ -21,38 +21,41 @@ npm run build          # generates OG image + static build into dist/
    already configured; no build settings needed.
 2. Add environment variables in **Vercel → Project → Settings → Environment Variables**
    (see `.env.example`):
-   - `WAITLIST_WEBHOOK_URL` — where signups are forwarded (see below)
-   - `PUBLIC_GA_MEASUREMENT_ID` — GA4 ID; analytics stays off until this is set
+   - `KIT_API_KEY` — Kit (ConvertKit) v4 API key, server-side only
+   - `KIT_FORM_ID` — the Kit form waitlist signups subscribe to
 3. Point the `handsful.app` domain at the Vercel project.
 
 ## Structure
 
 ```
 src/
-  config.ts          ← site-wide config: CTA mode, store URLs, socials, GA
+  config.ts          ← site-wide config: CTA mode, store URLs, socials
   data/              ← editable content: features, FAQ, testimonials/press
-  layouts/           ← BaseLayout (SEO/meta/analytics), LegalLayout
-  components/        ← header, footer, waitlist form, store badges, cookie banner
+  layouts/           ← BaseLayout (SEO/meta), LegalLayout
+  components/        ← header, footer, waitlist form, store badges
   sections/          ← homepage sections in page order
-  pages/             ← routes (/, legal pages, /api/subscribe)
+  pages/             ← routes (/, legal pages, /waitlist-confirmed, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
 brand/               ← source brand assets + style guide (not served)
 scripts/generate-og.mjs ← builds the OG share image from brand assets
 docs/LAUNCH-CHECKLIST.md ← everything to flip at launch time
 ```
 
-## The waitlist pipeline (provider-agnostic)
+## The waitlist pipeline (Kit, double opt-in)
 
-The form POSTs to `/api/subscribe`, which validates the email (plus a honeypot for
-bots) and forwards `{ email, source, timestamp }` as JSON to `WAITLIST_WEBHOOK_URL`.
+The form POSTs to `/api/subscribe`, which validates the email (plus a honeypot and
+basic per-IP rate limiting) and adds the subscriber to a Kit (ConvertKit) form via
+the v4 API. The form markup is fully custom — no Kit embed, no "Powered by Kit"
+branding.
 
-- **Today:** point the env var at a Zapier/Make webhook or Google Apps Script that
-  appends to a sheet — signups are collected with zero code changes.
-- **Later (Mailchimp / ConvertKit / Supabase):** either keep the webhook pattern via
-  their incoming-webhook/automation endpoints, or replace the single `forward()`
-  function in `src/pages/api/subscribe.ts` with a native API call.
-- If the env var is unset, signups are logged to Vercel function logs and the form
-  still succeeds — the UX never breaks.
+- **Double opt-in is Kit's job.** Kit sends the confirmation email; the signup only
+  counts once the visitor clicks the link. The form's success message says "check
+  your inbox" accordingly, and repeat signups get a friendly "already on the list" /
+  "check your earlier email" message.
+- **`/waitlist-confirmed`** is the on-brand landing page after they confirm — set it
+  as the confirmation redirect URL in the Kit form's settings.
+- If `KIT_API_KEY` / `KIT_FORM_ID` are unset, `/api/subscribe` returns a
+  "briefly unavailable" error (never a fake success) and logs to Vercel function logs.
 
 ## Switching the CTA to App Store / Play Store badges
 
@@ -60,11 +63,10 @@ One config change, no redesign — see the checklist in
 [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md) and the notes in
 `src/components/StoreBadges.astro`.
 
-## Analytics & cookie consent
+## Cookie consent
 
-GA4 loads **only after** the visitor accepts the cookie banner
-(`src/components/CookieConsent.astro` → `src/components/Analytics.astro`). Declining
-sets no cookies at all. The banner links to `/cookie-policy`.
+The site ships no cookie banner and sets no tracking cookies of its own. Consent
+management is handled by Termly (script added separately, outside this codebase).
 
 ## Legal pages
 

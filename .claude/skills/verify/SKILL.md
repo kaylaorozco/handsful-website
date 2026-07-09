@@ -32,8 +32,8 @@ npx astro dev --port 4399   # background it; ready in ~2s, http://localhost:4399
   bottom of the viewport; it also photobombs fullPage screenshots). Remove it
   before clicking anything:
   `page.evaluate(() => document.querySelector('astro-dev-toolbar')?.remove())`
-- The cookie consent banner covers the lower viewport on first load — click
-  its Decline button (`#cookie-decline`) when it's in the way.
+- There is no cookie banner (consent is Termly's job, added outside the
+  codebase) — nothing overlays the lower viewport on first load.
 
 ## Flows worth driving
 
@@ -41,7 +41,11 @@ npx astro dev --port 4399   # background it; ready in ~2s, http://localhost:4399
   alternating warm/white backgrounds.
 - Hero waitlist form: bad email → inline status "That email looks a little
   off…" (client-side; no network needed). Real submits POST `/api/subscribe`,
-  which needs env keys — don't drive live.
+  which calls the Kit API and needs `KIT_API_KEY`/`KIT_FORM_ID` — don't drive
+  live; stub `window.fetch` to return
+  `{ ok: true, status: 'confirmation_sent' | 'already_subscribed' | 'already_pending' }`
+  to exercise the success states. Note the hero intro's infinite blob
+  animations throw on `Animation.finish()` — wrap in try/catch.
 - Animations: sample `getComputedStyle(el).getPropertyValue('d')` /
   `.transform` twice a few seconds apart to prove motion; emulate
   `reducedMotion: 'reduce'` to prove the global freeze rule applies.

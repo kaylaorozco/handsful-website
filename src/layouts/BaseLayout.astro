@@ -3,8 +3,6 @@ import '../styles/global.css';
 import { SITE } from '../config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import CookieConsent from '../components/CookieConsent.astro';
-import Analytics from '../components/Analytics.astro';
 
 interface Props {
   /** Page <title>. Defaults to the site-wide SEO title. */
@@ -65,8 +63,6 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />
       ))
     }
-
-    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -75,7 +71,6 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
       <slot />
     </main>
     <Footer />
-    <CookieConsent />
   </body>
 </html>
 
