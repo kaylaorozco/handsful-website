@@ -3,6 +3,7 @@ import '../styles/global.css';
 import { SITE } from '../config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '../components/Analytics.astro';
 
 interface Props {
   /** Page <title>. Defaults to the site-wide SEO title. */
@@ -63,6 +64,11 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
         <script type="application/ld+json" set:html={JSON.stringify(schema)} />
       ))
     }
+
+    <!-- Termly's CMP embed goes here, ABOVE <Analytics /> — it must load
+         before gtag so stored consent choices apply within the consent-mode
+         wait_for_update window. -->
+    <Analytics />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>

@@ -57,11 +57,20 @@ Then in Vercel → Project → Settings → Environment Variables:
       "already on the list" message, not an error.
 - [ ] Share the URL in iMessage/Slack → confirm the OG card image shows.
 
-## 6. Cookie consent (Termly)
+## 6. Analytics + cookie consent (GA4 · Consent Mode v2 · Termly)
 
-- [ ] Add Termly's consent script/embed to the site (Kayla, separate from the
-      codebase changes). The site itself sets no tracking cookies and ships no
-      cookie banner of its own.
+- [ ] Create the GA4 property: analytics.google.com → Admin → Create property
+      ("Handsful", your timezone/currency) → add a **Web** data stream for
+      `https://handsful.app` → copy the `G-XXXXXXXXXX` measurement ID.
+- [ ] Set `PUBLIC_GA_MEASUREMENT_ID` in Vercel env vars (Production + Preview).
+      GA is completely absent from the page until this is set. It's a public
+      identifier, not a secret — hence the `PUBLIC_` prefix.
+- [ ] Add Termly's consent embed in `BaseLayout.astro`, **above** `<Analytics />`
+      (a placeholder comment marks the spot), and enable Termly's **Google
+      Consent Mode** integration in the Termly dashboard.
+- [ ] Verify on the live site: before accepting the Termly banner there are no
+      `_ga*` cookies (gtag loads but consent defaults are denied); after
+      accepting, `_ga*` cookies appear and hits show in GA4 Realtime.
 
 ## 7. Content that's stubbed and waiting
 

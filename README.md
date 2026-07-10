@@ -23,6 +23,7 @@ npm run build          # generates OG image + static build into dist/
    (see `.env.example`):
    - `KIT_API_KEY` — Kit (ConvertKit) v4 API key, server-side only
    - `KIT_FORM_ID` — the Kit form waitlist signups subscribe to
+   - `PUBLIC_GA_MEASUREMENT_ID` — GA4 ID; GA stays off entirely until this is set
 3. Point the `handsful.app` domain at the Vercel project.
 
 ## Structure
@@ -63,10 +64,14 @@ One config change, no redesign — see the checklist in
 [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md) and the notes in
 `src/components/StoreBadges.astro`.
 
-## Cookie consent
+## Analytics & cookie consent
 
-The site ships no cookie banner and sets no tracking cookies of its own. Consent
-management is handled by Termly (script added separately, outside this codebase).
+GA4 (`src/components/Analytics.astro`) loads via **Google Consent Mode v2**: every
+consent signal defaults to `denied` before gtag.js runs, so GA sets no cookies and
+stores no identifiers out of the box. Consent is Termly's job — its embed (pasted
+into `BaseLayout.astro` above `<Analytics />`, with Termly's Google Consent Mode
+integration enabled) calls `gtag('consent', 'update', …)` when a visitor accepts,
+and only then do GA cookies appear. The site ships no cookie banner of its own.
 
 ## Legal pages
 
