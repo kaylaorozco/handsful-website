@@ -59,24 +59,41 @@ Then in Vercel → Project → Settings → Environment Variables:
 
 ## 6. Analytics + cookie consent (GA4 · Consent Mode v2 · custom banner)
 
-- [ ] Create the GA4 property: analytics.google.com → Admin → Create property
-      ("Handsful", your timezone/currency) → add a **Web** data stream for
-      `https://handsful.app` → copy the `G-XXXXXXXXXX` measurement ID.
-- [ ] Set `PUBLIC_GA_MEASUREMENT_ID` in Vercel env vars (Production + Preview).
-      GA is completely absent from the page until this is set. It's a public
-      identifier, not a secret — hence the `PUBLIC_` prefix.
+- [x] GA4 property: **"Handsful"**, Web data stream for
+      `https://www.handsful.app`, Measurement ID **`G-PJC1SRJSPB`**.
+      ⚠️ Correction (2026-07-12): the ID documented previously,
+      `G-6463W89ED0`, was never a valid/findable GA4 property — if it turns
+      up in old notes or dashboards, it's wrong; `G-PJC1SRJSPB` is the
+      corrected one.
+- [x] `PUBLIC_GA_MEASUREMENT_ID` set in Vercel env vars (Production +
+      Preview) with the corrected ID. GA is completely absent from the page
+      until this is set. It's a public identifier, not a secret — hence the
+      `PUBLIC_` prefix.
 - Consent UI is the site's own banner (`src/components/CookieConsentBanner.astro`,
   issue #7 — Termly was dropped). The visitor's choice is stored in
-  localStorage under `handsful_cookie_consent`; a bootstrap snippet in
-  `BaseLayout.astro` reads it before `<Analytics />` so a stored "granted"
-  applies before gtag.js loads. The footer "Cookie preferences" button
-  reopens the banner to change the choice; declining also removes any
-  existing `_ga*` cookies.
-- [ ] Verify on the live site: before accepting the banner there are no
-      `_ga*` cookies (gtag loads but consent defaults are denied); after
-      accepting, `_ga*` cookies appear and hits show in GA4 Realtime; after
-      switching to Decline via the footer link, `_ga*` cookies are removed
-      and collection stops.
+  localStorage under `handsful_cookie_consent` (`{ value, timestamp }`,
+  expires after 12 months); a bootstrap snippet in `BaseLayout.astro` reads
+  it before `<Analytics />` so a stored "granted" applies before gtag.js
+  loads. The footer "Cookie preferences" button reopens the banner to change
+  the choice; declining also removes any existing `_ga*` cookies.
+
+### Verify AFTER the production push
+
+(GA4 Test Installation and DebugView both need the live site reachable with
+the correct ID deployed.)
+
+- [ ] **GA4 Test Installation**: Admin → Data Streams → Handsful Website
+      stream → "Test installation" — confirms the tag is detected on the
+      live domain.
+- [ ] **DebugView full consent loop**: fresh load with no stored consent
+      shows no `_ga*` cookies → Accept: `_ga*` cookies appear and a
+      `page_view`/`session_start` event registers in DebugView/Realtime →
+      reload doesn't reshow the banner and still registers hits → Decline
+      via "Cookie preferences": `_ga*` cookies are removed → reload after
+      declining shows no new hits.
+- [ ] Confirm no residual references to `G-6463W89ED0` anywhere in the
+      codebase or docs (verified clean in the repo as of 2026-07-12 — this
+      check is for dashboards/external notes).
 
 ## 7. Content that's stubbed and waiting
 
