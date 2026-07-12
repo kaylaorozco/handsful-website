@@ -71,9 +71,16 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
          between the denied default and gtag.js loading. The banner UI itself
          (CookieConsentBanner, end of <body>) writes this key on Accept/Decline. -->
     <script is:inline>
-      /* Keep the key in sync with CookieConsentBanner.astro. */
+      /* Keep key, stored shape ({ value, timestamp }), and 12-month TTL in
+         sync with CookieConsentBanner.astro. Expired, invalid, or missing →
+         null, i.e. Consent Mode's denied default stands. */
       try {
-        window.__handsfulStoredConsent = localStorage.getItem('handsful_cookie_consent');
+        var handsfulConsent = JSON.parse(localStorage.getItem('handsful_cookie_consent'));
+        window.__handsfulStoredConsent =
+          handsfulConsent &&
+          Date.now() - Date.parse(handsfulConsent.timestamp) <= 365 * 24 * 60 * 60 * 1000
+            ? handsfulConsent.value
+            : null;
       } catch (e) {
         window.__handsfulStoredConsent = null;
       }

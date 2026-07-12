@@ -4,10 +4,13 @@
  * original Termly plan.
  *
  * Contract with the GA setup:
- *   - The visitor's choice lives in localStorage as `handsful_cookie_consent`
- *     ('granted' | 'denied'). Keep that key in sync with the consent
- *     bootstrap snippet in BaseLayout.astro, which reads a stored 'granted'
- *     so Analytics.astro can apply it before gtag.js loads.
+ *   - The visitor's choice lives in localStorage as `handsful_cookie_consent`,
+ *     a JSON object { value: 'granted' | 'denied', timestamp: <ISO date> }.
+ *     A choice older than 12 months is expired: same as no choice (banner
+ *     reshows, GA stays denied until re-accepted). Keep the key, shape, and
+ *     TTL in sync with the consent bootstrap snippet in BaseLayout.astro,
+ *     which reads a stored fresh 'granted' so Analytics.astro can apply it
+ *     before gtag.js loads.
  *   - This component fires gtag('consent', 'update', …) only on user action
  *     (Accept / Decline), including choice changes made after reopening the
  *     banner via the footer's [data-cookie-preferences] button.
@@ -46,26 +49,43 @@
 </div>
 
 <script>
-  // Keep in sync with the consent bootstrap snippet in BaseLayout.astro.
+  // Keep key, stored shape, and TTL in sync with the consent bootstrap
+  // snippet in BaseLayout.astro.
   const CONSENT_KEY = 'handsful_cookie_consent';
+  // Consent expires after 12 months (~365 days) — the Cookie Policy promises
+  // "Up to 12 months, after which we ask again".
+  const CONSENT_TTL_MS = 365 * 24 * 60 * 60 * 1000;
 
   const banner = document.querySelector<HTMLElement>('[data-cookie-banner]')!;
   const accept = banner.querySelector<HTMLButtonElement>('[data-consent-accept]')!;
   const reject = banner.querySelector<HTMLButtonElement>('[data-consent-reject]')!;
   const close = banner.querySelector<HTMLButtonElement>('[data-consent-close]')!;
 
-  // localStorage throws in some private modes — treat that as "no choice",
-  // which means the banner shows but a denied default still protects the visitor.
-  function readChoice(): string | null {
+  // localStorage throws in some private modes — treat that, an unparsable
+  // value (e.g. the pre-expiry bare-string format), or an expired timestamp
+  // as "no choice": the banner shows and the denied default protects the
+  // visitor until they choose again.
+  function readChoice(): 'granted' | 'denied' | null {
     try {
-      return localStorage.getItem(CONSENT_KEY);
+      const parsed = JSON.parse(localStorage.getItem(CONSENT_KEY) ?? 'null');
+      if (
+        parsed &&
+        (parsed.value === 'granted' || parsed.value === 'denied') &&
+        Date.now() - Date.parse(parsed.timestamp) <= CONSENT_TTL_MS
+      ) {
+        return parsed.value;
+      }
     } catch {
-      return null;
+      /* fall through to null */
     }
+    return null;
   }
   function storeChoice(value: 'granted' | 'denied') {
     try {
-      localStorage.setItem(CONSENT_KEY, value);
+      localStorage.setItem(
+        CONSENT_KEY,
+        JSON.stringify({ value, timestamp: new Date().toISOString() }),
+      );
     } catch {
       /* choice just won't persist */
     }
