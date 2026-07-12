@@ -32,8 +32,17 @@ npx astro dev --port 4399   # background it; ready in ~2s, http://localhost:4399
   bottom of the viewport; it also photobombs fullPage screenshots). Remove it
   before clicking anything:
   `page.evaluate(() => document.querySelector('astro-dev-toolbar')?.remove())`
-- There is no cookie banner (consent is Termly's job, added outside the
-  codebase) — nothing overlays the lower viewport on first load.
+- **The site ships its own cookie consent banner**
+  (`src/components/CookieConsentBanner.astro`): with no stored consent it
+  appears ~2 seconds after load, fixed to the bottom of the viewport — it
+  overlays lower-page content, photobombs screenshots, and intercepts
+  bottom-of-page clicks taken after that delay. To suppress it, pre-set a
+  choice before load (fresh, ISO timestamp — bare strings and >12-month-old
+  choices are treated as no consent and the banner reshows):
+  `page.addInitScript(() => localStorage.setItem('handsful_cookie_consent', JSON.stringify({ value: 'denied', timestamp: new Date().toISOString() })))`
+  To test the banner itself, wait for it rather than racing the delay:
+  `page.waitForSelector('[data-cookie-banner]:not([hidden])')`. The footer
+  "Cookie preferences" button reopens it instantly (no delay).
 
 ## Flows worth driving
 
