@@ -68,16 +68,20 @@ One config change, no redesign — see the checklist in
 
 GA4 (`src/components/Analytics.astro`) loads via **Google Consent Mode v2**: every
 consent signal defaults to `denied` before gtag.js runs, so GA sets no cookies and
-stores no identifiers out of the box. Consent is Termly's job — its embed (pasted
-into `BaseLayout.astro` above `<Analytics />`, with Termly's Google Consent Mode
-integration enabled) calls `gtag('consent', 'update', …)` when a visitor accepts,
-and only then do GA cookies appear. The site ships no cookie banner of its own.
+stores no identifiers out of the box. Consent comes from the site's own banner
+(`src/components/CookieConsentBanner.astro`): Accept calls
+`gtag('consent', 'update', { analytics_storage: 'granted' })` and only then do GA
+cookies appear; Decline keeps the denied default and clears any existing `_ga*`
+cookies. The choice persists in localStorage (`handsful_cookie_consent`) and is
+applied before gtag.js loads via a bootstrap snippet in `BaseLayout.astro`, so
+returning visitors' first hit is decided correctly. The "Cookie preferences" button
+in the footer reopens the banner at any time.
 
 ## Legal pages
 
-`/privacy-policy`, `/cookie-policy`, `/terms-of-service` are structural placeholders
-(clearly marked, `noindex`, excluded from the sitemap). When final copy lands, follow
-the three-step note at the top of `src/layouts/LegalLayout.astro`.
+`/privacy-policy` and `/cookie-policy` carry final copy; `/terms-of-service` is still
+a structural placeholder. All three stay `noindex` and out of the sitemap until the
+indexing ticket ships — see the note at the top of `src/layouts/LegalLayout.astro`.
 
 ## SEO notes
 

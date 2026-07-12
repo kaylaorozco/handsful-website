@@ -57,7 +57,7 @@ Then in Vercel → Project → Settings → Environment Variables:
       "already on the list" message, not an error.
 - [ ] Share the URL in iMessage/Slack → confirm the OG card image shows.
 
-## 6. Analytics + cookie consent (GA4 · Consent Mode v2 · Termly)
+## 6. Analytics + cookie consent (GA4 · Consent Mode v2 · custom banner)
 
 - [ ] Create the GA4 property: analytics.google.com → Admin → Create property
       ("Handsful", your timezone/currency) → add a **Web** data stream for
@@ -65,12 +65,18 @@ Then in Vercel → Project → Settings → Environment Variables:
 - [ ] Set `PUBLIC_GA_MEASUREMENT_ID` in Vercel env vars (Production + Preview).
       GA is completely absent from the page until this is set. It's a public
       identifier, not a secret — hence the `PUBLIC_` prefix.
-- [ ] Add Termly's consent embed in `BaseLayout.astro`, **above** `<Analytics />`
-      (a placeholder comment marks the spot), and enable Termly's **Google
-      Consent Mode** integration in the Termly dashboard.
-- [ ] Verify on the live site: before accepting the Termly banner there are no
+- Consent UI is the site's own banner (`src/components/CookieConsentBanner.astro`,
+  issue #7 — Termly was dropped). The visitor's choice is stored in
+  localStorage under `handsful_cookie_consent`; a bootstrap snippet in
+  `BaseLayout.astro` reads it before `<Analytics />` so a stored "granted"
+  applies before gtag.js loads. The footer "Cookie preferences" button
+  reopens the banner to change the choice; declining also removes any
+  existing `_ga*` cookies.
+- [ ] Verify on the live site: before accepting the banner there are no
       `_ga*` cookies (gtag loads but consent defaults are denied); after
-      accepting, `_ga*` cookies appear and hits show in GA4 Realtime.
+      accepting, `_ga*` cookies appear and hits show in GA4 Realtime; after
+      switching to Decline via the footer link, `_ga*` cookies are removed
+      and collection stops.
 
 ## 7. Content that's stubbed and waiting
 
@@ -78,8 +84,9 @@ Then in Vercel → Project → Settings → Environment Variables:
   the section appears automatically (renders nothing while empty).
 - Social links: fill URLs in `src/config.ts` → `SOCIAL` (footer shows
   "· soon" placeholders until then).
-- Legal copy: three placeholder pages, `noindex`'d and out of the sitemap.
-  Un-flagging steps are at the top of `src/layouts/LegalLayout.astro`.
+- Legal copy: Privacy and Cookie Policy are final; Terms of Service is still a
+  placeholder. All stay `noindex`'d and out of the sitemap until the indexing
+  ticket — steps at the top of `src/layouts/LegalLayout.astro`.
 - App mocks: swap `src/components/AppPeek.astro` and
   `src/components/NotesPeek.astro` (both in the "See it in action" section,
   `src/sections/SeeItInAction.astro`) for real screenshots when app screens

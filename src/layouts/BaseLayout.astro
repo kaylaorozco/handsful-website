@@ -4,6 +4,7 @@ import { SITE } from '../config';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
+import CookieConsentBanner from '../components/CookieConsentBanner.astro';
 
 interface Props {
   /** Page <title>. Defaults to the site-wide SEO title. */
@@ -65,9 +66,18 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
       ))
     }
 
-    <!-- Termly's CMP embed goes here, ABOVE <Analytics /> — it must load
-         before gtag so stored consent choices apply within the consent-mode
-         wait_for_update window. -->
+    <!-- Consent bootstrap: read the stored cookie-consent choice BEFORE
+         <Analytics /> runs, so its Consent Mode snippet can apply the choice
+         between the denied default and gtag.js loading. The banner UI itself
+         (CookieConsentBanner, end of <body>) writes this key on Accept/Decline. -->
+    <script is:inline>
+      /* Keep the key in sync with CookieConsentBanner.astro. */
+      try {
+        window.__handsfulStoredConsent = localStorage.getItem('handsful_cookie_consent');
+      } catch (e) {
+        window.__handsfulStoredConsent = null;
+      }
+    </script>
     <Analytics />
   </head>
   <body>
@@ -77,6 +87,7 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
       <slot />
     </main>
     <Footer />
+    <CookieConsentBanner />
   </body>
 </html>
 

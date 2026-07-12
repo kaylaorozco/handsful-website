@@ -1,0 +1,240 @@
+---
+/**
+ * Cookie consent banner (issue #7) — the site's own consent UI, replacing the
+ * original Termly plan.
+ *
+ * Contract with the GA setup:
+ *   - The visitor's choice lives in localStorage as `handsful_cookie_consent`
+ *     ('granted' | 'denied'). Keep that key in sync with the consent
+ *     bootstrap snippet in BaseLayout.astro, which reads a stored 'granted'
+ *     so Analytics.astro can apply it before gtag.js loads.
+ *   - This component fires gtag('consent', 'update', …) only on user action
+ *     (Accept / Decline), including choice changes made after reopening the
+ *     banner via the footer's [data-cookie-preferences] button.
+ *   - No stored choice → the banner shows; ignoring it leaves Consent Mode's
+ *     denied default in force, so GA collects nothing.
+ *
+ * The banner is position: fixed, so it never shifts page content.
+ */
+---
+
+<div class="cookie-banner" data-cookie-banner hidden role="region" aria-label="Cookie consent">
+  <div class="cookie-banner__card">
+    <div class="cookie-banner__copy">
+      <p class="cookie-banner__title">One quick cookie question</p>
+      <p class="cookie-banner__text">
+        We'd like to use one optional analytics cookie (Google Analytics) to see which pages help.
+        It stays off unless you accept — details in our
+        <a href="/cookie-policy">Cookie Policy</a>.
+      </p>
+    </div>
+    <div class="cookie-banner__actions">
+      <button type="button" class="btn btn--solid" data-consent-accept>Accept analytics</button>
+      <button type="button" class="btn cookie-banner__decline" data-consent-reject>Decline</button>
+    </div>
+    <button
+      type="button"
+      class="cookie-banner__close"
+      data-consent-close
+      aria-label="Close and keep my current choice"
+    >
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 3l10 10M13 3L3 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Keep in sync with the consent bootstrap snippet in BaseLayout.astro.
+  const CONSENT_KEY = 'handsful_cookie_consent';
+
+  const banner = document.querySelector<HTMLElement>('[data-cookie-banner]')!;
+  const accept = banner.querySelector<HTMLButtonElement>('[data-consent-accept]')!;
+  const reject = banner.querySelector<HTMLButtonElement>('[data-consent-reject]')!;
+  const close = banner.querySelector<HTMLButtonElement>('[data-consent-close]')!;
+
+  // localStorage throws in some private modes — treat that as "no choice",
+  // which means the banner shows but a denied default still protects the visitor.
+  function readChoice(): string | null {
+    try {
+      return localStorage.getItem(CONSENT_KEY);
+    } catch {
+      return null;
+    }
+  }
+  function storeChoice(value: 'granted' | 'denied') {
+    try {
+      localStorage.setItem(CONSENT_KEY, value);
+    } catch {
+      /* choice just won't persist */
+    }
+  }
+
+  // Queue the consent command even if gtag.js hasn't loaded (or never loads —
+  // pushes are harmless when PUBLIC_GA_MEASUREMENT_ID is unset).
+  function updateConsent(state: 'granted' | 'denied') {
+    const w = window as any;
+    w.dataLayer = w.dataLayer || [];
+    w.gtag =
+      w.gtag ||
+      function () {
+        // eslint-disable-next-line prefer-rest-params -- gtag.js expects Arguments objects
+        w.dataLayer.push(arguments);
+      };
+    w.gtag('consent', 'update', { analytics_storage: state });
+  }
+
+  // GA cookies linger after consent is withdrawn unless removed — the Cookie
+  // Policy promises "only essential cookies" once a visitor declines.
+  function clearGaCookies() {
+    const expired = '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    const registrable = location.hostname.split('.').slice(-2).join('.');
+    document.cookie.split(';').forEach((entry) => {
+      const name = entry.split('=')[0].trim();
+      if (!name.startsWith('_ga')) return;
+      document.cookie = name + expired;
+      document.cookie = `${name}${expired}; domain=.${location.hostname}`;
+      document.cookie = `${name}${expired}; domain=.${registrable}`;
+    });
+  }
+
+  function openBanner(reopened: boolean) {
+    // The close button only appears when a prior choice exists to fall back to.
+    banner.dataset.canClose = String(reopened && readChoice() !== null);
+    banner.hidden = false;
+    if (reopened) accept.focus();
+  }
+  function closeBanner() {
+    banner.hidden = true;
+  }
+
+  accept.addEventListener('click', () => {
+    storeChoice('granted');
+    updateConsent('granted');
+    closeBanner();
+  });
+  reject.addEventListener('click', () => {
+    storeChoice('denied');
+    updateConsent('denied');
+    clearGaCookies();
+    closeBanner();
+  });
+  close.addEventListener('click', closeBanner);
+  banner.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && banner.dataset.canClose === 'true') closeBanner();
+  });
+
+  // Footer "Cookie preferences" (and any future [data-cookie-preferences]
+  // trigger) reopens the banner so the choice can be changed at any time.
+  document.querySelectorAll('[data-cookie-preferences]').forEach((el) =>
+    el.addEventListener('click', (event) => {
+      event.preventDefault();
+      openBanner(true);
+    }),
+  );
+
+  if (readChoice() === null) openBanner(false);
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 80; /* above page content, below the skip link (100) */
+    padding: var(--space-4);
+    pointer-events: none; /* the card, not the full-width strip, takes clicks */
+  }
+  .cookie-banner[hidden] {
+    display: none;
+  }
+  .cookie-banner__card {
+    pointer-events: auto;
+    position: relative;
+    margin-inline: auto;
+    max-width: 720px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-6);
+    padding: var(--space-6);
+    background: var(--ink);
+    color: var(--warm-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 32px rgba(34, 32, 29, 0.35);
+  }
+  .cookie-banner__copy {
+    flex: 1 1 320px;
+  }
+  .cookie-banner__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .cookie-banner__text {
+    margin-top: var(--space-2);
+    font-size: 15px;
+    line-height: 22px;
+    color: rgba(250, 247, 242, 0.85);
+  }
+  .cookie-banner__text a {
+    color: var(--warm-bg);
+  }
+  .cookie-banner__text a:hover {
+    color: var(--butter);
+  }
+  .cookie-banner__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+  /* Ghost button recolored for the Ink card — the global .btn--ghost is
+     ink-on-light and would vanish here. */
+  .cookie-banner__decline {
+    background: transparent;
+    color: var(--warm-bg);
+    box-shadow: inset 0 0 0 2px rgba(250, 247, 242, 0.6);
+  }
+  .cookie-banner__decline:hover {
+    box-shadow: inset 0 0 0 2px var(--warm-bg);
+  }
+  .cookie-banner__close {
+    display: none;
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    border-radius: 50%;
+    color: rgba(250, 247, 242, 0.7);
+    cursor: pointer;
+  }
+  .cookie-banner__close:hover {
+    color: var(--warm-bg);
+    background: rgba(250, 247, 242, 0.08);
+  }
+  .cookie-banner__close:focus-visible {
+    outline: 3px solid var(--butter);
+    outline-offset: 2px;
+  }
+  .cookie-banner[data-can-close='true'] .cookie-banner__close {
+    display: inline-flex;
+  }
+  @media (max-width: 480px) {
+    .cookie-banner {
+      padding: var(--space-2);
+    }
+    .cookie-banner__actions {
+      width: 100%;
+    }
+    .cookie-banner__actions .btn {
+      flex: 1 1 auto;
+    }
+  }
+</style>

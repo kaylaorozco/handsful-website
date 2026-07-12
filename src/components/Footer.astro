@@ -47,8 +47,11 @@ const socials = [
       <a href="/privacy-policy">Privacy Policy</a>
       <a href="/cookie-policy">Cookie Policy</a>
       <a href="/terms-of-service">Terms of Service</a>
-      {/* TODO(#7): add the "Cookie preferences" link here (reopens the consent banner).
-          The Cookie Policy (Section 4) and Privacy Policy (Section 5) both promise it. */}
+      {/* Reopens the consent banner (CookieConsentBanner.astro listens on the
+          data attribute). Both legal policies promise this link by name. */}
+      <button type="button" class="footer__prefs" data-cookie-preferences>
+        Cookie preferences
+      </button>
     </nav>
 
     <div class="footer__col">
@@ -122,6 +125,22 @@ const socials = [
     padding-block: var(--space-1);
   }
   .footer__col a:hover {
+    color: var(--butter);
+  }
+  /* A button dressed as a footer link — it triggers the consent banner
+     rather than navigating, but must read identically to its neighbors. */
+  .footer__prefs {
+    background: none;
+    border: 0;
+    padding: var(--space-1) 0;
+    color: var(--warm-bg);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 22px;
+    text-align: left;
+    cursor: pointer;
+  }
+  .footer__prefs:hover {
     color: var(--butter);
   }
   .footer__social {
