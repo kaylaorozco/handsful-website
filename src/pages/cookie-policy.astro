@@ -1,29 +1,227 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { EMAILS } from '../config';
+
+// Table of contents — ids must match the h2 ids below.
+const toc = [
+  { id: 'what-are-cookies', title: 'What are cookies?' },
+  { id: 'how-we-use-cookies', title: 'How we use cookies' },
+  { id: 'the-cookies-we-use', title: 'The cookies we use' },
+  { id: 'your-consent-choices', title: 'Your consent choices' },
+  { id: 'third-party-cookies', title: 'Third-party cookies' },
+  { id: 'browser-controls', title: 'Browser controls' },
+  { id: 'changes-to-this-policy', title: 'Changes to this policy' },
+  { id: 'contact-us', title: 'Contact us' },
+];
+
+const privacyEmail = EMAILS.privacy;
 ---
 
 <LegalLayout
   title="Cookie Policy"
-  description="The cookies Handsful uses on handsful.app and how to control them."
-  placeholder={true}
+  description="How Handsful uses cookies and similar tracking technologies on handsful.app."
+  placeholder={false}
+  noindex={true}
+  lastUpdated="July 12, 2026"
 >
-  <!-- PLACEHOLDER — final legal copy pending. Cookie consent management is
-       handled by Termly (added separately); the final policy should be
-       generated/kept in sync there. -->
-  <h2>1. What cookies we use today</h2>
   <p>
-    Analytics cookies (Google Analytics 4) are set <strong>only after you consent</strong> via
-    the cookie banner — until then Google Consent Mode keeps all tracking denied and no
-    cookies are stored. [Pending final copy — GA4 cookie names, purposes, retention; consent
-    management and the cookie policy are handled via Termly.]
+    This Cookie Policy explains how MESQUITE &amp; THORN DIGITAL, LLC (doing business as Handsful)
+    ("<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>") uses cookies and
+    similar tracking technologies on
+    <a href="https://www.handsful.app">https://www.handsful.app</a> (the
+    "<strong>Website</strong>"). It supplements our Privacy Policy at
+    <a href="/privacy-policy">https://www.handsful.app/privacy-policy</a>. Terms not defined here
+    have the meaning given in the Privacy Policy.
+  </p>
+  <p>
+    This policy currently covers the Website only. The Handsful mobile app does not yet use
+    cookies or the tracking technologies described here; if that changes, this policy will be
+    updated and you will be notified through the app.
   </p>
 
-  <h2>2. Managing cookies</h2>
-  <p>[Pending final copy — how to change your consent choice and browser-level controls.]</p>
+  <h2 id="table-of-contents">Table of contents</h2>
+  <ol class="toc">
+    {
+      toc.map(({ id, title }) => (
+        <li>
+          <a href={`#${id}`}>{title}</a>
+        </li>
+      ))
+    }
+  </ol>
 
-  <h2>3. Contact</h2>
+  <h2 id="what-are-cookies">1. What are cookies?</h2>
   <p>
-    Cookie and privacy questions: <a href={`mailto:${EMAILS.privacy}`}>{EMAILS.privacy}</a>
+    Cookies are small text files placed on your device when you visit a website. They're widely
+    used to make websites work, work more efficiently, and to provide reporting information.
+    Similar technologies (like local storage) serve comparable purposes and are covered by this
+    policy alongside cookies.
+  </p>
+
+  <h2 id="how-we-use-cookies">2. How we use cookies</h2>
+  <p>We use two categories of cookies on the Website:</p>
+  <p>
+    <strong>Essential cookies</strong> — required for the Website to function. These don't require
+    consent and can't be turned off through our banner. They include:
+  </p>
+  <ul>
+    <li>
+      Your cookie consent choice itself (so we remember your preference and don't ask again every
+      visit)
+    </li>
+  </ul>
+  <p>
+    <strong>Analytics cookies</strong> — used only with your consent, to help us understand how
+    visitors use the Website (e.g. which pages are viewed, general traffic patterns). We use
+    Google Analytics (GA4) for this purpose. See
+    <a href="#your-consent-choices">Section 4</a> for how consent controls this.
+  </p>
+  <p>
+    We do not use advertising or cross-site tracking cookies. We do not sell or share data
+    collected through cookies with third parties for advertising purposes.
+  </p>
+
+  <h2 id="the-cookies-we-use">3. The cookies we use</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Cookie/Technology</th>
+          <th scope="col">Purpose</th>
+          <th scope="col">Type</th>
+          <th scope="col">Duration</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Consent preference storage</td>
+          <td>Remembers your cookie choice</td>
+          <td>Essential</td>
+          <td>Persistent (until you change your preference or clear browser storage)</td>
+        </tr>
+        <tr>
+          <td>Google Analytics (GA4)</td>
+          <td>Site usage analytics</td>
+          <td>Analytics — requires consent</td>
+          <td>
+            Per Google's standard GA4 cookie duration (see Google's policy, linked in
+            <a href="#third-party-cookies">Section 5</a>)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    This table will be updated if additional cookies or tracking technologies are added to the
+    Website.
+  </p>
+
+  <h2 id="your-consent-choices">4. Your consent choices</h2>
+  <p>
+    When you first visit the Website, a consent banner asks whether you'd like to allow analytics
+    cookies. Google Analytics is configured to deny data collection by default (via Google Consent
+    Mode) — it collects nothing about you unless and until you actively accept.
+  </p>
+  <ul>
+    <li>
+      <strong>If you accept</strong>, analytics cookies are enabled and GA4 begins collecting
+      anonymized usage data.
+    </li>
+    <li>
+      <strong>If you decline</strong>, only essential cookies are used, and GA4 collects nothing.
+    </li>
+    <li>
+      <strong>To change your choice at any time</strong>, use the "Cookie preferences" link in the
+      Website footer, which reopens the consent banner.
+    </li>
+  </ul>
+  {/* TODO(#7): the consent banner and the footer "Cookie preferences" link described above
+      don't exist yet — they ship with issue #7 (custom cookie consent banner). Until #7 lands,
+      this section describes behavior that isn't live. */}
+  <p>
+    Your choice is stored so you won't be asked again on future visits unless you clear your
+    browser's storage or use a different browser/device.
+  </p>
+
+  <h2 id="third-party-cookies">5. Third-party cookies</h2>
+  <p>
+    Google Analytics (GA4) is the only third-party service that sets cookies on the Website, and
+    only after you consent. For more on how Google handles data, see
+    <a href="https://policies.google.com/privacy" rel="noopener noreferrer"
+      >Google's Privacy Policy</a
+    > and information on
+    <a
+      href="https://developers.google.com/analytics/devguides/collection/analyticsjs/cookie-usage"
+      rel="noopener noreferrer">Google Analytics cookie usage</a
+    >.
+  </p>
+
+  <h2 id="browser-controls">6. Browser controls</h2>
+  <p>
+    Most browsers let you block or delete cookies through their settings, independent of the
+    choice you make in our banner. Blocking essential cookies may affect how the Website functions
+    (for example, we may not remember your consent preference, and the banner may reappear on
+    every visit).
+  </p>
+
+  <h2 id="changes-to-this-policy">7. Changes to this policy</h2>
+  <p>
+    We may update this Cookie Policy as our use of cookies changes, including when the Handsful
+    mobile app introduces cookies or similar tracking technologies. The "Last updated" date above
+    reflects the most recent revision.
+  </p>
+
+  <h2 id="contact-us">8. Contact us</h2>
+  <p>
+    Questions about this Cookie Policy can be sent to
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>, or by mail to:
+  </p>
+  <p>
+    MESQUITE &amp; THORN DIGITAL, LLC<br />
+    Data Protection Officer<br />
+    1018 E Washington St, Suite A<br />
+    Brownsville, TX 78520<br />
+    United States
   </p>
 </LegalLayout>
+
+<style>
+  /* TOC anchor targets must clear the sticky header (48px logo + padding). */
+  h2 {
+    scroll-margin-top: 96px;
+  }
+  .toc {
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-6);
+  }
+  .toc li {
+    margin-top: var(--space-2);
+  }
+  ul {
+    margin: var(--space-3) 0 0;
+    padding-left: var(--space-6);
+  }
+  .table-scroll {
+    margin-top: var(--space-4);
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  th,
+  td {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid rgba(110, 100, 89, 0.3); /* --taupe at 30% */
+    text-align: left;
+    vertical-align: top;
+    color: var(--taupe-dark);
+  }
+  th {
+    background: rgba(110, 100, 89, 0.08);
+    color: var(--ink);
+    font-weight: 700;
+  }
+</style>
