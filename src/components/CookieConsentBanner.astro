@@ -154,7 +154,20 @@
     }),
   );
 
-  if (readChoice() === null) openBanner(false);
+  // The hero intro owns the page's first moments (its CSS-only sequence has
+  // no completion event to hook; the tagline reveal lands around 2.8s), so
+  // hold the first-visit banner back briefly rather than competing with it.
+  // Visual timing only — Consent Mode's denied default applies from document
+  // start regardless of when the banner appears.
+  const SHOW_DELAY_MS = 2000;
+
+  if (readChoice() === null) {
+    setTimeout(() => {
+      // Re-check both: the visitor may have opened the banner via the footer
+      // link and/or already made a choice while the delay ran.
+      if (readChoice() === null && banner.hidden) openBanner(false);
+    }, SHOW_DELAY_MS);
+  }
 </script>
 
 <style>
