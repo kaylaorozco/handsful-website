@@ -4,11 +4,13 @@
  *
  * gtag.js loads on every page, but the inline snippet defaults every consent
  * signal to "denied" BEFORE it loads — so GA sets no cookies and stores no
- * identifiers until a consent management platform grants them. Consent is
- * Termly's job: its embed (added separately in BaseLayout, above this
- * component's output) has Google Consent Mode support and calls
- * gtag('consent', 'update', …) when the visitor accepts. Nothing here needs
- * to know about Termly.
+ * identifiers until the visitor consents. Consent comes from the site's own
+ * banner (CookieConsentBanner.astro): BaseLayout's bootstrap snippet reads
+ * the stored choice into window.__handsfulStoredConsent just before this
+ * component's output, and a stored "granted" is re-applied below — after the
+ * default, before gtag.js — so returning visitors' very first hit is decided
+ * correctly. Live Accept/Decline clicks in the banner fire their own
+ * gtag('consent', 'update', …) calls.
  *
  * Renders nothing until PUBLIC_GA_MEASUREMENT_ID is set, so GA stays
  * completely off in envs without the var (local dev, previews if unset).
@@ -25,16 +27,16 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
           dataLayer.push(arguments);
         }
         window.gtag = gtag;
-        /* Consent Mode v2 — must run before gtag.js. wait_for_update gives a
-           CMP that loads early (Termly) a beat to apply stored choices before
-           the first hit is decided. */
+        /* Consent Mode v2 — must run before gtag.js, default before update. */
         gtag('consent', 'default', {
           ad_storage: 'denied',
           ad_user_data: 'denied',
           ad_personalization: 'denied',
           analytics_storage: 'denied',
-          wait_for_update: 500,
         });
+        if (window.__handsfulStoredConsent === 'granted') {
+          gtag('consent', 'update', { analytics_storage: 'granted' });
+        }
         gtag('js', new Date());
         gtag('config', gaId);
       </script>

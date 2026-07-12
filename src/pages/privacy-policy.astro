@@ -1,40 +1,677 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
 import { EMAILS } from '../config';
+
+// Table of contents — ids must match the h2 ids below.
+const toc = [
+  { id: 'what-information-do-we-collect', title: 'What information do we collect?' },
+  {
+    id: 'sensitive-consumer-health-data',
+    title: "Sensitive consumer health data: how we handle your child's care information",
+  },
+  { id: 'how-do-we-process-your-information', title: 'How do we process your information?' },
+  {
+    id: 'when-and-with-whom-do-we-share',
+    title: 'When and with whom do we share your personal information?',
+  },
+  { id: 'cookies-and-tracking', title: 'Do we use cookies and other tracking technologies?' },
+  { id: 'social-logins', title: 'How do we handle your social logins?' },
+  { id: 'how-long-do-we-keep-your-information', title: 'How long do we keep your information?' },
+  { id: 'how-do-we-keep-your-information-safe', title: 'How do we keep your information safe?' },
+  { id: 'information-from-minors', title: 'Do we collect information from minors?' },
+  { id: 'privacy-rights', title: 'What are your privacy rights?' },
+  { id: 'do-not-track', title: 'Controls for Do-Not-Track features' },
+  {
+    id: 'us-privacy-rights',
+    title: 'Do United States residents have specific privacy rights?',
+  },
+  { id: 'washington-my-health-my-data', title: 'Washington My Health My Data Act rights' },
+  {
+    id: 'gdpr',
+    title: 'Do European Union residents have specific privacy rights (GDPR)?',
+  },
+  { id: 'shared-caregiver-access', title: 'Shared caregiver access' },
+  { id: 'updates', title: 'Do we make updates to this notice?' },
+  { id: 'contact', title: 'How can you contact us about this notice?' },
+  {
+    id: 'review-update-delete',
+    title: 'How can you review, update, or delete the data we collect from you?',
+  },
+];
+
+const privacyEmail = EMAILS.privacy;
 ---
 
 <LegalLayout
   title="Privacy Policy"
   description="How Handsful collects, uses, and protects your family's data."
-  placeholder={true}
+  placeholder={false}
+  noindex={true}
+  lastUpdated="July 12, 2026"
 >
-  <!-- PLACEHOLDER — final legal copy pending. The outline below shows the
-       intended structure so the final draft can drop straight in. -->
-  <h2>1. What we collect</h2>
-  <p>[Pending final copy — categories of data collected via the website and the Handsful app.]</p>
-
-  <h2>2. How we use it</h2>
-  <p>[Pending final copy — purposes of processing, legal bases where required.]</p>
-
-  <h2>3. Children's data</h2>
-  <p>[Pending final copy — how baby-related data entered by parents is handled and protected.]</p>
-
-  <h2>4. Sharing &amp; third parties</h2>
-  <p>[Pending final copy — processors, analytics, no sale of personal data.]</p>
-
-  <h2>5. Your rights</h2>
-  <p>[Pending final copy — access, correction, deletion, portability, complaints.]</p>
-
-  <h2>6. Marketing emails</h2>
   <p>
-    [Pending final copy — waitlist signups consent to launch news, early access and
-    occasional marketing emails; every email includes an unsubscribe link. Keep in sync
-    with the waitlist form microcopy.]
+    This Privacy Notice for MESQUITE &amp; THORN DIGITAL, LLC (doing business as Handsful)
+    ("<strong>we</strong>," "<strong>us</strong>," or "<strong>our</strong>"), describes how and why
+    we might access, collect, store, use, and/or share ("<strong>process</strong>") your personal
+    information when you use our services ("<strong>Services</strong>"), including when you:
+  </p>
+  <ul>
+    <li>
+      Visit our website at <a href="https://www.handsful.app">https://www.handsful.app</a> or any
+      website of ours that links to this Privacy Notice
+    </li>
+    <li>Join our waitlist or subscribe to updates</li>
+    <li>
+      Download and use our mobile application (Handsful), once available, or any other application
+      of ours that links to this Privacy Notice
+    </li>
+    <li>
+      Use Handsful. Handsful is a mobile app that helps parents of multiples (twins, triplets, and
+      more) log and track care activities for each of their children — including feeding, sleep,
+      diaper changes, and growth — simultaneously across babies, compare activity side by side,
+      share caregiver access with a partner or family member, and prepare notes for pediatrician
+      visits. The app is intended for use by adults; it is not directed to children and is not
+      intended to be used by children.
+    </li>
+    <li>Engage with us in other related ways, including any marketing or events</li>
+  </ul>
+  <p>
+    <strong>Questions or concerns?</strong> Reading this Privacy Notice will help you understand
+    your privacy rights and choices. We are responsible for making decisions about how your
+    personal information is processed. If you do not agree with our policies and practices, please
+    do not use our Services. If you still have any questions or concerns, please contact us at
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
   </p>
 
-  <h2>7. Contact</h2>
+  <h2 id="who-this-policy-is-about">A note on who this policy is about</h2>
   <p>
-    [Pending final copy — data controller identity.] Privacy questions and data requests:
-    <a href={`mailto:${EMAILS.privacy}`}>{EMAILS.privacy}</a>
+    This Privacy Notice describes both (1) how we handle information about you, the parent or
+    caregiver who creates an account, and (2) how we handle information you provide about your
+    child or children in the course of using the Services. Information about your children is
+    provided by you, not collected directly from them, and is used solely to deliver the
+    care-tracking features you've chosen to use.
+  </p>
+
+  <h2 id="summary-of-key-points">Summary of key points</h2>
+  <p>
+    <strong>What personal information do we process?</strong> When you visit, use, or navigate our
+    Services, we may process personal information depending on how you interact with us and the
+    Services, the choices you make, and the products and features you use. This includes
+    information about your child or children that you choose to log. Learn more below.
+  </p>
+  <p>
+    <strong>Do we process any sensitive personal information?</strong> Yes. The care activity data
+    you log about your child or children — including feeding, sleep, diaper, growth, and
+    pediatrician visit information — is treated by us as sensitive consumer health data, and we
+    apply heightened protections to it as described in this Notice.
+  </p>
+  <p>
+    <strong>Do we collect any information from third parties?</strong> We do not collect any
+    information from third parties.
+  </p>
+  <p>
+    <strong>How do we process your information?</strong> We process your information to provide,
+    improve, and administer our Services, communicate with you, for security and fraud prevention,
+    and to comply with law. We process sensitive consumer health data only with your affirmative
+    consent, and only for the purposes you authorize. Learn more below.
+  </p>
+  <p>
+    <strong>In what situations and with which parties do we share personal information?</strong>
+    We may share information in specific situations and with specific third parties. We do not
+    sell or share your sensitive consumer health data, and we do not use it for advertising. Learn
+    more below.
+  </p>
+  <p>
+    <strong>How do we keep your information safe?</strong> We have adequate organizational and
+    technical processes and procedures in place to protect your personal information. However, no
+    electronic transmission over the internet or information storage technology can be guaranteed
+    to be 100% secure. Learn more below.
+  </p>
+  <p>
+    <strong>What are your rights?</strong> Depending on where you are located, applicable privacy
+    law may give you certain rights regarding your personal information, including sensitive
+    consumer health data. Learn more below.
+  </p>
+  <p>
+    <strong>How do you exercise your rights?</strong> The easiest way to exercise your rights is
+    by contacting us at <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. We will consider
+    and act upon any request in accordance with applicable data protection laws.
+  </p>
+
+  <h2 id="table-of-contents">Table of contents</h2>
+  <ol class="toc">
+    {
+      toc.map(({ id, title }) => (
+        <li>
+          <a href={`#${id}`}>{title}</a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2 id="what-information-do-we-collect">1. What information do we collect?</h2>
+
+  <h3>Personal information you disclose to us</h3>
+  <p class="in-short">
+    <em>
+      In Short: We collect personal information that you provide to us, including care information
+      you choose to log about your child or children.
+    </em>
+  </p>
+  <p>
+    We collect personal information that you voluntarily provide to us when you register on the
+    Services, join our waitlist, express interest in our products, or otherwise contact us.
+  </p>
+  <p><strong>Personal Information Provided by You.</strong> This may include:</p>
+  <ul>
+    <li>Name</li>
+    <li>Email address</li>
+    <li>Password</li>
+    <li>Contact and marketing preferences</li>
+    <li>Your children's first names</li>
+    <li>Your children's dates of birth (used to calculate age-appropriate tracking)</li>
+  </ul>
+  <p>
+    <strong>Sensitive Consumer Health Data.</strong> When you use the app (once available), you may
+    log care activity data about your child or children, including: feeding times and amounts,
+    sleep periods, diaper changes, growth measurements, and notes tagged for pediatrician visits.
+    We treat this data as sensitive consumer health data. See
+    <a href="#sensitive-consumer-health-data">Section 2</a> for how we handle it specifically.
+  </p>
+  <p>
+    <strong>Payment Data.</strong> If you subscribe to a paid tier, payment is handled by Apple,
+    RevenueCat, and/or Google Play. We do not store your full payment card details. See their
+    privacy notices:
+    <a href="https://www.apple.com/legal/privacy/" rel="noopener noreferrer"
+      >https://www.apple.com/legal/privacy/</a
+    >,
+    <a href="https://www.revenuecat.com/privacy" rel="noopener noreferrer"
+      >https://www.revenuecat.com/privacy</a
+    >,
+    <a href="https://policies.google.com/privacy" rel="noopener noreferrer"
+      >https://policies.google.com/privacy</a
+    >.
+  </p>
+  <p>
+    <strong>Social Media Login Data.</strong> If you register using Google Sign-In, we collect the
+    profile information provided by that service, as described in
+    <a href="#social-logins">Section 6</a>.
+  </p>
+  <p>
+    <strong>Application Data.</strong> If you use the app, we may collect, with your permission,
+    information from your mobile device such as device identifiers, model, operating system and
+    version, and information about how you use app features. This is used to maintain security,
+    troubleshoot issues, and for internal analytics.
+  </p>
+
+  <h3>Information automatically collected</h3>
+  <p class="in-short">
+    <em>
+      In Short: Some information, such as your IP address and device characteristics, is collected
+      automatically when you visit the website.
+    </em>
+  </p>
+  <p>
+    When you visit the website, we automatically collect log and usage data (IP address, browser
+    type, pages viewed, referring URLs) and device data. This does not, on its own, reveal your
+    identity. See our Cookie Notice at
+    <a href="/cookies">https://www.handsful.app/cookies</a> for details on tracking technologies
+    used on the website.
+  </p>
+
+  <h3>Google API</h3>
+  <p>
+    Our use of information received from Google APIs will adhere to the
+    <a
+      href="https://developers.google.com/terms/api-services-user-data-policy"
+      rel="noopener noreferrer">Google API Services User Data Policy</a
+    >, including the Limited Use requirements.
+  </p>
+
+  <h2 id="sensitive-consumer-health-data">
+    2. Sensitive consumer health data: how we handle your child's care information
+  </h2>
+  <p class="in-short">
+    <em>
+      In Short: Feeding, sleep, diaper, growth, and pediatrician visit data you log about your
+      child is sensitive consumer health data. We collect it only with your consent, use it only
+      to provide the Services you request, and do not sell it or use it for advertising.
+    </em>
+  </p>
+  <p>
+    Because Handsful is built around logging care activities for infants and young children, much
+    of the data you enter is, or is closely related to, health information about a minor. We apply
+    the following commitments to this category of data specifically:
+  </p>
+  <ul>
+    <li>We collect this data only when you affirmatively choose to log it.</li>
+    <li>We do not sell this data.</li>
+    <li>We do not share this data for the purposes of targeted advertising.</li>
+    <li>We do not use geofencing around health care facilities in connection with this data.</li>
+    <li>
+      Access to this data within our systems is limited to what is necessary to provide the
+      Services (for example, syncing your entries across your devices and to caregivers you've
+      invited).
+    </li>
+    <li>
+      Where we use third-party infrastructure providers to store or process this data (see
+      <a href="#when-and-with-whom-do-we-share">Section 4</a>), those providers are contractually
+      restricted from using it for any purpose other than providing services to us.
+    </li>
+    <li>
+      You may delete individual entries or your full account's data at any time from within the
+      app. See <a href="#review-update-delete">Section 18</a>.
+    </li>
+  </ul>
+  <p>
+    If we ever introduce features that process this data using artificial intelligence or machine
+    learning tools (for example, AI-generated visit-prep summaries), we will update this Privacy
+    Notice to describe that processing, name the provider involved, and obtain any additional
+    consent required by law before that feature is enabled for your account.
+  </p>
+
+  <h2 id="how-do-we-process-your-information">3. How do we process your information?</h2>
+  <p class="in-short">
+    <em>
+      In Short: We process your information to provide, improve, and administer the Services,
+      communicate with you, for security and fraud prevention, and to comply with law.
+    </em>
+  </p>
+  <p>We process personal information to:</p>
+  <ul>
+    <li>Create and maintain your account and authenticate you</li>
+    <li>Deliver the care-tracking, comparison, and caregiver-sharing features you use</li>
+    <li>Respond to support inquiries</li>
+    <li>Send administrative information about the Services</li>
+    <li>
+      Send marketing communications, where you've opted in (see
+      <a href="#privacy-rights">Section 10</a>)
+    </li>
+    <li>Protect the Services, including fraud monitoring</li>
+    <li>Understand usage trends and improve the Services</li>
+    <li>Comply with legal obligations</li>
+  </ul>
+  <p>
+    We do not use your child's care data to make automated decisions that produce legal or
+    similarly significant effects, and we do not use it to train third-party AI models.
+  </p>
+
+  <h2 id="when-and-with-whom-do-we-share">
+    4. When and with whom do we share your personal information?
+  </h2>
+  <p class="in-short">
+    <em>
+      In Short: We share information only with service providers who need it to operate the
+      Services, under contract, and never for advertising purposes involving sensitive consumer
+      health data.
+    </em>
+  </p>
+  <p><strong>Currently live (website):</strong></p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Category</th>
+          <th scope="col">Provider</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Website hosting</td>
+          <td>Vercel</td>
+        </tr>
+        <tr>
+          <td>Email list / marketing (waitlist)</td>
+          <td>Kit (ConvertKit)</td>
+        </tr>
+        <tr>
+          <td>Web analytics</td>
+          <td>Google Analytics (GA4) — active only after you consent via our cookie banner</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p><strong>Planned for app launch:</strong></p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Category</th>
+          <th scope="col">Provider</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>User account registration and authentication</td>
+          <td>Firebase Authentication</td>
+        </tr>
+        <tr>
+          <td>App data storage and sync</td>
+          <td>Cloud Firestore / Firebase</td>
+        </tr>
+        <tr>
+          <td>Subscription billing</td>
+          <td>RevenueCat, Apple, Google Play</td>
+        </tr>
+        <tr>
+          <td>Cloud infrastructure</td>
+          <td>Google Cloud Platform</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    We will update this table as additional providers are added, and will note here if any future
+    provider will have access to sensitive consumer health data.
+  </p>
+  <p>
+    We also may need to share your personal information in connection with a merger, sale of
+    company assets, financing, or acquisition of all or part of our business — sensitive consumer
+    health data will remain subject to the protections in this Notice through any such transfer.
+  </p>
+
+  <h2 id="cookies-and-tracking">5. Do we use cookies and other tracking technologies?</h2>
+  <p class="in-short">
+    <em>
+      In Short: We use cookies and similar technologies on the website for functionality and, with
+      your consent, for analytics.
+    </em>
+  </p>
+  <p>
+    We use essential cookies to operate the website. With your consent, given through our cookie
+    banner, we also use Google Analytics to understand website usage. GA4 does not collect or
+    process any information from within the app itself, and never processes your child's care
+    data.
+  </p>
+  <p>
+    You can withdraw consent to analytics cookies at any time through the cookie preferences link
+    in the website footer. See our Cookie Notice at
+    <a href="/cookies">https://www.handsful.app/cookies</a> for full details.
+  </p>
+
+  <h2 id="social-logins">6. How do we handle your social logins?</h2>
+  <p>
+    If you register using Google Sign-In, we receive certain profile information (such as name and
+    email address) from Google, used only for the purposes described in this Notice. We recommend
+    reviewing Google's privacy notice to understand their own data practices.
+  </p>
+
+  <h2 id="how-long-do-we-keep-your-information">7. How long do we keep your information?</h2>
+  <p class="in-short">
+    <em>
+      In Short: We keep your information for as long as you have an account, unless a longer
+      period is required by law.
+    </em>
+  </p>
+  <p>
+    We retain personal information, including care activity data, for as long as your account is
+    active. When you delete your account, we delete or anonymize your data, except where retention
+    is required for legal, tax, or fraud-prevention purposes, or where data exists in backup
+    archives, in which case we isolate it from further processing until deletion is possible.
+  </p>
+
+  <h2 id="how-do-we-keep-your-information-safe">8. How do we keep your information safe?</h2>
+  <p>
+    We implement reasonable technical and organizational security measures designed to protect
+    personal information, including sensitive consumer health data. No method of transmission or
+    storage is 100% secure, and we cannot guarantee absolute security.
+  </p>
+
+  <h2 id="information-from-minors">9. Do we collect information from minors?</h2>
+  <p class="in-short">
+    <em>
+      In Short: Handsful is designed for use by parents and caregivers 18 years of age or older.
+      We do not knowingly collect personal information directly from children.
+    </em>
+  </p>
+  <p>
+    We do not direct the Services to children and do not knowingly collect personal information
+    directly from a child. Parents and caregivers may log information about their children —
+    including first name, date of birth, and care activity data — but this is provided by the
+    parent or caregiver, not the child, and is used solely to deliver the tracking features within
+    the parent's account. If you believe we have inadvertently collected information directly from
+    a child, contact us at <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a> and we will
+    promptly address it.
+  </p>
+
+  <h2 id="privacy-rights">10. What are your privacy rights?</h2>
+  <p>
+    You may withdraw consent, opt out of marketing communications, and review, update, or delete
+    your account information at any time. See
+    <a href="#review-update-delete">Section 18</a> for how to exercise these rights. Sensitive
+    consumer health data can be deleted at the individual entry level or in bulk via account
+    deletion within the app.
+  </p>
+
+  <h2 id="do-not-track">11. Controls for Do-Not-Track features</h2>
+  <p>
+    There is currently no uniform standard for DNT signals, so we do not respond to them at this
+    time. If a legal standard is adopted, we will update this Notice accordingly.
+  </p>
+
+  <h2 id="us-privacy-rights">12. Do United States residents have specific privacy rights?</h2>
+  <p class="in-short">
+    <em>
+      In Short: Residents of California, Colorado, Connecticut, and other states with
+      comprehensive privacy laws have rights to know, access, correct, delete, and opt out of
+      certain processing of their personal information, including sensitive personal information.
+    </em>
+  </p>
+  <p><strong>Categories of Personal Information We Collect (past 12 months):</strong></p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Category</th>
+          <th scope="col">Examples</th>
+          <th scope="col">Collected</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>A. Identifiers</td>
+          <td>Name, email, IP address, account name</td>
+          <td>YES</td>
+        </tr>
+        <tr>
+          <td>B. California Customer Records</td>
+          <td>Name, contact info, financial information</td>
+          <td>YES</td>
+        </tr>
+        <tr>
+          <td>F. Internet/network activity</td>
+          <td>Website browsing and interaction data</td>
+          <td>YES</td>
+        </tr>
+        <tr>
+          <td>Sensitive personal information</td>
+          <td>Consumer health data (your child's care activity data)</td>
+          <td>YES</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    We have not sold your personal information, including sensitive personal information, in the
+    preceding twelve months. We do not use sensitive consumer health data for cross-context
+    behavioral advertising.
+  </p>
+  <p>
+    Your rights include the right to know, access, correct, delete, obtain a copy of, and opt out
+    of certain processing of your personal information, including the right to limit use of
+    sensitive personal information under California law. To exercise these rights, contact us at
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
+  </p>
+
+  <h2 id="washington-my-health-my-data">13. Washington My Health My Data Act rights</h2>
+  <p class="in-short">
+    <em>
+      In Short: If you are a Washington resident, or your consumer health data was collected in
+      Washington, you have specific rights under the My Health My Data Act.
+    </em>
+  </p>
+  <p>
+    We treat the care activity data logged in Handsful (feeding, sleep, diaper, growth, and
+    pediatrician visit notes) as "consumer health data" under the Washington My Health My Data
+    Act. In addition to the rights described elsewhere in this Notice, Washington residents have
+    the right to:
+  </p>
+  <ul>
+    <li>
+      Confirm whether we are collecting, sharing, or selling their consumer health data, and to
+      access that data
+    </li>
+    <li>Withdraw consent to our collection or sharing of their consumer health data</li>
+    <li>Have their consumer health data deleted</li>
+  </ul>
+  <p>
+    We obtain your consent before collecting consumer health data, do not sell it, and do not
+    share it for advertising purposes. To exercise these rights, contact
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. You may also submit complaints to the
+    Washington State Attorney General.
+  </p>
+
+  <h2 id="gdpr">14. Do European Union residents have specific privacy rights (GDPR)?</h2>
+  <p class="in-short">
+    <em>
+      In Short: If you are located in the EU/EEA or UK, you have rights under the GDPR, including
+      for special category data such as your child's health-related information.
+    </em>
+  </p>
+  <p>
+    Where GDPR applies, our legal basis for processing your account information is performance of
+    a contract with you (providing the Services) and, for marketing, your consent. Our legal basis
+    for processing your child's care activity data is your explicit consent, given at the point
+    you enable tracking features.
+  </p>
+  <p>
+    You have the right to access, rectify, erase, restrict, or port your data, and to withdraw
+    consent at any time without affecting the lawfulness of processing before withdrawal. To
+    exercise these rights, contact <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. You may
+    also lodge a complaint with your local data protection authority.
+  </p>
+
+  <h2 id="shared-caregiver-access">15. Shared caregiver access</h2>
+  <p class="in-short">
+    <em>
+      In Short: If you invite another caregiver to your account, they will be able to view and add
+      to your child's care data. If that caregiver's access is later removed, the entries they
+      logged remain in your child's record, but you can choose to anonymize the label showing who
+      logged them.
+    </em>
+  </p>
+  <p>
+    Handsful allows you to share access to your child's tracking data with another caregiver (such
+    as a co-parent or family member) that you invite. Once invited and accepted, that caregiver
+    can view and log entries for your child, including sensitive consumer health data, subject to
+    the permissions you grant. You are responsible for deciding who to invite.
+  </p>
+  <p>When a caregiver's access is removed:</p>
+  <ul>
+    <li>
+      Entries they logged remain part of your child's record — we do not delete a removed
+      caregiver's past entries, since they form part of your child's ongoing care history.
+    </li>
+    <li>
+      By default, entries stay attributed to the caregiver who logged them. You may choose to
+      anonymize the visible label (for example, showing "Caregiver 2" instead of a name) without
+      deleting the underlying entries.
+    </li>
+    <li>
+      We retain an internal record of the true attribution (which caregiver logged which entry)
+      for up to 12 months after a caregiver's access is removed, restricted to internal use for
+      security, dispute resolution, and legal compliance purposes. This internal record is not
+      visible to you, other caregivers, or the removed caregiver through the app.
+    </li>
+    <li>
+      A removed caregiver may request deletion of their personal information, including this
+      internal attribution record, as described in
+      <a href="#privacy-rights">Section 10</a> (or
+      <a href="#washington-my-health-my-data">Section 13</a> for Washington residents, or
+      <a href="#gdpr">Section 14</a> for EU/EEA and UK residents). Deletion of the internal
+      attribution record does not delete the underlying care entries themselves, which remain
+      part of your child's record.
+    </li>
+  </ul>
+  <p>
+    To revoke a caregiver's access, use in-app account management once available, or contact us
+    at <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
+  </p>
+
+  <h2 id="updates">16. Do we make updates to this notice?</h2>
+  <p>
+    We may update this Notice from time to time, indicated by the "Last updated" date above.
+    Material changes will be communicated by prominent notice or direct notification before they
+    take effect.
+  </p>
+
+  <h2 id="contact">17. How can you contact us about this notice?</h2>
+  <p>
+    MESQUITE &amp; THORN DIGITAL, LLC<br />
+    Data Protection Officer<br />
+    1018 E Washington St, Suite A<br />
+    Brownsville, TX 78520<br />
+    United States<br />
+    Email: <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>
+  </p>
+
+  <h2 id="review-update-delete">
+    18. How can you review, update, or delete the data we collect from you?
+  </h2>
+  <p>
+    You may request access to, correction of, or deletion of your personal information, including
+    your child's care activity data, by contacting
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a> or, once available, through account
+    settings within the app.
   </p>
 </LegalLayout>
+
+<style>
+  /* TOC anchor targets must clear the sticky header (48px logo + padding). */
+  h2 {
+    scroll-margin-top: 96px;
+  }
+  /* Global h3 (26px) would outrank the layout's 24px h2 inside legal copy. */
+  h3 {
+    margin-top: var(--space-6);
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .in-short {
+    color: var(--taupe);
+  }
+  .toc {
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-6);
+  }
+  .toc li {
+    margin-top: var(--space-2);
+  }
+  ul {
+    margin: var(--space-3) 0 0;
+    padding-left: var(--space-6);
+  }
+  .table-scroll {
+    margin-top: var(--space-4);
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  th,
+  td {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid rgba(110, 100, 89, 0.3); /* --taupe at 30% */
+    text-align: left;
+    vertical-align: top;
+    color: var(--taupe-dark);
+  }
+  th {
+    background: rgba(110, 100, 89, 0.08);
+    color: var(--ink);
+    font-weight: 700;
+  }
+</style>

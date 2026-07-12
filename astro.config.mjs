@@ -12,15 +12,22 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   trailingSlash: 'never',
+  // Short aliases: /privacy is the route referenced in launch tickets, and the
+  // Privacy Policy copy cites https://www.handsful.app/cookies verbatim.
+  redirects: {
+    '/privacy': '/privacy-policy',
+    '/cookies': '/cookie-policy',
+  },
   integrations: [
     sitemap({
-      // Legal pages are excluded while they hold placeholder copy (they are
-      // also noindex'd). When final legal copy lands, remove them from this
-      // filter and flip `noindex` off in the three legal pages.
+      // Legal pages are excluded until the indexing ticket ships (they are
+      // also noindex'd — the Privacy Policy has final copy but stays noindex'd
+      // deliberately). /privacy and /cookies are redirect stubs; the '/privacy'
+      // entry also matches '/privacy-policy'.
       // /waitlist-confirmed stays excluded permanently — it's only reachable
       // from the double opt-in email link and is noindex'd.
       filter: (page) =>
-        !['/privacy-policy', '/cookie-policy', '/terms-of-service', '/waitlist-confirmed'].some(
+        !['/privacy', '/cookie-policy', '/cookies', '/terms-of-service', '/waitlist-confirmed'].some(
           (p) => page.includes(p),
         ),
     }),

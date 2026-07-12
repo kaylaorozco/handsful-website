@@ -57,20 +57,43 @@ Then in Vercel → Project → Settings → Environment Variables:
       "already on the list" message, not an error.
 - [ ] Share the URL in iMessage/Slack → confirm the OG card image shows.
 
-## 6. Analytics + cookie consent (GA4 · Consent Mode v2 · Termly)
+## 6. Analytics + cookie consent (GA4 · Consent Mode v2 · custom banner)
 
-- [ ] Create the GA4 property: analytics.google.com → Admin → Create property
-      ("Handsful", your timezone/currency) → add a **Web** data stream for
-      `https://handsful.app` → copy the `G-XXXXXXXXXX` measurement ID.
-- [ ] Set `PUBLIC_GA_MEASUREMENT_ID` in Vercel env vars (Production + Preview).
-      GA is completely absent from the page until this is set. It's a public
-      identifier, not a secret — hence the `PUBLIC_` prefix.
-- [ ] Add Termly's consent embed in `BaseLayout.astro`, **above** `<Analytics />`
-      (a placeholder comment marks the spot), and enable Termly's **Google
-      Consent Mode** integration in the Termly dashboard.
-- [ ] Verify on the live site: before accepting the Termly banner there are no
-      `_ga*` cookies (gtag loads but consent defaults are denied); after
-      accepting, `_ga*` cookies appear and hits show in GA4 Realtime.
+- [x] GA4 property: **"Handsful"**, Web data stream for
+      `https://www.handsful.app`, Measurement ID **`G-PJC1SRJSPB`**.
+      ⚠️ Correction (2026-07-12): the ID documented previously,
+      `G-6463W89ED0`, was never a valid/findable GA4 property — if it turns
+      up in old notes or dashboards, it's wrong; `G-PJC1SRJSPB` is the
+      corrected one.
+- [x] `PUBLIC_GA_MEASUREMENT_ID` set in Vercel env vars (Production +
+      Preview) with the corrected ID. GA is completely absent from the page
+      until this is set. It's a public identifier, not a secret — hence the
+      `PUBLIC_` prefix.
+- Consent UI is the site's own banner (`src/components/CookieConsentBanner.astro`,
+  issue #7 — Termly was dropped). The visitor's choice is stored in
+  localStorage under `handsful_cookie_consent` (`{ value, timestamp }`,
+  expires after 12 months); a bootstrap snippet in `BaseLayout.astro` reads
+  it before `<Analytics />` so a stored "granted" applies before gtag.js
+  loads. The footer "Cookie preferences" button reopens the banner to change
+  the choice; declining also removes any existing `_ga*` cookies.
+
+### Verify AFTER the production push
+
+(GA4 Test Installation and DebugView both need the live site reachable with
+the correct ID deployed.)
+
+- [ ] **GA4 Test Installation**: Admin → Data Streams → Handsful Website
+      stream → "Test installation" — confirms the tag is detected on the
+      live domain.
+- [ ] **DebugView full consent loop**: fresh load with no stored consent
+      shows no `_ga*` cookies → Accept: `_ga*` cookies appear and a
+      `page_view`/`session_start` event registers in DebugView/Realtime →
+      reload doesn't reshow the banner and still registers hits → Decline
+      via "Cookie preferences": `_ga*` cookies are removed → reload after
+      declining shows no new hits.
+- [ ] Confirm no residual references to `G-6463W89ED0` anywhere in the
+      codebase or docs (verified clean in the repo as of 2026-07-12 — this
+      check is for dashboards/external notes).
 
 ## 7. Content that's stubbed and waiting
 
@@ -78,8 +101,9 @@ Then in Vercel → Project → Settings → Environment Variables:
   the section appears automatically (renders nothing while empty).
 - Social links: fill URLs in `src/config.ts` → `SOCIAL` (footer shows
   "· soon" placeholders until then).
-- Legal copy: three placeholder pages, `noindex`'d and out of the sitemap.
-  Un-flagging steps are at the top of `src/layouts/LegalLayout.astro`.
+- Legal copy: Privacy and Cookie Policy are final; Terms of Service is still a
+  placeholder. All stay `noindex`'d and out of the sitemap until the indexing
+  ticket — steps at the top of `src/layouts/LegalLayout.astro`.
 - App mocks: swap `src/components/AppPeek.astro` and
   `src/components/NotesPeek.astro` (both in the "See it in action" section,
   `src/sections/SeeItInAction.astro`) for real screenshots when app screens
