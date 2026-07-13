@@ -24,7 +24,6 @@
 <div class="cookie-banner" data-cookie-banner hidden role="region" aria-label="Cookie consent">
   <div class="cookie-banner__card">
     <div class="cookie-banner__copy">
-      <p class="cookie-banner__title">One quick cookie question</p>
       <p class="cookie-banner__text">
         We use essential cookies to make our site work. With your consent, we may also use
         analytics cookies to understand how visitors use our site. By clicking "Accept," you agree
@@ -34,7 +33,7 @@
       </p>
     </div>
     <div class="cookie-banner__actions">
-      <button type="button" class="btn btn--solid" data-consent-accept>Accept analytics</button>
+      <button type="button" class="btn btn--solid" data-consent-accept>Accept</button>
       <button type="button" class="btn cookie-banner__decline" data-consent-reject>Decline</button>
     </div>
     <button
@@ -202,14 +201,13 @@
   .cookie-banner__copy {
     flex: 1 1 320px;
   }
-  .cookie-banner__title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 26px;
+  /* The close button is absolutely positioned in the card's top-right corner.
+     When it's showing, keep the copy clear of it — otherwise the first line
+     runs underneath it once the copy wraps to the card's full width. */
+  .cookie-banner[data-can-close='true'] .cookie-banner__copy {
+    padding-right: 40px;
   }
   .cookie-banner__text {
-    margin-top: var(--space-2);
     font-size: 15px;
     line-height: 22px;
     color: rgba(250, 247, 242, 0.85);
