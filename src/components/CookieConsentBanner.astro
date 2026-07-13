@@ -24,16 +24,20 @@
 <div class="cookie-banner" data-cookie-banner hidden role="region" aria-label="Cookie consent">
   <div class="cookie-banner__card">
     <div class="cookie-banner__copy">
-      <p class="cookie-banner__title">One quick cookie question</p>
       <p class="cookie-banner__text">
-        We'd like to use one optional analytics cookie (Google Analytics) to see which pages help.
-        It stays off unless you accept — details in our
-        <a href="/cookie-policy">Cookie Policy</a>.
+        We use essential cookies to make our site work. With your consent, we may also use
+        analytics cookies to understand how visitors use our site. By clicking "Accept," you agree
+        to our website's cookie use as described in our <a href="/cookie-policy">Cookie Policy</a>.
+        You can change your cookie choice at any time using the "Cookie preferences" link in the
+        footer.
       </p>
     </div>
     <div class="cookie-banner__actions">
-      <button type="button" class="btn btn--solid" data-consent-accept>Accept analytics</button>
-      <button type="button" class="btn cookie-banner__decline" data-consent-reject>Decline</button>
+      <!-- Accept and Decline are deliberately identical in weight, size, and
+           color: consent guidance (EDPB/CNIL) expects rejecting to be no
+           harder, and no less prominent, than accepting. -->
+      <button type="button" class="btn btn--solid" data-consent-accept>Accept</button>
+      <button type="button" class="btn btn--solid" data-consent-reject>Decline</button>
     </div>
     <button
       type="button"
@@ -187,27 +191,25 @@
     position: relative;
     margin-inline: auto;
     max-width: 720px;
+    /* Copy stacked above the actions at every width — the buttons never sit
+       beside the text. */
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-4) var(--space-6);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
     padding: var(--space-6);
     background: var(--ink);
     color: var(--warm-bg);
     border-radius: var(--radius-lg);
     box-shadow: 0 12px 32px rgba(34, 32, 29, 0.35);
   }
-  .cookie-banner__copy {
-    flex: 1 1 320px;
-  }
-  .cookie-banner__title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 26px;
+  /* The close button is absolutely positioned in the card's top-right corner.
+     When it's showing, keep the copy clear of it — otherwise the first line
+     runs underneath it once the copy wraps to the card's full width. */
+  .cookie-banner[data-can-close='true'] .cookie-banner__copy {
+    padding-right: 40px;
   }
   .cookie-banner__text {
-    margin-top: var(--space-2);
     font-size: 15px;
     line-height: 22px;
     color: rgba(250, 247, 242, 0.85);
@@ -221,17 +223,12 @@
   .cookie-banner__actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-3);
   }
-  /* Ghost button recolored for the Ink card — the global .btn--ghost is
-     ink-on-light and would vanish here. */
-  .cookie-banner__decline {
-    background: transparent;
-    color: var(--warm-bg);
-    box-shadow: inset 0 0 0 2px rgba(250, 247, 242, 0.6);
-  }
-  .cookie-banner__decline:hover {
-    box-shadow: inset 0 0 0 2px var(--warm-bg);
+  /* Equal width too, so neither choice reads as the default. */
+  .cookie-banner__actions .btn {
+    min-width: 132px;
   }
   .cookie-banner__close {
     display: none;
@@ -267,7 +264,7 @@
       width: 100%;
     }
     .cookie-banner__actions .btn {
-      flex: 1 1 auto;
+      flex: 1 1 0; /* basis 0, not auto: equal halves regardless of label length */
     }
   }
 </style>

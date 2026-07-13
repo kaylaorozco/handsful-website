@@ -81,4 +81,10 @@ const { title, description, placeholder = true, noindex = placeholder, lastUpdat
     margin-top: var(--space-3);
     color: var(--taupe-dark);
   }
+  /* Legal copy cites URLs in full (e.g. the app-store refund policies in the
+     Terms). Some are a single token longer than a phone viewport, which would
+     push the whole page sideways — let them wrap mid-URL instead. */
+  .legal__body :global(a) {
+    overflow-wrap: break-word;
+  }
 </style>

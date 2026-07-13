@@ -1,31 +1,588 @@
 ---
 import LegalLayout from '../layouts/LegalLayout.astro';
+import { EMAILS } from '../config';
+
+// Table of contents — ids must match the h2 ids below.
+const toc = [
+  { id: 'our-services', title: 'Our services' },
+  { id: 'not-medical-advice', title: 'Not medical advice' },
+  { id: 'intellectual-property-rights', title: 'Intellectual property rights' },
+  { id: 'user-representations', title: 'User representations' },
+  { id: 'user-registration', title: 'User registration' },
+  { id: 'shared-caregiver-access', title: 'Shared caregiver access' },
+  { id: 'your-content', title: 'Your Content' },
+  { id: 'subscriptions-and-payment', title: 'Subscriptions and payment' },
+  { id: 'refunds-policy', title: 'Refunds policy' },
+  { id: 'prohibited-activities', title: 'Prohibited activities' },
+  { id: 'mobile-application-license', title: 'Mobile application license' },
+  { id: 'third-party-sign-in', title: 'Third-party sign-in' },
+  { id: 'services-management', title: 'Services management' },
+  { id: 'privacy-policy', title: 'Privacy Policy' },
+  { id: 'copyright-infringements', title: 'Copyright infringements' },
+  { id: 'term-and-termination', title: 'Term and termination' },
+  { id: 'modifications-and-interruptions', title: 'Modifications and interruptions' },
+  { id: 'governing-law', title: 'Governing law' },
+  { id: 'dispute-resolution', title: 'Dispute resolution' },
+  { id: 'corrections', title: 'Corrections' },
+  { id: 'disclaimer', title: 'Disclaimer' },
+  { id: 'limitations-of-liability', title: 'Limitations of liability' },
+  { id: 'indemnification', title: 'Indemnification' },
+  { id: 'user-data', title: 'User data' },
+  {
+    id: 'electronic-communications',
+    title: 'Electronic communications, transactions, and signatures',
+  },
+  { id: 'california-users-and-residents', title: 'California users and residents' },
+  { id: 'miscellaneous', title: 'Miscellaneous' },
+  { id: 'in-app-purchase-refunds', title: 'In-app purchase refunds' },
+  { id: 'contact-us', title: 'Contact us' },
+];
+
+const supportEmail = EMAILS.support;
 ---
 
 <LegalLayout
   title="Terms of Service"
   description="The terms that govern your use of Handsful and handsful.app."
-  placeholder={true}
+  placeholder={false}
+  noindex={true}
+  lastUpdated="July 13, 2026"
 >
-  <!-- PLACEHOLDER — final legal copy pending. -->
-  <h2>1. Acceptance of terms</h2>
-  <p>[Pending final copy.]</p>
-
-  <h2>2. The service</h2>
-  <p>[Pending final copy — description of the Handsful app and website, waitlist terms.]</p>
-
-  <h2>3. Not medical advice</h2>
+  <h2 id="agreement-to-our-legal-terms">Agreement to our legal terms</h2>
   <p>
-    [Pending final copy — Handsful is a tracking tool, not a medical device; always consult a
-    pediatrician for medical questions.]
+    We are MESQUITE &amp; THORN DIGITAL, LLC, doing business as Handsful ("<strong>Company</strong>,"
+    "<strong>we</strong>," "<strong>us</strong>," "<strong>our</strong>"), a company registered in
+    Texas, United States at 1018 E Washington St, Suite A, Brownsville, TX 78520.
+  </p>
+  <p>
+    We operate the website <a href="https://www.handsful.app">https://www.handsful.app</a> (the
+    "<strong>Site</strong>"), the mobile application Handsful (the "<strong>App</strong>"), as well
+    as any other related products and services that refer or link to these legal terms (the
+    "<strong>Legal Terms</strong>") (collectively, the "<strong>Services</strong>").
+  </p>
+  <p>
+    Handsful is a mobile application that helps parents of multiples (twins, triplets, and more) log
+    and track care activities for each of their children — including feeding, sleep, diaper changes,
+    and growth — simultaneously across babies, compare activity side by side, share caregiver access
+    with a partner or family member, and prepare notes for pediatrician visits.
+  </p>
+  <p>
+    You can contact us by email at <a href={`mailto:${supportEmail}`}>{supportEmail}</a>, or by mail
+    to 1018 E Washington St, Suite A, Brownsville, TX 78520, United States.
+  </p>
+  <p>
+    These Legal Terms constitute a legally binding agreement made between you, whether personally or
+    on behalf of an entity ("<strong>you</strong>"), and MESQUITE &amp; THORN DIGITAL, LLC,
+    concerning your access to and use of the Services. By accessing the Services, you agree that you
+    have read, understood, and agreed to be bound by all of these Legal Terms. IF YOU DO NOT AGREE
+    WITH ALL OF THESE LEGAL TERMS, THEN YOU ARE EXPRESSLY PROHIBITED FROM USING THE SERVICES AND YOU
+    MUST DISCONTINUE USE IMMEDIATELY.
+  </p>
+  <p>
+    The Services are intended for users who are at least 18 years old. Persons under the age of 18
+    are not permitted to use or register for the Services, though parents and guardians may log
+    information about their own children as described in these Legal Terms and our
+    <a href="/privacy-policy">Privacy Policy</a>.
+  </p>
+  <p>We recommend that you print or save a copy of these Legal Terms for your records.</p>
+
+  <h2 id="table-of-contents">Table of contents</h2>
+  <ol class="toc">
+    {
+      toc.map(({ id, title }) => (
+        <li>
+          <a href={`#${id}`}>{title}</a>
+        </li>
+      ))
+    }
+  </ol>
+
+  <h2 id="our-services">1. Our services</h2>
+  <p>
+    The information provided when using the Services is not intended for distribution to or use by
+    any person or entity in any jurisdiction or country where such distribution or use would be
+    contrary to law or regulation or which would subject us to any registration requirement within
+    such jurisdiction or country. Those who choose to access the Services from other locations do so
+    on their own initiative and are solely responsible for compliance with local laws, to the extent
+    applicable.
+  </p>
+  <p>
+    The Services are not tailored to comply with industry-specific regulations that apply to covered
+    entities under the Health Insurance Portability and Accountability Act (HIPAA), the Federal
+    Information Security Management Act (FISMA), or similar frameworks. If your use of the Services
+    would be subject to such laws by virtue of a covered-entity relationship, you may not use the
+    Services in that capacity. You may not use the Services in a way that would violate the
+    Gramm-Leach-Bliley Act (GLBA).
   </p>
 
-  <h2>4. Accounts &amp; acceptable use</h2>
-  <p>[Pending final copy.]</p>
+  <h2 id="not-medical-advice">2. Not medical advice</h2>
+  <p>
+    The Services are intended to help you organize and track information about your child's care.
+    They are not a substitute for professional medical advice, diagnosis, or treatment, and are not
+    a medical device. Always seek the advice of your child's pediatrician or other qualified health
+    provider with any questions regarding your child's health or development. Do not disregard,
+    delay, or discontinue any medical care because of information organized or generated through the
+    Services.
+  </p>
 
-  <h2>5. Liability &amp; disclaimers</h2>
-  <p>[Pending final copy.]</p>
+  <h2 id="intellectual-property-rights">3. Intellectual property rights</h2>
+  <h3>Our intellectual property</h3>
+  <p>
+    We are the owner or the licensee of all intellectual property rights in our Services, including
+    all source code, databases, functionality, software, website designs, audio, video, text,
+    photographs, and graphics in the Services (collectively, the "<strong>Content</strong>"), as
+    well as the trademarks, service marks, and logos contained therein (the "<strong>Marks</strong>").
+  </p>
+  <p>
+    Our Content and Marks are protected by copyright and trademark laws and treaties in the United
+    States and around the world. The Content and Marks are provided in or through the Services "AS
+    IS" for your personal, non-commercial use only.
+  </p>
+  <h3>Your use of our Services</h3>
+  <p>
+    Subject to your compliance with these Legal Terms, including the
+    <a href="#prohibited-activities">"Prohibited activities"</a> section below, we grant you a
+    non-exclusive, non-transferable, revocable license to access the Services and to download or
+    print a copy of any portion of the Content to which you have properly gained access, solely for
+    your personal, non-commercial use.
+  </p>
+  <p>
+    Except as set out in this section or elsewhere in our Legal Terms, no part of the Services and
+    no Content or Marks may be copied, reproduced, republished, uploaded, posted, publicly
+    displayed, encoded, translated, transmitted, distributed, sold, licensed, or otherwise exploited
+    for any commercial purpose whatsoever, without our express prior written permission. Requests
+    should be sent to <a href={`mailto:${supportEmail}`}>{supportEmail}</a>.
+  </p>
+  <p>
+    We reserve all rights not expressly granted to you in and to the Services, Content, and Marks.
+    Any breach of these Intellectual Property Rights will constitute a material breach of our Legal
+    Terms and your right to use our Services will terminate immediately.
+  </p>
+  <h3>Submissions</h3>
+  <p>
+    By directly sending us any question, comment, suggestion, idea, feedback, or other information
+    about the Services ("<strong>Submissions</strong>"), you agree to assign to us all intellectual
+    property rights in such Submission, and that we may use and disseminate it for any lawful
+    purpose without acknowledgment or compensation to you. This section applies only to feedback you
+    send us directly about the Services — it does not apply to the care information you log about
+    your child, which is addressed separately in
+    <a href="#your-content">Section 7 ("Your Content")</a>.
+  </p>
 
-  <h2>6. Governing law &amp; contact</h2>
-  <p>[Pending final copy.]</p>
+  <h2 id="user-representations">4. User representations</h2>
+  <p>
+    By using the Services, you represent and warrant that: (1) all registration information you
+    submit will be true, accurate, current, and complete; (2) you will maintain the accuracy of such
+    information and promptly update it as necessary; (3) you have the legal capacity and agree to
+    comply with these Legal Terms; (4) you are at least 18 years old; (5) where you log information
+    about a child, you are their parent, legal guardian, or an authorized caregiver with permission
+    to do so; (6) you will not access the Services through automated or non-human means, whether
+    through a bot, script, or otherwise; and (7) your use of the Services will not violate any
+    applicable law or regulation.
+  </p>
+  <p>
+    If you provide any information that is untrue, inaccurate, not current, or incomplete, we have
+    the right to suspend or terminate your account and refuse any and all current or future use of
+    the Services.
+  </p>
+
+  <h2 id="user-registration">5. User registration</h2>
+  <p>
+    You may be required to register to use the Services. You agree to keep your password
+    confidential and will be responsible for all use of your account and password. Notify us
+    promptly at <a href={`mailto:${supportEmail}`}>{supportEmail}</a> if you suspect unauthorized
+    use of your account.
+  </p>
+
+  <h2 id="shared-caregiver-access">6. Shared caregiver access</h2>
+  <p>
+    The Services allow you to invite other caregivers to access and contribute to your child's
+    tracking data. You are responsible for deciding who to invite and what access to grant. Once
+    invited and accepted, a caregiver may view and log entries subject to the permissions you set.
+  </p>
+  <p>
+    See our Privacy Policy,
+    <a href="/privacy-policy#shared-caregiver-access">Section 15</a>, for how we handle entries and
+    attribution after a caregiver's access is revoked.
+  </p>
+
+  <h2 id="your-content">7. Your Content</h2>
+  <p>
+    You retain ownership of the information you log through the Services, including entries about
+    your child ("<strong>Your Content</strong>"). By using the Services, you grant us a limited
+    license to store, process, and transmit Your Content solely as necessary to provide and improve
+    the Services, consistent with our <a href="/privacy-policy">Privacy Policy</a>. We do not use
+    Your Content for advertising, and we do not sell or share sensitive consumer health data logged
+    through the Services.
+  </p>
+  <p>
+    You are responsible for the accuracy of the information you or caregivers you invite log. We do
+    not independently verify care information entered through the Services.
+  </p>
+
+  <h2 id="subscriptions-and-payment">8. Subscriptions and payment</h2>
+  <p>We accept the following forms of payment:</p>
+  <ul>
+    <li>Apple In-App Purchase</li>
+    <li>Google Play In-App Purchase</li>
+  </ul>
+  <p>
+    We may offer a free trial period for certain features of the Services, the length and terms of
+    which will be presented to you at the time of signup and may vary or be adjusted from time to
+    time.
+  </p>
+  <p>
+    Following any trial period, continued access to premium features requires a paid subscription.
+    Subscription fees, billing frequency, and available plans are as displayed in the App at the
+    time of purchase. Subscriptions automatically renew at the then-current price unless canceled
+    before the renewal date, in accordance with the cancellation mechanisms provided by the
+    applicable app store. We may change subscription pricing or plans at any time; where required by
+    law, we will provide notice before a change takes effect for existing subscribers. All payments
+    shall be in US dollars, and applicable sales tax will be added as required.
+  </p>
+  <p>
+    We reserve the right to correct any errors or mistakes in pricing, even if we have already
+    requested or received payment.
+  </p>
+
+  <h2 id="refunds-policy">9. Refunds policy</h2>
+  <p>
+    All sales are final and no refund will be issued by us directly. See
+    <a href="#in-app-purchase-refunds">Section 28</a> for how refund requests for in-app purchases
+    are handled.
+  </p>
+
+  <h2 id="prohibited-activities">10. Prohibited activities</h2>
+  <p>
+    You may not access or use the Services for any purpose other than that for which we make the
+    Services available. As a user of the Services, you agree not to:
+  </p>
+  <ul>
+    <li>
+      Systematically retrieve data or other content from the Services to create or compile a
+      collection, compilation, database, or directory without written permission from us.
+    </li>
+    <li>
+      Trick, defraud, or mislead us or other users, especially in any attempt to learn sensitive
+      account information such as passwords.
+    </li>
+    <li>
+      Circumvent, disable, or otherwise interfere with security-related features of the Services.
+    </li>
+    <li>
+      Use the Services to log information about a child you are not authorized to care for or make
+      decisions on behalf of.
+    </li>
+    <li>Misrepresent your identity or your relationship to a child whose information you log.</li>
+    <li>
+      Use any information obtained from the Services to harass, abuse, or harm another person.
+    </li>
+    <li>Make improper use of our support services or submit false reports of abuse or misconduct.</li>
+    <li>Use the Services in a manner inconsistent with any applicable laws or regulations.</li>
+    <li>Engage in unauthorized framing of or linking to the Services.</li>
+    <li>
+      Upload or transmit viruses, Trojan horses, or other material that interferes with the Services.
+    </li>
+    <li>
+      Engage in any automated use of the Services, including scraping, data mining, or use of bots.
+    </li>
+    <li>Delete the copyright or other proprietary rights notice from any Content.</li>
+    <li>Attempt to impersonate another user or person.</li>
+    <li>
+      Interfere with, disrupt, or create an undue burden on the Services or connected networks.
+    </li>
+    <li>Attempt to bypass any measures designed to prevent or restrict access to the Services.</li>
+    <li>
+      Decipher, decompile, disassemble, or reverse engineer any software comprising the Services,
+      except as permitted by applicable law.
+    </li>
+    <li>Use the Services as part of any effort to compete with us.</li>
+    <li>Sell or otherwise transfer your account.</li>
+  </ul>
+
+  <h2 id="mobile-application-license">11. Mobile application license</h2>
+  <h3>Use License</h3>
+  <p>
+    If you access the Services via the App, we grant you a revocable, non-exclusive,
+    non-transferable, limited right to install and use the App on devices owned or controlled by
+    you, strictly in accordance with these Legal Terms. You shall not: (1) except as permitted by
+    applicable law, decompile, reverse engineer, disassemble, or attempt to derive the source code
+    of the App; (2) make any modification, adaptation, or derivative work from the App; (3) violate
+    any applicable laws in connection with your use of the App; (4) remove or obscure any
+    proprietary notice posted by us or our licensors; (5) use the App for any revenue-generating
+    endeavor for which it is not designed; (6) make the App available over a network permitting
+    access by multiple devices or users simultaneously beyond what caregiver-sharing features
+    intentionally permit; (7) use the App to create a competitive product or service; or (8) use any
+    proprietary information or interfaces of the App in the design or development of other
+    applications.
+  </p>
+  <h3>Apple and Android Devices</h3>
+  <p>
+    The following terms apply when you access the Services via the Apple App Store or Google Play
+    (each an "<strong>App Distributor</strong>"): (1) the license granted is limited to a
+    non-transferable license to use the App on a device utilizing the applicable operating system,
+    in accordance with the App Distributor's terms of service; (2) we are responsible for providing
+    maintenance and support with respect to the App as specified herein or as required by applicable
+    law, and each App Distributor has no obligation to furnish maintenance or support; (3) in the
+    event of a failure of the App to conform to any applicable warranty, you may notify the
+    applicable App Distributor, which may, in accordance with its own policies, refund the purchase
+    price paid for the App, and to the maximum extent permitted by law will have no further warranty
+    obligation; (4) you represent that you are not located in a country subject to a US government
+    embargo or designated as "terrorist supporting," and are not listed on any US government list of
+    prohibited or restricted parties; (5) you must comply with applicable third-party terms of
+    agreement when using the App; and (6) you acknowledge that the App Distributors are third-party
+    beneficiaries of this section and may enforce it against you.
+  </p>
+
+  <h2 id="third-party-sign-in">12. Third-party sign-in</h2>
+  <p>
+    The Services may allow you to register or sign in using a third-party account (such as Google
+    Sign-In). If you choose to do so, we will receive certain profile information from that provider
+    (such as your name and email address), as described in our
+    <a href="/privacy-policy">Privacy Policy</a>. Your relationship with the third-party provider is
+    governed solely by your agreement with that provider. You can revoke this connection at any time
+    through your account settings or the third-party provider's settings.
+  </p>
+
+  <h2 id="services-management">13. Services management</h2>
+  <p>
+    We reserve the right, but not the obligation, to: (1) monitor the Services for violations of
+    these Legal Terms; (2) take appropriate legal action against anyone who violates the law or
+    these Legal Terms, including reporting to law enforcement; (3) refuse, restrict, or disable
+    access to any portion of the Services in our discretion; (4) remove or disable content that is
+    excessive in size or burdensome to our systems; and (5) otherwise manage the Services to protect
+    our rights and property and facilitate proper functioning.
+  </p>
+
+  <h2 id="privacy-policy">14. Privacy Policy</h2>
+  <p>
+    We care about data privacy and security, especially given the sensitive nature of the care
+    information logged through the Services. Please review our Privacy Policy:
+    <a href="/privacy-policy">https://www.handsful.app/privacy-policy</a>. By using the Services,
+    you agree to be bound by our Privacy Policy, which is incorporated into these Legal Terms.
+  </p>
+  <p>
+    The Services are hosted in the United States. If you access the Services from a region with data
+    protection laws that differ from those in the United States, your continued use of the Services
+    constitutes your consent to have your data transferred to and processed in the United States,
+    subject to the safeguards described in our Privacy Policy.
+  </p>
+
+  <h2 id="copyright-infringements">15. Copyright infringements</h2>
+  <p>
+    We respect the intellectual property rights of others. If you believe that any material
+    available on or through the Services infringes upon any copyright you own or control, please
+    notify us using the contact information in <a href="#contact-us">Section 29</a>. Please be
+    advised that you may be held liable for damages if you make material misrepresentations in such
+    a notification.
+  </p>
+
+  <h2 id="term-and-termination">16. Term and termination</h2>
+  <p>
+    These Legal Terms remain in full force and effect while you use the Services. We reserve the
+    right to deny access to and use of the Services to any person for any reason or no reason,
+    including for breach of these Legal Terms, in our sole discretion and without notice or
+    liability where permitted by law. We may terminate your use of the Services or delete your
+    account and associated content at any time.
+  </p>
+  <p>
+    If we terminate or suspend your account, you are prohibited from registering a new account under
+    your name, a fake or borrowed name, or the name of any third party. Upon termination, the
+    data-retention and deletion practices described in our
+    <a href="/privacy-policy">Privacy Policy</a> will apply.
+  </p>
+
+  <h2 id="modifications-and-interruptions">17. Modifications and interruptions</h2>
+  <p>
+    We reserve the right to change, modify, or remove the contents of the Services at any time or
+    for any reason at our sole discretion, though we have no obligation to update any information.
+    We cannot guarantee the Services will be available at all times, and we are not liable for any
+    loss, damage, or inconvenience caused by downtime or discontinuance of the Services.
+  </p>
+
+  <h2 id="governing-law">18. Governing law</h2>
+  <p>
+    These Legal Terms and your use of the Services are governed by and construed in accordance with
+    the laws of the State of Texas applicable to agreements made and entirely performed within the
+    State of Texas, without regard to conflict of law principles.
+  </p>
+
+  <h2 id="dispute-resolution">19. Dispute resolution</h2>
+  <h3>Informal Negotiations</h3>
+  <p>
+    To expedite resolution and control the cost of any dispute, controversy, or claim related to
+    these Legal Terms (each a "<strong>Dispute</strong>"), the parties agree to first attempt to
+    negotiate any Dispute informally for at least thirty (30) days before initiating arbitration.
+    Such informal negotiations commence upon written notice from one party to the other.
+  </p>
+  <h3>Binding Arbitration</h3>
+  <p>
+    If the parties are unable to resolve a Dispute through informal negotiations, the Dispute
+    (except those excluded below) will be finally and exclusively resolved by binding arbitration.
+    YOU UNDERSTAND THAT WITHOUT THIS PROVISION, YOU WOULD HAVE THE RIGHT TO SUE IN COURT AND HAVE A
+    JURY TRIAL. The arbitration shall be commenced and conducted under the Commercial Arbitration
+    Rules of the American Arbitration Association ("<strong>AAA</strong>") and, where appropriate,
+    the AAA's Supplementary Procedures for Consumer Related Disputes, both available at the AAA
+    website. Arbitration fees shall be governed by the AAA Consumer Rules; if such costs are
+    determined by the arbitrator to be excessive, we will pay all arbitration fees and expenses. The
+    arbitration may be conducted in person, through submission of documents, by phone, or online.
+    Except where otherwise required, the arbitration will take place in Cameron County, Texas.
+  </p>
+  <p>
+    If for any reason a Dispute proceeds in court rather than arbitration, it shall be commenced in
+    the state and federal courts located in Cameron County, Texas, and the parties consent to, and
+    waive all defenses of lack of personal jurisdiction and forum non conveniens with respect to,
+    venue and jurisdiction in such courts.
+  </p>
+  <p>No Dispute may be commenced more than one (1) year after the cause of action arose.</p>
+  <h3>Restrictions</h3>
+  <p>
+    Any arbitration shall be limited to the Dispute between the parties individually. To the full
+    extent permitted by law: (a) no arbitration shall be joined with any other proceeding; (b) there
+    is no right or authority for any Dispute to be arbitrated on a class-action basis; and (c) there
+    is no right or authority for any Dispute to be brought in a representative capacity on behalf of
+    the general public or others.
+  </p>
+  <h3>Exceptions</h3>
+  <p>
+    The following Disputes are not subject to informal negotiation or arbitration: (a) Disputes
+    seeking to enforce or protect, or concerning the validity of, intellectual property rights; (b)
+    Disputes related to allegations of theft, piracy, invasion of privacy, or unauthorized use; and
+    (c) any claim for injunctive relief. If any part of this section is found illegal or
+    unenforceable, that Dispute will instead be decided by a court of competent jurisdiction as
+    described above.
+  </p>
+
+  <h2 id="corrections">20. Corrections</h2>
+  <p>
+    There may be information on the Services that contains typographical errors, inaccuracies, or
+    omissions. We reserve the right to correct such errors and to change or update information on
+    the Services at any time without prior notice.
+  </p>
+
+  <h2 id="disclaimer">21. Disclaimer</h2>
+  <p>
+    THE SERVICES ARE PROVIDED ON AN AS-IS AND AS-AVAILABLE BASIS. YOUR USE OF THE SERVICES IS AT
+    YOUR SOLE RISK. TO THE FULLEST EXTENT PERMITTED BY LAW, WE DISCLAIM ALL WARRANTIES, EXPRESS OR
+    IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
+    NON-INFRINGEMENT. WE MAKE NO WARRANTIES ABOUT THE ACCURACY OR COMPLETENESS OF THE SERVICES'
+    CONTENT AND ASSUME NO LIABILITY FOR: (1) ERRORS, MISTAKES, OR INACCURACIES OF CONTENT; (2)
+    PERSONAL INJURY OR PROPERTY DAMAGE RESULTING FROM YOUR ACCESS TO OR USE OF THE SERVICES; (3)
+    UNAUTHORIZED ACCESS TO OUR SECURE SERVERS OR ANY PERSONAL INFORMATION STORED THEREIN; (4)
+    INTERRUPTION OR CESSATION OF TRANSMISSION TO OR FROM THE SERVICES; OR (5) BUGS, VIRUSES, OR
+    SIMILAR TRANSMITTED THROUGH THE SERVICES BY ANY THIRD PARTY. AS WITH ANY DECISION AFFECTING YOUR
+    CHILD'S CARE, YOU SHOULD USE YOUR OWN JUDGMENT AND CONSULT A QUALIFIED HEALTH PROVIDER WHERE
+    APPROPRIATE.
+  </p>
+
+  <h2 id="limitations-of-liability">22. Limitations of liability</h2>
+  <p>
+    IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU OR ANY THIRD PARTY
+    FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY, INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES,
+    INCLUDING LOST PROFIT, LOST REVENUE, OR LOSS OF DATA, ARISING FROM YOUR USE OF THE SERVICES,
+    EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. OUR LIABILITY TO YOU FOR ANY
+    CAUSE WHATSOEVER WILL AT ALL TIMES BE LIMITED TO THE AMOUNT PAID, IF ANY, BY YOU TO US DURING
+    THE TWELVE (12) MONTH PERIOD PRIOR TO THE CAUSE OF ACTION ARISING. CERTAIN JURISDICTIONS DO NOT
+    ALLOW LIMITATIONS ON IMPLIED WARRANTIES OR EXCLUSION OF CERTAIN DAMAGES; IF THESE LAWS APPLY TO
+    YOU, SOME OR ALL OF THE ABOVE LIMITATIONS MAY NOT APPLY, AND YOU MAY HAVE ADDITIONAL RIGHTS.
+  </p>
+
+  <h2 id="indemnification">23. Indemnification</h2>
+  <p>
+    You agree to defend, indemnify, and hold us harmless, including our subsidiaries, affiliates,
+    and respective officers, agents, and employees, from any loss, damage, liability, claim, or
+    demand, including reasonable attorneys' fees, made by any third party due to or arising out of:
+    (1) Your Content; (2) use of the Services; (3) breach of these Legal Terms; (4) breach of your
+    representations and warranties; (5) violation of the rights of a third party; or (6) any harmful
+    act toward another user with whom you connected via the Services.
+  </p>
+
+  <h2 id="user-data">24. User data</h2>
+  <p>
+    We will maintain certain data that you transmit to the Services for the purpose of managing
+    performance, as well as data relating to your use of the Services. Although we perform regular
+    backups, you are solely responsible for all data you transmit or that relates to your activity
+    using the Services, subject to the commitments in our
+    <a href="/privacy-policy">Privacy Policy</a> regarding sensitive consumer health data.
+  </p>
+
+  <h2 id="electronic-communications">
+    25. Electronic communications, transactions, and signatures
+  </h2>
+  <p>
+    Visiting the Services, sending us emails, and completing online forms constitute electronic
+    communications. You consent to receive electronic communications, and agree that all agreements,
+    notices, disclosures, and other communications we provide electronically satisfy any legal
+    requirement that such communications be in writing.
+  </p>
+
+  <h2 id="california-users-and-residents">26. California users and residents</h2>
+  <p>
+    If any complaint with us is not satisfactorily resolved, you can contact the Complaint
+    Assistance Unit of the Division of Consumer Services of the California Department of Consumer
+    Affairs in writing at 1625 North Market Blvd., Suite N 112, Sacramento, California 95834, or by
+    telephone at (800) 952-5210 or (916) 445-1254.
+  </p>
+
+  <h2 id="miscellaneous">27. Miscellaneous</h2>
+  <p>
+    These Legal Terms and any policies or operating rules posted by us constitute the entire
+    agreement between you and us. Our failure to exercise or enforce any right or provision shall
+    not operate as a waiver of that right or provision. We may assign any or all of our rights and
+    obligations to others at any time. We are not responsible for any loss, damage, delay, or
+    failure to act caused by any cause beyond our reasonable control. If any provision is determined
+    to be unlawful, void, or unenforceable, that provision is deemed severable and does not affect
+    the validity of the remaining provisions. There is no joint venture, partnership, employment, or
+    agency relationship created between you and us as a result of these Legal Terms.
+  </p>
+
+  <h2 id="in-app-purchase-refunds">28. In-app purchase refunds</h2>
+  <p>
+    All in-app purchases are processed by Apple through the App Store (iOS) or Google through Google
+    Play (Android). Refund requests for in-app purchases are handled by Apple or Google in
+    accordance with their respective refund policies, available at
+    <a href="https://www.apple.com/legal/internet-services/itunes/" rel="noopener noreferrer"
+      >https://www.apple.com/legal/internet-services/itunes/</a
+    > and
+    <a href="https://support.google.com/googleplay/answer/2479637" rel="noopener noreferrer"
+      >https://support.google.com/googleplay/answer/2479637</a
+    >. We do not process refunds directly.
+  </p>
+
+  <h2 id="contact-us">29. Contact us</h2>
+  <p>
+    In order to resolve a complaint regarding the Services or to receive further information
+    regarding use of the Services, please contact us at:
+  </p>
+  <p>
+    MESQUITE &amp; THORN DIGITAL, LLC<br />
+    1018 E Washington St, Suite A<br />
+    Brownsville, TX 78520<br />
+    United States<br />
+    Email: <a href={`mailto:${supportEmail}`}>{supportEmail}</a>
+  </p>
 </LegalLayout>
+
+<style>
+  /* TOC anchor targets must clear the sticky header (48px logo + padding). */
+  h2 {
+    scroll-margin-top: 96px;
+  }
+  /* Global h3 (26px) would outrank the layout's 24px h2 inside legal copy. */
+  h3 {
+    margin-top: var(--space-6);
+    font-size: 20px;
+    line-height: 26px;
+  }
+  .toc {
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-6);
+  }
+  .toc li {
+    margin-top: var(--space-2);
+  }
+  ul {
+    margin: var(--space-3) 0 0;
+    padding-left: var(--space-6);
+  }
+</style>
