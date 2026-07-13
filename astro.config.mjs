@@ -17,18 +17,20 @@ export default defineConfig({
   redirects: {
     '/privacy': '/privacy-policy',
     '/cookies': '/cookie-policy',
+    '/terms': '/terms-of-service',
   },
   integrations: [
     sitemap({
       // Legal pages are excluded until the indexing ticket ships (they are
-      // also noindex'd — the Privacy Policy has final copy but stays noindex'd
-      // deliberately). /privacy and /cookies are redirect stubs; the '/privacy'
-      // entry also matches '/privacy-policy'.
+      // also noindex'd — the Privacy Policy and Terms of Service have final
+      // copy but stay noindex'd deliberately). /privacy, /cookies, and /terms
+      // are redirect stubs; the '/privacy' entry also matches '/privacy-policy',
+      // and '/terms' also matches '/terms-of-service'.
       // /waitlist-confirmed stays excluded permanently — it's only reachable
       // from the double opt-in email link and is noindex'd.
       filter: (page) =>
-        !['/privacy', '/cookie-policy', '/cookies', '/terms-of-service', '/waitlist-confirmed'].some(
-          (p) => page.includes(p),
+        !['/privacy', '/cookie-policy', '/cookies', '/terms', '/waitlist-confirmed'].some((p) =>
+          page.includes(p),
         ),
     }),
   ],
