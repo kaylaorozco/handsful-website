@@ -191,18 +191,17 @@
     position: relative;
     margin-inline: auto;
     max-width: 720px;
+    /* Copy stacked above the actions at every width — the buttons never sit
+       beside the text. */
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--space-4) var(--space-6);
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-4);
     padding: var(--space-6);
     background: var(--ink);
     color: var(--warm-bg);
     border-radius: var(--radius-lg);
     box-shadow: 0 12px 32px rgba(34, 32, 29, 0.35);
-  }
-  .cookie-banner__copy {
-    flex: 1 1 320px;
   }
   /* The close button is absolutely positioned in the card's top-right corner.
      When it's showing, keep the copy clear of it — otherwise the first line
@@ -224,6 +223,7 @@
   .cookie-banner__actions {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-3);
   }
   /* Equal width too, so neither choice reads as the default. */
