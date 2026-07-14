@@ -36,10 +36,12 @@ export default defineConfig({
       // copy but stay noindex'd deliberately). /privacy, /cookies, and /terms
       // are redirect stubs; the '/privacy' entry also matches '/privacy-policy',
       // and '/terms' also matches '/terms-of-service'.
-      // /waitlist-confirmed stays excluded permanently — it's only reachable
-      // from the double opt-in email link and is noindex'd.
+      // The /waitlist-* pages stay excluded permanently — they're only
+      // reachable from the double opt-in email link (/waitlist-confirmed) or
+      // /api/subscribe's no-JS 303 redirects (-thanks, -error), and all are
+      // noindex'd. '/waitlist-' matches all three.
       filter: (page) =>
-        !['/privacy', '/cookie-policy', '/cookies', '/terms', '/waitlist-confirmed'].some((p) =>
+        !['/privacy', '/cookie-policy', '/cookies', '/terms', '/waitlist-'].some((p) =>
           page.includes(p),
         ),
     }),

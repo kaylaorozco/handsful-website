@@ -35,7 +35,7 @@ src/
   layouts/           ← BaseLayout (SEO/meta), LegalLayout
   components/        ← header, footer, waitlist form, store badges
   sections/          ← homepage sections in page order
-  pages/             ← routes (/, legal pages, /waitlist-confirmed, /api/subscribe)
+  pages/             ← routes (/, legal pages, /waitlist-* status pages, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
 brand/               ← source brand assets + style guide (not served)
 scripts/generate-og.mjs ← builds the OG share image from brand assets (npm run og)

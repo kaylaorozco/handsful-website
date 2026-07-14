@@ -81,8 +81,9 @@ const { variant = 'on-solid', formId, source } = Astro.props;
 }
 
 <script>
-  // Progressive enhancement: without JS the form still POSTs to /api/subscribe
-  // (which returns JSON); with JS we submit inline and show friendly states.
+  // Progressive enhancement: without JS the form still POSTs to /api/subscribe,
+  // which 303-redirects it to /waitlist-thanks or /waitlist-error; with JS we
+  // submit JSON inline and show friendly states without leaving the page.
   //
   // Success is deliberately "check your inbox", not "you're on the list" —
   // Kit's double opt-in means the signup only counts once they click the
