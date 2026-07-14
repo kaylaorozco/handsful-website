@@ -45,6 +45,13 @@
 
   --content-width: 1080px;
   --content-narrow: 720px;
+
+  /* Page-level stacking order — the single source of truth. Anything with a
+     page-level z-index must use one of these (local stacking contexts inside
+     a component may still use small literals). */
+  --z-header: 40; /* sticky header */
+  --z-cookie-banner: 80; /* above the header, below the skip link */
+  --z-skip-link: 100; /* always on top when focused */
 }
 
 *,
