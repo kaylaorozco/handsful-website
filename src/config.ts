@@ -6,6 +6,11 @@
 
 export type CtaMode = 'waitlist' | 'stores';
 
+// Tagline/headline live in copy.mjs so the OG-image generator (plain Node)
+// can share them — edit them there.
+import { TAGLINE_LINES, HEADLINE } from './copy.mjs';
+export { TAGLINE_LINES, HEADLINE };
+
 /**
  * Role-based inboxes. These must actually exist (or forward) at your mail/domain
  * provider before the pages referencing them go live — most registrars and
@@ -20,7 +25,7 @@ export const EMAILS = {
 export const SITE = {
   name: 'Handsful',
   url: 'https://handsful.app',
-  tagline: "You've got your hands full. We've got you.",
+  tagline: TAGLINE_LINES.join(' '),
   title: 'Handsful — Baby Tracker App for Twins, Triplets & Multiples',
   description:
     'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, compare side by side, and share with every caregiver. Join the waitlist.',

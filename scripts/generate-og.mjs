@@ -7,8 +7,12 @@ import { readFile, mkdir, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import sharp from 'sharp';
+import { TAGLINE_LINES, HEADLINE } from '../src/copy.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
+
+// The copy is trusted, but it flows into SVG markup — escape XML specials.
+const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 const wordmark = await readFile(join(root, 'src/assets/wordmark.svg'), 'utf8');
 // Strip the outer <svg> so the paths can be placed in our canvas.
@@ -34,10 +38,10 @@ const svg = `
   <g transform="translate(290, 130) scale(0.605)">${wordmarkInner}</g>
   <text x="600" y="470" text-anchor="middle"
     font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="700"
-    fill="#FFFFFF">You've got your hands full. We've got you.</text>
+    fill="#FFFFFF">${esc(TAGLINE_LINES.join(' '))}</text>
   <text x="600" y="530" text-anchor="middle"
     font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="400"
-    fill="#FAF7F2" opacity="0.9">The baby tracker built for twins, triplets &amp; more</text>
+    fill="#FAF7F2" opacity="0.9">${esc(HEADLINE)}</text>
 </svg>`;
 
 const outDir = join(root, 'public/images');

@@ -1,5 +1,6 @@
 ---
 import WaitlistCta from '../components/WaitlistCta.astro';
+import { TAGLINE_LINES, HEADLINE } from '../config';
 ---
 
 <!-- Signature gradient hero with a one-time blob intro and a living coral
@@ -116,10 +117,12 @@ import WaitlistCta from '../components/WaitlistCta.astro';
 
   <div class="container hero__inner">
     <div class="hero__copy">
-      <!-- SITE.tagline, hardcoded here for the presentational line break —
-           keep the words in sync with src/config.ts -->
-      <p class="hero__eyebrow">You've got your hands full.<br />We've got you.</p>
-      <h1 class="hero__title">The baby tracker built for twins, triplets&nbsp;&amp;&nbsp;more</h1>
+      <!-- The tagline's sentences (src/copy.mjs) with a presentational line
+           break between them; SITE.tagline is the same words on one line. -->
+      <p class="hero__eyebrow">
+        {TAGLINE_LINES.map((line, i) => (i > 0 ? <><br />{line}</> : line))}
+      </p>
+      <h1 class="hero__title">{HEADLINE}</h1>
       <!-- No subhead: the hero stays sparse (tagline + headline + form);
            the one-tap pitch lives in "See it in action" below. -->
       <WaitlistCta variant="on-gradient" formId="waitlist-email-hero" source="hero" />
