@@ -14,32 +14,20 @@
  *
  * Renders nothing until PUBLIC_GA_MEASUREMENT_ID is set, so GA stays
  * completely off in envs without the var (local dev, previews if unset).
+ *
+ * The snippet source lives in src/ga-snippet.ts because astro.config.mjs
+ * hashes the identical string into the CSP script-src header — editing the
+ * snippet there keeps script and hash in lockstep automatically.
  */
+import { gaConsentSnippet } from '../ga-snippet';
+
 const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 ---
 
 {
   gaId && (
     <>
-      <script is:inline define:vars={{ gaId }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        window.gtag = gtag;
-        /* Consent Mode v2 — must run before gtag.js, default before update. */
-        gtag('consent', 'default', {
-          ad_storage: 'denied',
-          ad_user_data: 'denied',
-          ad_personalization: 'denied',
-          analytics_storage: 'denied',
-        });
-        if (window.__handsfulStoredConsent === 'granted') {
-          gtag('consent', 'update', { analytics_storage: 'granted' });
-        }
-        gtag('js', new Date());
-        gtag('config', gaId);
-      </script>
+      <script is:inline set:html={gaConsentSnippet(gaId)} />
       <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
     </>
   )
