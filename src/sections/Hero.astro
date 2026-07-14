@@ -210,7 +210,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 2.7s both,
-      drift-coral 17s ease-in-out -6s infinite;
+      drift-coral 11s ease-in-out -4s infinite;
   }
   /* Second coral, top-left: dimmer sibling of the main coral so the warm
      color frames both sides. Its sweep heads down-right into the teal but
@@ -226,7 +226,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 3.1s both,
-      drift-coral2 20s ease-in-out -9s infinite;
+      drift-coral2 13s ease-in-out -6s infinite;
   }
   .hero__glow--butter {
     width: clamp(360px, 40vw, 640px);
@@ -239,7 +239,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 3s both,
-      drift-butter 22s ease-in-out -15s infinite;
+      drift-butter 15s ease-in-out -10s infinite;
   }
   /* Faint cool bloom, pinned to the bottom-left corner: its meaningful
      color must stay below/left of the centered form (white small text over
@@ -255,7 +255,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     );
     animation:
       glow-appear 1.1s ease 3.3s both,
-      drift-sky 27s ease-in-out -11s infinite;
+      drift-sky 17s ease-in-out -7s infinite;
   }
 
   @keyframes ambient-breathe {
@@ -274,23 +274,26 @@ import WaitlistCta from '../components/WaitlistCta.astro';
   }
   /* Lava-lamp wander: closed multi-waypoint loops (not a two-point
      alternate, which reads as a metronome) with asymmetric scale(x, y)
-     squish so each blob elongates and settles as it floats. Sweeps stay
-     restrained toward the teal — meaningful color must remain clear of the
-     centered text column. Different periods + offsets keep the three from
-     ever aligning. */
+     squish so each blob elongates and settles as it floats. Travel and
+     tempo are deliberately assertive (roughly double the original sweep,
+     11–17s loops) so the drift reads at a glance instead of demanding a
+     stare — but sweeps toward the teal stay capped: meaningful color must
+     remain clear of the centered text column (the falloff hits 0 at 70%
+     radius, so only the faint outer half approaches it). Different periods
+     + offsets keep the four from ever aligning. */
   @keyframes drift-coral {
     0%,
     100% {
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     30% {
-      transform: translate3d(-9%, 11%, 0) scale(1.14, 0.94);
+      transform: translate3d(-16%, 20%, 0) scale(1.2, 0.9);
     }
     60% {
-      transform: translate3d(-15%, 4%, 0) scale(1.24, 1.08);
+      transform: translate3d(-24%, 7%, 0) scale(1.32, 1.12);
     }
     80% {
-      transform: translate3d(-5%, -8%, 0) scale(1, 1.18);
+      transform: translate3d(-8%, -15%, 0) scale(0.95, 1.26);
     }
   }
   @keyframes drift-coral2 {
@@ -299,13 +302,13 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     35% {
-      transform: translate3d(8%, 9%, 0) scale(1.14, 0.95);
+      transform: translate3d(15%, 17%, 0) scale(1.22, 0.92);
     }
     65% {
-      transform: translate3d(12%, 2%, 0) scale(1.04, 1.18);
+      transform: translate3d(21%, 4%, 0) scale(1.06, 1.3);
     }
     85% {
-      transform: translate3d(3%, -6%, 0) scale(1.16, 1);
+      transform: translate3d(6%, -12%, 0) scale(1.28, 0.96);
     }
   }
   @keyframes drift-butter {
@@ -314,13 +317,13 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     25% {
-      transform: translate3d(-10%, -9%, 0) scale(1.16, 0.9);
+      transform: translate3d(-18%, -16%, 0) scale(1.25, 0.86);
     }
     55% {
-      transform: translate3d(-4%, -16%, 0) scale(1, 1.2);
+      transform: translate3d(-8%, -28%, 0) scale(1, 1.32);
     }
     75% {
-      transform: translate3d(8%, -6%, 0) scale(1.17, 1.02);
+      transform: translate3d(14%, -11%, 0) scale(1.28, 1.04);
     }
   }
   @keyframes drift-sky {
@@ -329,10 +332,10 @@ import WaitlistCta from '../components/WaitlistCta.astro';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     40% {
-      transform: translate3d(8%, -12%, 0) scale(1.2, 1);
+      transform: translate3d(15%, -21%, 0) scale(1.3, 0.95);
     }
     70% {
-      transform: translate3d(13%, -3%, 0) scale(0.94, 1.22);
+      transform: translate3d(24%, -6%, 0) scale(0.9, 1.32);
     }
   }
 

@@ -95,6 +95,19 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
     </main>
     <Footer />
     <CookieConsentBanner />
+    <script>
+      // The header and footer wordmarks scroll the current page back to the
+      // top on every page (never a navigation/reload — their href="/" is
+      // only the no-JS fallback). Lives here because both components render
+      // from this layout.
+      document.querySelectorAll<HTMLAnchorElement>('[data-scroll-top]').forEach((el) =>
+        el.addEventListener('click', (event) => {
+          event.preventDefault();
+          const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+          window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+        }),
+      );
+    </script>
   </body>
 </html>
 

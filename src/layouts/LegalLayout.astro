@@ -26,6 +26,12 @@ const { title, description, placeholder = true, noindex = placeholder, lastUpdat
 <BaseLayout title={`${title} — ${SITE.name}`} description={description} noindex={noindex}>
   <article class="legal section">
     <div class="container--narrow">
+      <nav class="legal__breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li aria-current="page">{title}</li>
+        </ol>
+      </nav>
       <h1>{title}</h1>
       {lastUpdated && <p class="legal__updated">Last updated: {lastUpdated}</p>}
 
@@ -50,6 +56,25 @@ const { title, description, placeholder = true, noindex = placeholder, lastUpdat
 </BaseLayout>
 
 <style>
+  .legal__breadcrumb {
+    margin-bottom: var(--space-6);
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .legal__breadcrumb ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--taupe);
+  }
+  .legal__breadcrumb li + li::before {
+    content: '›';
+    margin-right: var(--space-2);
+  }
   .legal__updated {
     margin-top: var(--space-3);
     color: var(--taupe);

@@ -159,11 +159,11 @@
   );
 
   // The hero intro owns the page's first moments (its CSS-only sequence has
-  // no completion event to hook; the tagline reveal lands around 2.8s), so
-  // hold the first-visit banner back briefly rather than competing with it.
+  // no completion event to hook; the content stagger finishes around 5.9s),
+  // so hold the first-visit banner back rather than competing with it.
   // Visual timing only — Consent Mode's denied default applies from document
   // start regardless of when the banner appears.
-  const SHOW_DELAY_MS = 2000;
+  const SHOW_DELAY_MS = 6000;
 
   if (readChoice() === null) {
     setTimeout(() => {
@@ -187,6 +187,11 @@
     display: none;
   }
   .cookie-banner__card {
+    /* Restarts on every unhide (display: none → flex re-triggers it), so both
+       the delayed first-visit appearance and the footer reopen ease in rather
+       than popping. Reduced-motion users get an instant show via the global
+       duration-zeroing rule. */
+    animation: cookie-banner-enter 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
     pointer-events: auto;
     position: relative;
     margin-inline: auto;
@@ -255,6 +260,12 @@
   }
   .cookie-banner[data-can-close='true'] .cookie-banner__close {
     display: inline-flex;
+  }
+  @keyframes cookie-banner-enter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
   }
   @media (max-width: 480px) {
     .cookie-banner {
