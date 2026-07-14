@@ -67,12 +67,13 @@ const { variant = 'on-solid', formId, source } = Astro.props;
           Join the waitlist
         </button>
       </div>
-      {/* Consent language deliberately covers marketing emails (launch news, tips,
-          offers) so the list can be used beyond a single launch announcement.
-          Keep this in sync with the Privacy Policy's marketing section. */}
+      {/* Consent language covers launch news plus occasional updates so the list
+          can be used beyond a single launch announcement. Keep this in sync with
+          the Privacy Policy's marketing section. */}
       <p class="waitlist-form__note" data-note>
-        Launching soon on iOS &amp; Android. We'll send launch news, early access, and the
-        occasional tip for parents of multiples — unsubscribe anytime.
+        By subscribing, you agree to receive emails from Handsful about the app launch and
+        occasional updates. Unsubscribe anytime. See our
+        <a href="/privacy-policy">Privacy Policy</a>.
       </p>
       <p class="waitlist-form__status" data-status role="status" aria-live="polite"></p>
     </form>
@@ -190,6 +191,19 @@ const { variant = 'on-solid', formId, source } = Astro.props;
   }
   .waitlist-form--on-solid .waitlist-form__note {
     color: var(--taupe);
+  }
+  /* The Privacy Policy link inherits the note's muted color per variant —
+     the underline alone marks it as a link on both backgrounds. */
+  .waitlist-form__note a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .waitlist-form--on-gradient .waitlist-form__note a:hover {
+    color: #fff;
+  }
+  .waitlist-form--on-solid .waitlist-form__note a:hover {
+    color: var(--ink);
   }
   .waitlist-form__status {
     margin-top: var(--space-3);

@@ -28,7 +28,10 @@ const socials = [
 <footer class="footer">
   <div class="container footer__inner">
     <div class="footer__brand">
-      <a href="/" aria-label="Handsful home" class="footer__logo">
+      {/* href="/" is the no-JS fallback; with JS the wordmark smooth-scrolls
+          the current page to the top instead of reloading (see the
+          data-scroll-top handler in BaseLayout.astro). */}
+      <a href="/" aria-label="Handsful — back to top" class="footer__logo" data-scroll-top>
         <Wordmark onDark />
       </a>
       <p class="footer__tagline">{SITE.tagline}</p>
@@ -98,6 +101,11 @@ const socials = [
   .footer__logo {
     display: inline-block;
     color: var(--warm-bg);
+    /* The wordmark SVG's glyphs start at x=125 of its 1024-wide viewBox, so
+       the rendered mark carries invisible left padding (125/406 × the 40px
+       height ≈ 12px). Pull it back so the "H" sits on the same vertical
+       line as the tagline below. */
+    margin-left: -12px;
   }
   .footer__tagline {
     margin-top: var(--space-4);

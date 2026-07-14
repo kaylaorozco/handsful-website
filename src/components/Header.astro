@@ -1,10 +1,20 @@
 ---
 import Wordmark from './Wordmark.astro';
+
+// On the homepage the logo smooth-scrolls to the top (data-scroll-top handler
+// in BaseLayout.astro); everywhere else it navigates home. The footer wordmark
+// deliberately keeps always-scroll — the footer's own links cover navigation.
+const isHome = Astro.url.pathname === '/';
 ---
 
 <header class="header">
   <div class="container header__inner">
-    <a href="/" class="header__logo" aria-label="Handsful home">
+    <a
+      href="/"
+      class="header__logo"
+      aria-label={isHome ? 'Handsful — back to top' : 'Handsful home'}
+      data-scroll-top={isHome ? '' : undefined}
+    >
       <Wordmark />
     </a>
     <nav class="header__nav" aria-label="Primary">
