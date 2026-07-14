@@ -1,7 +1,7 @@
 ---
 import '../styles/global.css';
 import { SITE } from '../config';
-import { CONSENT_KEY, CONSENT_TTL_MS } from '../consent';
+import { CONSENT_BOOTSTRAP_SRC } from '../consent';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Analytics from '../components/Analytics.astro';
@@ -71,23 +71,11 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
          <Analytics /> runs, so its Consent Mode snippet can apply the choice
          between the denied default and gtag.js loading. The banner UI itself
          (CookieConsentBanner, end of <body>) writes this key on Accept/Decline. -->
-    <script is:inline define:vars={{ CONSENT_KEY, CONSENT_TTL_MS }}>
-      /* Key and TTL come from src/consent.ts via define:vars; this must run
-         pre-gtag so it can't import the module — mirror parseStoredConsent
-         exactly. Expired, invalid, or missing → null, i.e. Consent Mode's
-         denied default stands. */
-      try {
-        var handsfulConsent = JSON.parse(localStorage.getItem(CONSENT_KEY));
-        window.__handsfulStoredConsent =
-          handsfulConsent &&
-          (handsfulConsent.value === 'granted' || handsfulConsent.value === 'denied') &&
-          Date.now() - Date.parse(handsfulConsent.timestamp) <= CONSENT_TTL_MS
-            ? handsfulConsent.value
-            : null;
-      } catch (e) {
-        window.__handsfulStoredConsent = null;
-      }
-    </script>
+    <!-- The script body is the CONSENT_BOOTSTRAP_SRC string from
+         src/consent.ts, rendered verbatim: astro.config.mjs hashes that same
+         string into the CSP script-src header, so it must not be transformed
+         here (no define:vars — Astro's wrapper would change the hash). -->
+    <script is:inline set:html={CONSENT_BOOTSTRAP_SRC} />
     <Analytics />
   </head>
   <body>

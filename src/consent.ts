@@ -1,10 +1,11 @@
 /**
  * The cookie-consent storage contract — single source of truth shared by:
- *   - BaseLayout.astro's inline bootstrap (gets the constants via define:vars;
- *     its read logic mirrors parseStoredConsent and must stay equivalent,
- *     since an inline pre-gtag script can't import modules)
+ *   - BaseLayout.astro's inline bootstrap (rendered from CONSENT_BOOTSTRAP_SRC
+ *     below; an inline pre-gtag script can't import modules, so its read logic
+ *     mirrors parseStoredConsent and must stay equivalent)
  *   - CookieConsentBanner.astro (imports everything directly)
  *   - Analytics.astro (consumes window.__handsfulStoredConsent downstream)
+ *   - astro.config.mjs (hashes CONSENT_BOOTSTRAP_SRC for the CSP header)
  */
 
 export const CONSENT_KEY = 'handsful_cookie_consent';
@@ -38,3 +39,27 @@ export function parseStoredConsent(raw: string | null): ConsentValue | null {
   }
   return null;
 }
+
+/**
+ * The consent bootstrap, as the EXACT source text BaseLayout inlines into
+ * <head> (via set:html) and astro.config.mjs hashes for the CSP script-src
+ * directive. Both consumers must use this constant verbatim — any transform
+ * on either side breaks the hash and the browser blocks the script.
+ *
+ * It must run before Analytics.astro's snippet and can't import modules, so
+ * it mirrors parseStoredConsent: expired, invalid, or missing → null, i.e.
+ * Consent Mode's denied default stands.
+ */
+export const CONSENT_BOOTSTRAP_SRC = `
+try {
+  var handsfulConsent = JSON.parse(localStorage.getItem(${JSON.stringify(CONSENT_KEY)}));
+  window.__handsfulStoredConsent =
+    handsfulConsent &&
+    (handsfulConsent.value === 'granted' || handsfulConsent.value === 'denied') &&
+    Date.now() - Date.parse(handsfulConsent.timestamp) <= ${CONSENT_TTL_MS}
+      ? handsfulConsent.value
+      : null;
+} catch (e) {
+  window.__handsfulStoredConsent = null;
+}
+`;
