@@ -9,6 +9,7 @@
     "build": "npm run og && astro build",
     "preview": "astro preview",
     "og": "node scripts/generate-og.mjs",
+    "blobs": "node scripts/generate-blobs.mjs",
     "astro": "astro"
   },
   "dependencies": {

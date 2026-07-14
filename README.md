@@ -31,14 +31,16 @@ npm run build          # generates OG image + static build into dist/
 ```
 src/
   config.ts          ← site-wide config: CTA mode, store URLs, socials
-  data/              ← editable content: features, FAQ, testimonials/press
+  data/              ← editable content: FAQ, testimonials/press
   layouts/           ← BaseLayout (SEO/meta), LegalLayout
   components/        ← header, footer, waitlist form, store badges
   sections/          ← homepage sections in page order
   pages/             ← routes (/, legal pages, /waitlist-confirmed, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
 brand/               ← source brand assets + style guide (not served)
-scripts/generate-og.mjs ← builds the OG share image from brand assets
+scripts/generate-og.mjs ← builds the OG share image from brand assets (npm run og)
+scripts/generate-blobs.mjs ← regenerates the hero intro's blob morph paths (npm run blobs;
+                             deterministic — paste the output into Hero.astro)
 docs/LAUNCH-CHECKLIST.md ← everything to flip at launch time
 ```
 
