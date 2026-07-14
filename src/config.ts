@@ -6,6 +6,17 @@
 
 export type CtaMode = 'waitlist' | 'stores';
 
+/**
+ * Role-based inboxes. These must actually exist (or forward) at your mail/domain
+ * provider before the pages referencing them go live — most registrars and
+ * Google Workspace/Fastmail support alias forwarding to one inbox.
+ */
+export const EMAILS = {
+  hello: 'hello@handsful.app', // general contact (footer, SITE.contactEmail)
+  privacy: 'privacy@handsful.app', // data/privacy requests (Privacy & Cookie Policy)
+  support: 'support@handsful.app', // app support once launched
+} as const;
+
 export const SITE = {
   name: 'Handsful',
   url: 'https://handsful.app',
@@ -13,19 +24,8 @@ export const SITE = {
   title: 'Handsful — Baby Tracker App for Twins, Triplets & Multiples',
   description:
     'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, compare side by side, and share with every caregiver. Join the waitlist.',
-  contactEmail: 'hello@handsful.app',
+  contactEmail: EMAILS.hello,
   ogImage: '/images/og.png',
-} as const;
-
-/**
- * Role-based inboxes. These must actually exist (or forward) at your mail/domain
- * provider before the pages referencing them go live — most registrars and
- * Google Workspace/Fastmail support alias forwarding to one inbox.
- */
-export const EMAILS = {
-  hello: 'hello@handsful.app', // general contact (footer)
-  privacy: 'privacy@handsful.app', // data/privacy requests (Privacy & Cookie Policy)
-  support: 'support@handsful.app', // app support once launched
 } as const;
 
 export const CTA = {
