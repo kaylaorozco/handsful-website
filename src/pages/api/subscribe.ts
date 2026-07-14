@@ -65,6 +65,17 @@ async function kit(path: string, apiKey: string, body: object): Promise<Response
 }
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  // CSRF guard: browsers attach an Origin header to cross-site POSTs (and to
+  // same-origin fetch/form POSTs, where it matches the site). Reject other
+  // origins outright — comparing against the request's own origin keeps
+  // previews and local dev working, and SITE.url covers any proxy edge case
+  // in production. Requests without the header (curl, uptime checks) aren't
+  // browser CSRF vectors and fall through to the other guards.
+  const origin = request.headers.get('origin');
+  if (origin && origin !== new URL(request.url).origin && origin !== SITE.url) {
+    return json({ ok: false, error: 'Cross-origin requests are not allowed' }, 403);
+  }
+
   let email = '';
   let source = 'unknown';
   let honeypot = '';
@@ -99,6 +110,11 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   } catch {
     return respond({ ok: false, error: 'Invalid request body' }, 400);
   }
+
+  // `source` is client-supplied attribution metadata that flows into Kit's
+  // referrer column ('hero', 'footer-cta', … today) — normalize it to a short
+  // slug so arbitrary values can't pollute the attribution data.
+  source = source.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 64) || 'unknown';
 
   // Bots fill every field; humans never see the honeypot. Pretend success
   // without ever touching the Kit API.
