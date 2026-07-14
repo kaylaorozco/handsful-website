@@ -1,5 +1,5 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 
@@ -12,6 +12,16 @@ export default defineConfig({
   output: 'static',
   adapter: vercel(),
   trailingSlash: 'never',
+  env: {
+    // Typed access for /api/subscribe via astro:env/server. Both stay
+    // `optional` on purpose: local dev and previews run without Kit, and the
+    // route answers 503 (never a fake success) when they're missing — the
+    // schema still catches type drift and documents the contract.
+    schema: {
+      KIT_API_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),
+      KIT_FORM_ID: envField.string({ context: 'server', access: 'secret', optional: true }),
+    },
+  },
   // Short aliases: /privacy is the route referenced in launch tickets, and the
   // Privacy Policy copy cites https://www.handsful.app/cookies verbatim.
   redirects: {

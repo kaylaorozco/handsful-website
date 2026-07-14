@@ -14,11 +14,17 @@
  *      double opt-in email · 200: was already on the form (no re-send)
  */
 import type { APIRoute } from 'astro';
+import { KIT_API_KEY, KIT_FORM_ID } from 'astro:env/server';
 import { SITE } from '../../config';
 
 export const prerender = false;
 
 const KIT_API_BASE = 'https://api.kit.com/v4';
+
+/** The slice of Kit's "add subscriber to form" response we actually read. */
+interface KitFormSubscriberResponse {
+  subscriber?: { state?: string };
+}
 
 // Pragmatic email shape check (full RFC validation is a fool's errand).
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -66,7 +72,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   try {
     const type = request.headers.get('content-type') ?? '';
     if (type.includes('application/json')) {
-      const body = await request.json();
+      const body = (await request.json()) as Record<string, unknown>;
       email = String(body.email ?? '');
       source = String(body.source ?? source);
       honeypot = String(body.nickname ?? '');
@@ -95,8 +101,8 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     return json({ ok: false, error: 'Too many attempts — please try again in a few minutes' }, 429);
   }
 
-  const apiKey = import.meta.env.KIT_API_KEY;
-  const formId = import.meta.env.KIT_FORM_ID;
+  const apiKey = KIT_API_KEY;
+  const formId = KIT_FORM_ID;
   if (!apiKey || !formId) {
     // Misconfiguration must not fake success — the visitor would wait for a
     // confirmation email that never comes.
@@ -124,7 +130,7 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     if (added.status === 201) {
       return json({ ok: true, status: 'confirmation_sent' }, 200);
     }
-    const { subscriber } = await added.json();
+    const { subscriber } = (await added.json()) as KitFormSubscriberResponse;
     const status = subscriber?.state === 'active' ? 'already_subscribed' : 'already_pending';
     return json({ ok: true, status }, 200);
   } catch (err) {

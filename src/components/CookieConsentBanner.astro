@@ -98,15 +98,14 @@
   // Queue the consent command even if gtag.js hasn't loaded (or never loads —
   // pushes are harmless when PUBLIC_GA_MEASUREMENT_ID is unset).
   function updateConsent(state: 'granted' | 'denied') {
-    const w = window as any;
-    w.dataLayer = w.dataLayer || [];
-    w.gtag =
-      w.gtag ||
+    const dataLayer = (window.dataLayer = window.dataLayer || []);
+    window.gtag =
+      window.gtag ||
       function () {
         // eslint-disable-next-line prefer-rest-params -- gtag.js expects Arguments objects
-        w.dataLayer.push(arguments);
+        dataLayer.push(arguments);
       };
-    w.gtag('consent', 'update', { analytics_storage: state });
+    window.gtag('consent', 'update', { analytics_storage: state });
   }
 
   // GA cookies linger after consent is withdrawn unless removed — the Cookie
