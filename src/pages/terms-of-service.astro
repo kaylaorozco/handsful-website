@@ -563,26 +563,5 @@ const supportEmail = EMAILS.support;
   </p>
 </LegalLayout>
 
-<style>
-  /* TOC anchor targets must clear the sticky header (48px logo + padding). */
-  h2 {
-    scroll-margin-top: 96px;
-  }
-  /* Global h3 (26px) would outrank the layout's 24px h2 inside legal copy. */
-  h3 {
-    margin-top: var(--space-6);
-    font-size: 20px;
-    line-height: 26px;
-  }
-  .toc {
-    margin: var(--space-4) 0 0;
-    padding-left: var(--space-6);
-  }
-  .toc li {
-    margin-top: var(--space-2);
-  }
-  ul {
-    margin: var(--space-3) 0 0;
-    padding-left: var(--space-6);
-  }
-</style>
+<!-- Shared legal typography (TOC, lists, scroll margins) lives in
+     LegalLayout.astro's :global styles. -->

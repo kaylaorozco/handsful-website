@@ -183,43 +183,5 @@ const privacyEmail = EMAILS.privacy;
   </p>
 </LegalLayout>
 
-<style>
-  /* TOC anchor targets must clear the sticky header (48px logo + padding). */
-  h2 {
-    scroll-margin-top: 96px;
-  }
-  .toc {
-    margin: var(--space-4) 0 0;
-    padding-left: var(--space-6);
-  }
-  .toc li {
-    margin-top: var(--space-2);
-  }
-  ul {
-    margin: var(--space-3) 0 0;
-    padding-left: var(--space-6);
-  }
-  .table-scroll {
-    margin-top: var(--space-4);
-    overflow-x: auto;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 15px;
-    line-height: 22px;
-  }
-  th,
-  td {
-    padding: var(--space-3) var(--space-4);
-    border: 1px solid rgba(110, 100, 89, 0.3); /* --taupe at 30% */
-    text-align: left;
-    vertical-align: top;
-    color: var(--taupe-dark);
-  }
-  th {
-    background: rgba(110, 100, 89, 0.08);
-    color: var(--ink);
-    font-weight: 700;
-  }
-</style>
+<!-- Shared legal typography (TOC, lists, tables, scroll margins) lives in
+     LegalLayout.astro's :global styles. -->

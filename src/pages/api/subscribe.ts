@@ -14,11 +14,17 @@
  *      double opt-in email · 200: was already on the form (no re-send)
  */
 import type { APIRoute } from 'astro';
+import { KIT_API_KEY, KIT_FORM_ID } from 'astro:env/server';
 import { SITE } from '../../config';
 
 export const prerender = false;
 
 const KIT_API_BASE = 'https://api.kit.com/v4';
+
+/** The slice of Kit's "add subscriber to form" response we actually read. */
+interface KitFormSubscriberResponse {
+  subscriber?: { state?: string };
+}
 
 // Pragmatic email shape check (full RFC validation is a fool's errand).
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -63,51 +69,64 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   let source = 'unknown';
   let honeypot = '';
 
+  const type = request.headers.get('content-type') ?? '';
+  const isFormPost = !type.includes('application/json');
+
+  // The JS-enhanced form sends JSON and renders the response inline; a plain
+  // form POST (no JS) can't, so it gets a 303 to a human-readable status page
+  // instead of a raw JSON body.
+  const respond = (body: { ok: boolean; [key: string]: unknown }, status: number): Response =>
+    isFormPost
+      ? new Response(null, {
+          status: 303,
+          headers: { Location: body.ok ? '/waitlist-thanks' : '/waitlist-error' },
+        })
+      : json(body, status);
+
   try {
-    const type = request.headers.get('content-type') ?? '';
-    if (type.includes('application/json')) {
-      const body = await request.json();
-      email = String(body.email ?? '');
-      source = String(body.source ?? source);
-      honeypot = String(body.nickname ?? '');
-    } else {
+    if (isFormPost) {
       // No-JS fallback: plain form POST
       const form = await request.formData();
       email = String(form.get('email') ?? '');
       source = String(form.get('source') ?? source);
       honeypot = String(form.get('nickname') ?? '');
+    } else {
+      const body = (await request.json()) as Record<string, unknown>;
+      email = String(body.email ?? '');
+      source = String(body.source ?? source);
+      honeypot = String(body.nickname ?? '');
     }
   } catch {
-    return json({ ok: false, error: 'Invalid request body' }, 400);
+    return respond({ ok: false, error: 'Invalid request body' }, 400);
   }
 
   // Bots fill every field; humans never see the honeypot. Pretend success
   // without ever touching the Kit API.
-  if (honeypot) return json({ ok: true, status: 'confirmation_sent' }, 200);
+  if (honeypot) return respond({ ok: true, status: 'confirmation_sent' }, 200);
 
   email = email.trim().toLowerCase();
   if (!EMAIL_RE.test(email) || email.length > 254) {
-    return json({ ok: false, error: 'Please enter a valid email address' }, 422);
+    return respond({ ok: false, error: 'Please enter a valid email address' }, 422);
   }
 
   const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || clientAddress || '';
   if (rateLimited(ip)) {
-    return json({ ok: false, error: 'Too many attempts — please try again in a few minutes' }, 429);
+    return respond({ ok: false, error: 'Too many attempts — please try again in a few minutes' }, 429);
   }
 
-  const apiKey = import.meta.env.KIT_API_KEY;
-  const formId = import.meta.env.KIT_FORM_ID;
+  const apiKey = KIT_API_KEY;
+  const formId = KIT_FORM_ID;
   if (!apiKey || !formId) {
     // Misconfiguration must not fake success — the visitor would wait for a
     // confirmation email that never comes.
     console.error('[waitlist] KIT_API_KEY / KIT_FORM_ID not set; signup rejected:', email);
-    return json({ ok: false, error: 'Signups are briefly unavailable — please try again soon' }, 503);
+    return respond({ ok: false, error: 'Signups are briefly unavailable — please try again soon' }, 503);
   }
 
   try {
     const created = await kit('/subscribers', apiKey, { email_address: email });
     if (created.status === 422) {
-      return json({ ok: false, error: 'Please enter a valid email address' }, 422);
+      return respond({ ok: false, error: 'Please enter a valid email address' }, 422);
     }
     if (!created.ok) throw new Error(`Kit create subscriber responded ${created.status}`);
 
@@ -122,14 +141,14 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     // the form: `state` tells us whether they ever confirmed. Kit does not
     // re-send the confirmation email in the 200 case.
     if (added.status === 201) {
-      return json({ ok: true, status: 'confirmation_sent' }, 200);
+      return respond({ ok: true, status: 'confirmation_sent' }, 200);
     }
-    const { subscriber } = await added.json();
+    const { subscriber } = (await added.json()) as KitFormSubscriberResponse;
     const status = subscriber?.state === 'active' ? 'already_subscribed' : 'already_pending';
-    return json({ ok: true, status }, 200);
+    return respond({ ok: true, status }, 200);
   } catch (err) {
     console.error('[waitlist] Kit API call failed:', err);
-    return json({ ok: false, error: 'Something went wrong — please try again' }, 502);
+    return respond({ ok: false, error: 'Something went wrong — please try again' }, 502);
   }
 };
 

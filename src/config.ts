@@ -6,16 +6,10 @@
 
 export type CtaMode = 'waitlist' | 'stores';
 
-export const SITE = {
-  name: 'Handsful',
-  url: 'https://handsful.app',
-  tagline: "You've got your hands full. We've got you.",
-  title: 'Handsful — Baby Tracker App for Twins, Triplets & Multiples',
-  description:
-    'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, compare side by side, and share with every caregiver. Join the waitlist.',
-  contactEmail: 'hello@handsful.app',
-  ogImage: '/images/og.png',
-} as const;
+// Tagline/headline live in copy.mjs so the OG-image generator (plain Node)
+// can share them — edit them there.
+import { TAGLINE_LINES, HEADLINE } from './copy.mjs';
+export { TAGLINE_LINES, HEADLINE };
 
 /**
  * Role-based inboxes. These must actually exist (or forward) at your mail/domain
@@ -23,9 +17,20 @@ export const SITE = {
  * Google Workspace/Fastmail support alias forwarding to one inbox.
  */
 export const EMAILS = {
-  hello: 'hello@handsful.app', // general contact (footer)
+  hello: 'hello@handsful.app', // general contact (footer, SITE.contactEmail)
   privacy: 'privacy@handsful.app', // data/privacy requests (Privacy & Cookie Policy)
   support: 'support@handsful.app', // app support once launched
+} as const;
+
+export const SITE = {
+  name: 'Handsful',
+  url: 'https://handsful.app',
+  tagline: TAGLINE_LINES.join(' '),
+  title: 'Handsful — Baby Tracker App for Twins, Triplets & Multiples',
+  description:
+    'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, compare side by side, and share with every caregiver. Join the waitlist.',
+  contactEmail: EMAILS.hello,
+  ogImage: '/images/og.png',
 } as const;
 
 export const CTA = {

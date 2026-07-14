@@ -100,11 +100,55 @@ const { title, description, placeholder = true, noindex = placeholder, lastUpdat
     margin-top: var(--space-8);
     font-size: 24px;
     line-height: 30px;
+    /* TOC anchor targets must clear the sticky header (48px logo + padding). */
+    scroll-margin-top: 96px;
+  }
+  /* Global h3 (26px) would outrank this layout's 24px h2 inside legal copy. */
+  .legal__body :global(h3) {
+    margin-top: var(--space-6);
+    font-size: 20px;
+    line-height: 26px;
   }
   .legal__body :global(p),
   .legal__body :global(li) {
     margin-top: var(--space-3);
     color: var(--taupe-dark);
+  }
+  .legal__body :global(.toc) {
+    margin: var(--space-4) 0 0;
+    padding-left: var(--space-6);
+  }
+  .legal__body :global(.toc li) {
+    margin-top: var(--space-2);
+  }
+  .legal__body :global(ul) {
+    margin: var(--space-3) 0 0;
+    padding-left: var(--space-6);
+  }
+  /* Data tables (cookie/privacy policies) scroll inside their own wrapper on
+     phones instead of pushing the page sideways. */
+  .legal__body :global(.table-scroll) {
+    margin-top: var(--space-4);
+    overflow-x: auto;
+  }
+  .legal__body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 22px;
+  }
+  .legal__body :global(th),
+  .legal__body :global(td) {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid rgba(110, 100, 89, 0.3); /* --taupe at 30% */
+    text-align: left;
+    vertical-align: top;
+    color: var(--taupe-dark);
+  }
+  .legal__body :global(th) {
+    background: rgba(110, 100, 89, 0.08);
+    color: var(--ink);
+    font-weight: 700;
   }
   /* Legal copy cites URLs in full (e.g. the app-store refund policies in the
      Terms). Some are a single token longer than a phone viewport, which would

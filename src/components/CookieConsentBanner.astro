@@ -7,10 +7,10 @@
  *   - The visitor's choice lives in localStorage as `handsful_cookie_consent`,
  *     a JSON object { value: 'granted' | 'denied', timestamp: <ISO date> }.
  *     A choice older than 12 months is expired: same as no choice (banner
- *     reshows, GA stays denied until re-accepted). Keep the key, shape, and
- *     TTL in sync with the consent bootstrap snippet in BaseLayout.astro,
- *     which reads a stored fresh 'granted' so Analytics.astro can apply it
- *     before gtag.js loads.
+ *     reshows, GA stays denied until re-accepted). The key, shape, TTL, and
+ *     read logic live in src/consent.ts, shared with the consent bootstrap
+ *     snippet in BaseLayout.astro, which reads a stored fresh 'granted' so
+ *     Analytics.astro can apply it before gtag.js loads.
  *   - This component fires gtag('consent', 'update', …) only on user action
  *     (Accept / Decline), including choice changes made after reopening the
  *     banner via the footer's [data-cookie-preferences] button.
@@ -53,38 +53,26 @@
 </div>
 
 <script>
-  // Keep key, stored shape, and TTL in sync with the consent bootstrap
-  // snippet in BaseLayout.astro.
-  const CONSENT_KEY = 'handsful_cookie_consent';
-  // Consent expires after 12 months (~365 days) — the Cookie Policy promises
-  // "Up to 12 months, after which we ask again".
-  const CONSENT_TTL_MS = 365 * 24 * 60 * 60 * 1000;
+  // Key, stored shape, TTL, and read logic live in src/consent.ts — the
+  // BaseLayout bootstrap shares the same contract via define:vars.
+  import { CONSENT_KEY, parseStoredConsent, type ConsentValue } from '../consent';
 
   const banner = document.querySelector<HTMLElement>('[data-cookie-banner]')!;
   const accept = banner.querySelector<HTMLButtonElement>('[data-consent-accept]')!;
   const reject = banner.querySelector<HTMLButtonElement>('[data-consent-reject]')!;
   const close = banner.querySelector<HTMLButtonElement>('[data-consent-close]')!;
 
-  // localStorage throws in some private modes — treat that, an unparsable
-  // value (e.g. the pre-expiry bare-string format), or an expired timestamp
-  // as "no choice": the banner shows and the denied default protects the
-  // visitor until they choose again.
-  function readChoice(): 'granted' | 'denied' | null {
+  // localStorage itself throws in some private modes — treat that like any
+  // invalid/expired value (parseStoredConsent): "no choice", so the banner
+  // shows and the denied default protects the visitor until they choose.
+  function readChoice(): ConsentValue | null {
     try {
-      const parsed = JSON.parse(localStorage.getItem(CONSENT_KEY) ?? 'null');
-      if (
-        parsed &&
-        (parsed.value === 'granted' || parsed.value === 'denied') &&
-        Date.now() - Date.parse(parsed.timestamp) <= CONSENT_TTL_MS
-      ) {
-        return parsed.value;
-      }
+      return parseStoredConsent(localStorage.getItem(CONSENT_KEY));
     } catch {
-      /* fall through to null */
+      return null;
     }
-    return null;
   }
-  function storeChoice(value: 'granted' | 'denied') {
+  function storeChoice(value: ConsentValue) {
     try {
       localStorage.setItem(
         CONSENT_KEY,
@@ -97,16 +85,15 @@
 
   // Queue the consent command even if gtag.js hasn't loaded (or never loads —
   // pushes are harmless when PUBLIC_GA_MEASUREMENT_ID is unset).
-  function updateConsent(state: 'granted' | 'denied') {
-    const w = window as any;
-    w.dataLayer = w.dataLayer || [];
-    w.gtag =
-      w.gtag ||
+  function updateConsent(state: ConsentValue) {
+    const dataLayer = (window.dataLayer = window.dataLayer || []);
+    window.gtag =
+      window.gtag ||
       function () {
         // eslint-disable-next-line prefer-rest-params -- gtag.js expects Arguments objects
-        w.dataLayer.push(arguments);
+        dataLayer.push(arguments);
       };
-    w.gtag('consent', 'update', { analytics_storage: state });
+    window.gtag('consent', 'update', { analytics_storage: state });
   }
 
   // GA cookies linger after consent is withdrawn unless removed — the Cookie
@@ -179,7 +166,7 @@
     position: fixed;
     inset-inline: 0;
     bottom: 0;
-    z-index: 80; /* above page content, below the skip link (100) */
+    z-index: var(--z-cookie-banner); /* above page content, below the skip link */
     padding: var(--space-4);
     pointer-events: none; /* the card, not the full-width strip, takes clicks */
   }

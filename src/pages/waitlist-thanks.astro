@@ -1,0 +1,61 @@
+---
+/**
+ * No-JS fallback landing page. /api/subscribe 303-redirects plain form POSTs
+ * here on success; visitors with JS never see it (the form shows its inline
+ * status instead). A static page can't know which success case applied
+ * (new signup / already pending / already confirmed), so the copy covers all
+ * three without promising an email that might not come.
+ *
+ * Only reachable via that redirect, so it's noindex'd and excluded from the
+ * sitemap (see astro.config.mjs).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config';
+---
+
+<BaseLayout
+  title={`Almost there — ${SITE.name}`}
+  description="One more step: confirm your email to lock in your spot on the Handsful waitlist."
+  noindex={true}
+>
+  <section class="thanks section">
+    <div class="container--narrow">
+      <p class="thanks__eyebrow">Waitlist</p>
+      <h1>Almost there — check your inbox 📬</h1>
+      <p class="thanks__lead">
+        If you're new to the list, we just sent you a confirmation email — click the link inside
+        to lock in your spot. Signed up before? Look for our earlier email (spam folder too). And
+        if you've already confirmed, you're all set: no new email, your spot is safe.
+      </p>
+      <a class="btn btn--primary" href="/">Back to the site</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .thanks {
+    text-align: center;
+  }
+  .thanks__eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .thanks h1 {
+    margin-top: var(--space-3);
+  }
+  .thanks__lead {
+    max-width: 520px;
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    color: var(--taupe-dark);
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .thanks .btn {
+    margin-top: var(--space-8);
+  }
+</style>

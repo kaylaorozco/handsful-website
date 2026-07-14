@@ -30,7 +30,7 @@ const isHome = Astro.url.pathname === '/';
   .header {
     position: sticky;
     top: 0;
-    z-index: 40; /* above page content, below the cookie banner (50) */
+    z-index: var(--z-header); /* above page content, below the cookie banner */
     background: var(--warm-bg);
     border-bottom: 1px solid rgba(34, 32, 29, 0.08);
     box-shadow: 0 1px 8px rgba(34, 32, 29, 0.06);

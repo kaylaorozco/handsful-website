@@ -1,0 +1,61 @@
+---
+/**
+ * No-JS fallback error page. /api/subscribe 303-redirects plain form POSTs
+ * here when the signup didn't go through (invalid email, rate limit, Kit
+ * outage/misconfiguration). Visitors with JS see the form's inline error
+ * message instead and never land here. Kept generic on purpose — the
+ * detailed per-case messages live on the JS path.
+ *
+ * Only reachable via that redirect, so it's noindex'd and excluded from the
+ * sitemap (see astro.config.mjs).
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../config';
+---
+
+<BaseLayout
+  title={`That didn't go through — ${SITE.name}`}
+  description="Your waitlist signup didn't go through. Head back and try again."
+  noindex={true}
+>
+  <section class="oops section">
+    <div class="container--narrow">
+      <p class="oops__eyebrow">Waitlist</p>
+      <h1>That didn't go through</h1>
+      <p class="oops__lead">
+        You're not on the list yet — sorry about that. Double-check your email address and give it
+        another try; if it still won't take, wait a few minutes (we limit repeat attempts) or try
+        again a little later.
+      </p>
+      <a class="btn btn--primary" href="/#waitlist">Back to the signup form</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .oops {
+    text-align: center;
+  }
+  .oops__eyebrow {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+  }
+  .oops h1 {
+    margin-top: var(--space-3);
+  }
+  .oops__lead {
+    max-width: 520px;
+    margin-inline: auto;
+    margin-top: var(--space-4);
+    color: var(--taupe-dark);
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .oops .btn {
+    margin-top: var(--space-8);
+  }
+</style>
