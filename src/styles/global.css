@@ -185,12 +185,6 @@ svg {
   color: var(--ink);
 }
 
-.btn--ghost {
-  background: transparent;
-  color: var(--ink);
-  box-shadow: inset 0 0 0 2px var(--ink);
-}
-
 /* Visually-hidden utility for a11y labels */
 .visually-hidden {
   position: absolute;
