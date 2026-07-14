@@ -26,10 +26,12 @@ const ICON_PATHS = {
   clock: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2', // clock
 } satisfies Record<LogChip['icon'] | 'clock', string>;
 
-const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
+// `color` maps to a .peek__avatar--<color> class (not an inline style
+// attribute — those are blocked by the site's hash-based CSP).
+const babies: { name: string; color: 'sky' | 'teal'; chips: LogChip[] }[] = [
   {
     name: 'Baby A',
-    colorVar: 'var(--sky)',
+    color: 'sky',
     chips: [
       { icon: 'feed', label: 'Fed · 6:45am' },
       { icon: 'nap', label: 'Nap · 8:10am' },
@@ -38,7 +40,7 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
   },
   {
     name: 'Baby B',
-    colorVar: 'var(--teal)',
+    color: 'teal',
     chips: [
       { icon: 'feed', label: 'Fed · 6:45am' },
       { icon: 'nap', label: 'Nap · 8:32am' },
@@ -64,7 +66,7 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
         babies.map((baby) => (
           <div class="peek__col">
             <div class="peek__baby">
-              <span class="peek__avatar" style={`background:${baby.colorVar}`} />
+              <span class={`peek__avatar peek__avatar--${baby.color}`} />
               <span class="peek__name">{baby.name}</span>
             </div>
             {baby.chips.map((chip) => (
@@ -208,6 +210,12 @@ const babies: { name: string; colorVar: string; chips: LogChip[] }[] = [
   }
   .peek__col:nth-child(2) .peek__avatar {
     border-radius: 42% 58% 46% 54% / 58% 42% 60% 40%;
+  }
+  .peek__avatar--sky {
+    background: var(--sky);
+  }
+  .peek__avatar--teal {
+    background: var(--teal);
   }
   .peek__name {
     font-weight: 700;
