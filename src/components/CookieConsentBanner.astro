@@ -157,12 +157,12 @@
     }),
   );
 
-  // The hero copy fade owns the page's first moments (its CSS-only sequence
-  // has no completion event to hook; the stagger finishes around 3.5s), so
-  // hold the first-visit banner back rather than competing with it.
-  // Visual timing only — GA stays consent-gated regardless of when the
-  // banner appears.
-  const SHOW_DELAY_MS = 4000;
+  // The hero copy reveal owns the page's first moments (its CSS-only
+  // sequence has no completion event to hook; the stagger finishes around
+  // 2.75s — see the knobs on .hero__copy in Hero.astro), so hold the
+  // first-visit banner back rather than competing with it. Visual timing
+  // only — GA stays consent-gated regardless of when the banner appears.
+  const SHOW_DELAY_MS = 3250;
 
   if (readChoice() === null) {
     setTimeout(() => {
