@@ -6,17 +6,24 @@
  * color) sets it apart from the warm/white rhythm and lets the
  * black-and-white photo carry the emotion; the blob mask on the photo ties
  * the hero's blob motif back to the two humans that inspired it.
+ *
+ * The photo goes through astro:assets: the 1080×1350 source JPEG renders
+ * into a 380px (mobile 300px) slot, so build-time resizing + WebP takes it
+ * from ~129KB to a fraction of that. widths matches the slot at 1x/2x DPR.
  */
+import { Image } from 'astro:assets';
+import twins from '../assets/twins.jpg';
 ---
 
 <section class="story section" id="story">
   <div class="container story__inner">
     <figure class="story__photo">
-      <img
-        src="/images/twins.jpg"
+      <Image
+        src={twins}
         alt="Kayla resting with her newborn twins asleep on her chest"
-        width="1080"
-        height="1350"
+        widths={[380, 760]}
+        sizes="(max-width: 800px) 300px, 380px"
+        format="webp"
         loading="lazy"
       />
       <figcaption class="story__caption">month one, hands full</figcaption>
@@ -67,8 +74,11 @@
     align-items: center;
     gap: var(--space-4);
   }
-  .story__photo img {
+  /* :global() — the <img> is rendered by astro:assets' <Image>, so it
+     doesn't carry this component's scope attribute. */
+  .story__photo :global(img) {
     width: min(380px, 100%);
+    height: auto;
     /* Organic blob mask — the hero's motif, back where it came from */
     border-radius: 58% 42% 55% 45% / 45% 55% 45% 55%;
     box-shadow: 0 24px 64px rgba(34, 32, 29, 0.35);
@@ -117,7 +127,7 @@
     .story__photo {
       margin-bottom: var(--space-4);
     }
-    .story__photo img {
+    .story__photo :global(img) {
       width: min(300px, 85%);
     }
     /* Single column: center the copy under the centered photo. The title
