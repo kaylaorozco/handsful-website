@@ -9,33 +9,38 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      mock lives in the "See it in action" section below, so the hero stays
      uncrowded and the gradient + copy carry it.
 
-     Intro ("Blob Chase → Gradient Reveal", plays once per page load):
-       0–1.8s  the two sibling blobs CHASE each other, follow-the-leader
+     Intro ("Blob Chase → Gradient Reveal", plays once per page load).
+     Compressed for Core Web Vitals: the headline is an LCP candidate and
+     must paint by ~1.5s, so the whole sequence runs quick-and-confident
+     (~2.4s to settled) instead of the original slow-cinematic ~5.9s.
+       0–0.8s  the two sibling blobs CHASE each other, follow-the-leader
                style: they spring apart onto a wide shared track (a spread
                layer pushes each outward and shrinks it) and lap it once,
-               unhurried and upright — an inner keel cancels the orbit
-               rotation — B on a faster-starting curve so it visibly closes
-               on A before both bleed speed and flow back together. They
-               wobble lava-lamp style the whole way around (continuous
-               `d: path()` morphs between matched-point variants from
-               scripts/generate-blobs.mjs, a shape change every ~0.5s).
-       1.2–2.7s the lap's momentum flings them into DISPERSAL rather than
+               upright — an inner keel cancels the orbit rotation — B on a
+               faster-starting curve so it visibly closes on A before both
+               bleed speed and flow back together. They wobble lava-lamp
+               style the whole way around (continuous `d: path()` morphs
+               between matched-point variants from
+               scripts/generate-blobs.mjs, a shape change every ~0.26s).
+       0.5–1.15s the lap's momentum flings them into DISPERSAL rather than
                one conquering: Blob A scales ×15 (ease-in, clipped by the
                hero) while Blob B swells ×7, blurs, and evaporates on top
                of it — and the overlay starts crossfading mid-growth
-               (2.1–3.0s), so both blobs melt into the real gradient while
-               still moving. A brief coral-free breath follows…
-       2.7–4.1s …then coral re-emerges into the hero as the ambient glow
-               (butter and a faint sky glow follow), where Blob B died.
-       3.0–3.5s the sticky header (hidden until now — see the is:global
+               (0.85–1.2s), so both blobs melt into the real gradient while
+               still moving.
+       1.2–2s  coral re-emerges into the hero as the ambient glow (butter
+               and a faint sky glow follow), where Blob B died.
+       1.3–1.7s the sticky header (hidden until now — see the is:global
                style block) slides down once the gradient has filled.
-       2.8–3.6s the tagline fades in DEAD-CENTER on the settled gradient
+       0.85–1.25s the tagline fades in DEAD-CENTER on the settling gradient
                (vertically + horizontally, all viewports) at ~1.9× size —
                the brand speaks first, for a beat…
-       3.6–4.8s …then rises to its slot at the top of the centered copy
+       1.35–1.95s …then rises to its slot at the top of the centered copy
                block, shrinking into its docked eyebrow size,
-       4.2–5.9s while headline → form stagger in beneath it, an unhurried
-               0.7s apart.
+       1.45–2.4s while headline → form stagger in beneath it. The headline
+               (delay 1.45s) is the LCP anchor — don't push it later.
+     The sections below the hero are deliberately NOT delayed: they paint
+     immediately so below-fold content never waits on the intro.
 
      Ambient state (after the intro, runs indefinitely): a lava lamp. Four
      soft regions — coral top-right (Blob B's resting place), a second
@@ -136,7 +141,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
   // --tagline-stage-y. Runs once at load: the stage moment is over within
   // seconds, so a mid-intro resize isn't worth handling. Suspend the
   // element's animations while measuring (they win over inline styles), and
-  // note the reveal keeps the tagline invisible until 2.8s, so this can't
+  // note the reveal keeps the tagline invisible until 0.85s, so this can't
   // cause a flash.
   const hero = document.querySelector<HTMLElement>('.hero');
   const tagline = document.querySelector<HTMLElement>('.hero__eyebrow');
@@ -212,7 +217,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       rgba(255, 115, 87, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 2.7s both,
+      glow-appear 0.8s ease 1.2s both,
       drift-coral 11s ease-in-out -4s infinite;
   }
   /* Second coral, top-left: dimmer sibling of the main coral so the warm
@@ -228,7 +233,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       rgba(255, 115, 87, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 3.1s both,
+      glow-appear 0.8s ease 1.4s both,
       drift-coral2 13s ease-in-out -6s infinite;
   }
   .hero__glow--butter {
@@ -241,7 +246,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       rgba(255, 203, 87, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 3s both,
+      glow-appear 0.8s ease 1.35s both,
       drift-butter 15s ease-in-out -10s infinite;
   }
   /* Faint cool bloom, pinned to the bottom-left corner: its meaningful
@@ -257,7 +262,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       rgba(62, 166, 194, 0) 70%
     );
     animation:
-      glow-appear 1.1s ease 3.3s both,
+      glow-appear 0.8s ease 1.5s both,
       drift-sky 17s ease-in-out -7s infinite;
   }
 
@@ -392,7 +397,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     align-items: flex-start;
     background: var(--warm-bg);
     pointer-events: none;
-    animation: intro-vanish 0.9s ease 2.1s both;
+    animation: intro-vanish 0.35s ease 0.85s both;
   }
 
   .hero__intro-blobs {
@@ -431,22 +436,22 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     transform-origin: center;
   }
   .hero__intro-orbit--a {
-    animation: intro-chase 1.8s cubic-bezier(0.6, 0.02, 0.15, 1) both;
+    animation: intro-chase 0.8s cubic-bezier(0.6, 0.02, 0.15, 1) both;
   }
   .hero__intro-spread--a {
-    animation: intro-spread-a 1.8s ease-in-out both;
+    animation: intro-spread-a 0.8s ease-in-out both;
   }
   .hero__intro-keel--a {
-    animation: intro-chase-counter 1.8s cubic-bezier(0.6, 0.02, 0.15, 1) both;
+    animation: intro-chase-counter 0.8s cubic-bezier(0.6, 0.02, 0.15, 1) both;
   }
   .hero__intro-orbit--b {
-    animation: intro-chase 1.8s cubic-bezier(0.3, 0.1, 0.28, 1) both;
+    animation: intro-chase 0.8s cubic-bezier(0.3, 0.1, 0.28, 1) both;
   }
   .hero__intro-spread--b {
-    animation: intro-spread-b 1.8s ease-in-out both;
+    animation: intro-spread-b 0.8s ease-in-out both;
   }
   .hero__intro-keel--b {
-    animation: intro-chase-counter 1.8s cubic-bezier(0.3, 0.1, 0.28, 1) both;
+    animation: intro-chase-counter 0.8s cubic-bezier(0.3, 0.1, 0.28, 1) both;
   }
 
   .hero__intro-blob {
@@ -455,18 +460,18 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
   }
   .hero__intro-blob--a {
     animation:
-      intro-a-morph 2.6s ease-in-out both,
-      intro-a-takeover 1.5s cubic-bezier(0.55, 0, 0.85, 0.45) 1.2s both;
+      intro-a-morph 1.3s ease-in-out both,
+      intro-a-takeover 0.65s cubic-bezier(0.55, 0, 0.85, 0.45) 0.5s both;
     will-change: transform;
   }
   /* Blob B disperses: swells, blurs and evaporates on top of the growing
      gradient (still morphing all the while); coral then re-enters as
-     .hero__glow--coral (2.7s). The blur ramp is what sells "dissolving
-     into color" — it's a one-time 1.3s cost on a small element. */
+     .hero__glow--coral (1.2s). The blur ramp is what sells "dissolving
+     into color" — it's a one-time 0.6s cost on a small element. */
   .hero__intro-blob--b {
     animation:
-      intro-b-morph 2.6s ease-in-out both,
-      intro-b-dissolve 1.3s cubic-bezier(0.42, 0, 1, 1) 1.4s both;
+      intro-b-morph 1.3s ease-in-out both,
+      intro-b-dissolve 0.6s cubic-bezier(0.42, 0, 1, 1) 0.55s both;
     will-change: transform, opacity, filter;
   }
 
@@ -537,7 +542,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     }
   }
   /* Lava-lamp morphs: cycle the variants continuously (a shape change
-     every ~0.5s instead of one long two-stop tween) so the blobs visibly
+     every ~0.26s instead of one long two-stop tween) so the blobs visibly
      wobble the whole way around the track. A and B run different variant
      orders so their wobbles never rhyme. */
   @keyframes intro-a-morph {
@@ -586,13 +591,14 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      which doesn't carry this component's scope attribute. */
 
   .hero__copy > :global(*) {
-    animation: hero-reveal 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation: hero-reveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+  /* The headline. Its delay is the page's LCP floor — keep it ≤1.5s. */
   .hero__copy > :global(*:nth-child(2)) {
-    animation-delay: 4.2s;
+    animation-delay: 1.45s;
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: 4.9s;
+    animation-delay: 1.7s;
   }
 
   @keyframes hero-reveal {
@@ -618,8 +624,8 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     display: inline-block;
     transform: translateY(var(--tagline-stage-y)) scale(var(--tagline-stage-scale));
     animation:
-      tagline-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) 2.8s both,
-      tagline-dock 1.2s cubic-bezier(0.65, 0, 0.35, 1) 3.6s both;
+      tagline-enter 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both,
+      tagline-dock 0.6s cubic-bezier(0.65, 0, 0.35, 1) 1.35s both;
   }
   @keyframes tagline-enter {
     from {
@@ -651,7 +657,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
 
   /* Skip the intro and still the glows: straight to the finished hero.
      Needed explicitly — global.css only zeroes animation *durations*, which
-     would leave the 2.45s+ reveal delays as seconds of invisible content. */
+     would leave the reveal delays as seconds of invisible content. */
   @media (prefers-reduced-motion: reduce) {
     .hero__intro {
       display: none;
@@ -673,19 +679,15 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
 <style is:global>
   /* Part of the hero intro, but reaching outside the component: the sticky
      header stays hidden while the blobs open, then slides down once the
-     gradient has fully filled the hero (~2.4s, after the overlay crossfade
+     gradient has filled the hero (~1.2s, after the overlay crossfade
      completes). Global on purpose — Header.astro is rendered by the layout,
      but because this rule ships with Hero.astro it only exists on pages
      that have the hero (the landing page); the header appears instantly
-     everywhere else. Delete alongside the intro. */
+     everywhere else. Delete alongside the intro. The sections BELOW the
+     hero are deliberately left alone: they're LCP-adjacent content and
+     must paint immediately, whatever the intro is doing. */
   .header {
-    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
-  }
-  /* Same beat for everything else that peeks into the first paint: the
-     sections below the hero (its siblings inside <main>) — otherwise they
-     sit fully rendered next to a bare intro. */
-  main > .hero ~ * {
-    animation: header-reveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) 3s both;
+    animation: header-reveal 0.4s cubic-bezier(0.22, 1, 0.36, 1) 1.3s both;
   }
   @keyframes header-reveal {
     from {
@@ -694,8 +696,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .header,
-    main > .hero ~ * {
+    .header {
       animation: none;
     }
   }
