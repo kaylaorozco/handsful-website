@@ -68,9 +68,10 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
     }
 
     <!-- Consent bootstrap: read the stored cookie-consent choice BEFORE
-         <Analytics /> runs, so its Consent Mode snippet can apply the choice
-         between the denied default and gtag.js loading. The banner UI itself
-         (CookieConsentBanner, end of <body>) writes this key on Accept/Decline. -->
+         <Analytics /> runs, so its consent-gated loader knows whether to
+         inject gtag.js at all (no consent → no script, no network request).
+         The banner UI itself (CookieConsentBanner, end of <body>) writes this
+         key on Accept/Decline. -->
     <!-- The script body is the CONSENT_BOOTSTRAP_SRC string from
          src/consent.ts, rendered verbatim: astro.config.mjs hashes that same
          string into the CSP script-src header, so it must not be transformed

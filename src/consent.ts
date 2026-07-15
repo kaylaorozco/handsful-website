@@ -11,6 +11,14 @@
 export const CONSENT_KEY = 'handsful_cookie_consent';
 
 /**
+ * Dispatched on `document` by CookieConsentBanner when the visitor clicks
+ * Accept. The GA loader (src/ga-snippet.ts) listens for it to inject gtag.js
+ * — under "basic" Consent Mode the script is never even requested until this
+ * event fires or a stored granted choice exists.
+ */
+export const CONSENT_GRANTED_EVENT = 'handsful:consent-granted';
+
+/**
  * Consent expires after 12 months (~365 days) — the Cookie Policy promises
  * "Up to 12 months, after which we ask again".
  */

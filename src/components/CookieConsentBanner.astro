@@ -10,7 +10,8 @@
  *     reshows, GA stays denied until re-accepted). The key, shape, TTL, and
  *     read logic live in src/consent.ts, shared with the consent bootstrap
  *     snippet in BaseLayout.astro, which reads a stored fresh 'granted' so
- *     Analytics.astro can apply it before gtag.js loads.
+ *     Analytics.astro's loader knows whether to inject gtag.js at all
+ *     ("basic" Consent Mode — no consent, no script, no network request).
  *   - This component fires gtag('consent', 'update', …) only on user action
  *     (Accept / Decline), including choice changes made after reopening the
  *     banner via the footer's [data-cookie-preferences] button.
@@ -54,8 +55,13 @@
 
 <script>
   // Key, stored shape, TTL, and read logic live in src/consent.ts — the
-  // BaseLayout bootstrap shares the same contract via define:vars.
-  import { CONSENT_KEY, parseStoredConsent, type ConsentValue } from '../consent';
+  // BaseLayout bootstrap renders from the same contract.
+  import {
+    CONSENT_KEY,
+    CONSENT_GRANTED_EVENT,
+    parseStoredConsent,
+    type ConsentValue,
+  } from '../consent';
 
   const banner = document.querySelector<HTMLElement>('[data-cookie-banner]')!;
   const accept = banner.querySelector<HTMLButtonElement>('[data-consent-accept]')!;
@@ -122,6 +128,12 @@
 
   accept.addEventListener('click', () => {
     storeChoice('granted');
+    // Wakes the consent-gated GA loader (Analytics.astro) — under basic
+    // Consent Mode, gtag.js is only injected once this fires (or a stored
+    // granted choice exists on a later visit).
+    document.dispatchEvent(new Event(CONSENT_GRANTED_EVENT));
+    // Covers the already-loaded case: Accept after an earlier Decline in the
+    // same pageview resumes collection via a consent update.
     updateConsent('granted');
     closeBanner();
   });
