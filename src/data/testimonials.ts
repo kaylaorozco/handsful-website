@@ -18,6 +18,12 @@ export interface PressMention {
   url: string;
   /** Path under /public to an outlet logo (SVG preferred), e.g. "/images/press/techcrunch.svg" */
   logo?: string;
+  /**
+   * Rendered logo width in px at the row's fixed 28px height (width ≈
+   * 28 × the logo's aspect ratio). Always set this alongside `logo` — it
+   * lets the browser reserve the slot before the image loads (no CLS).
+   */
+  logoWidth?: number;
 }
 
 export const TESTIMONIALS: Testimonial[] = [

@@ -1,5 +1,10 @@
 ---
 import '../styles/global.css';
+// The two critical font files, imported as URLs so the preload links below
+// point at the same hashed /_astro/ assets the Fontsource CSS references
+// (Vite dedupes them). Latin subsets only — the other subsets stay lazy.
+import fredokaLatinUrl from '@fontsource-variable/fredoka/files/fredoka-latin-wght-normal.woff2?url';
+import karlaLatinUrl from '@fontsource-variable/karla/files/karla-latin-wght-normal.woff2?url';
 import { SITE } from '../config';
 import { CONSENT_BOOTSTRAP_SRC } from '../consent';
 import Header from '../components/Header.astro';
@@ -38,6 +43,11 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
     <meta name="description" content={description} />
     <link rel="canonical" href={canonicalURL} />
     {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <!-- Break the HTML → CSS → woff2 discovery chain for the two fonts every
+         page uses; without this the swap (FOUT) is visible on fast paints. -->
+    <link rel="preload" as="font" type="font/woff2" href={fredokaLatinUrl} crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href={karlaLatinUrl} crossorigin />
 
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />

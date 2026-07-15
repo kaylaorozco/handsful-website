@@ -157,12 +157,12 @@
     }),
   );
 
-  // The hero intro owns the page's first moments (its CSS-only sequence has
-  // no completion event to hook; the content stagger finishes around 5.9s),
-  // so hold the first-visit banner back rather than competing with it.
-  // Visual timing only — Consent Mode's denied default applies from document
-  // start regardless of when the banner appears.
-  const SHOW_DELAY_MS = 6000;
+  // The hero copy reveal owns the page's first moments (its CSS-only
+  // sequence has no completion event to hook; the stagger finishes around
+  // 2.75s — see the knobs on .hero__copy in Hero.astro), so hold the
+  // first-visit banner back rather than competing with it. Visual timing
+  // only — GA stays consent-gated regardless of when the banner appears.
+  const SHOW_DELAY_MS = 3250;
 
   if (readChoice() === null) {
     setTimeout(() => {

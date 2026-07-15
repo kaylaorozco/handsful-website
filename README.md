@@ -39,8 +39,6 @@ src/
   styles/global.css  ← brand tokens from brand/style-guide.html
 brand/               ← source brand assets + style guide (not served)
 scripts/generate-og.mjs ← builds the OG share image from brand assets (npm run og)
-scripts/generate-blobs.mjs ← regenerates the hero intro's blob morph paths (npm run blobs;
-                             deterministic — paste the output into Hero.astro)
 docs/LAUNCH-CHECKLIST.md ← everything to flip at launch time
 ```
 
