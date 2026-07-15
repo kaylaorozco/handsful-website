@@ -20,7 +20,7 @@ export const CONSENT_GRANTED_EVENT = 'handsful:consent-granted';
 
 /**
  * Consent expires after 12 months (~365 days) — the Cookie Policy promises
- * "Up to 12 months, after which we ask again".
+ * "12 months, after which we ask again".
  */
 export const CONSENT_TTL_MS = 365 * 24 * 60 * 60 * 1000;
 
