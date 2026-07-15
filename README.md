@@ -68,16 +68,18 @@ One config change, no redesign — see the checklist in
 
 ## Analytics & cookie consent
 
-GA4 (`src/components/Analytics.astro`) loads via **Google Consent Mode v2**: every
-consent signal defaults to `denied` before gtag.js runs, so GA sets no cookies and
-stores no identifiers out of the box. Consent comes from the site's own banner
-(`src/components/CookieConsentBanner.astro`): Accept calls
-`gtag('consent', 'update', { analytics_storage: 'granted' })` and only then do GA
-cookies appear; Decline keeps the denied default and clears any existing `_ga*`
-cookies. The choice persists in localStorage (`handsful_cookie_consent`) and is
-applied before gtag.js loads via a bootstrap snippet in `BaseLayout.astro`, so
-returning visitors' first hit is decided correctly. The "Cookie preferences" button
-in the footer reopens the banner at any time.
+GA4 (`src/components/Analytics.astro`) uses **Google Consent Mode v2 in "basic"
+mode**: gtag.js is not injected — not even requested from the network — until
+analytics consent is granted, so pre-consent (and forever after a Decline) Google
+receives nothing at all. Consent comes from the site's own banner
+(`src/components/CookieConsentBanner.astro`): Accept dispatches the consent-granted
+event that makes the loader (`src/ga-snippet.ts`) inject gtag.js with ad signals
+denied and `analytics_storage` granted; Decline stores the refusal and clears any
+existing `_ga*` cookies. The choice persists in localStorage
+(`handsful_cookie_consent`) and is read before `<Analytics />` renders via a
+bootstrap snippet in `BaseLayout.astro`, so returning visitors who accepted are
+tracked from their first hit. The "Cookie preferences" button in the footer reopens
+the banner at any time.
 
 ## Legal pages
 

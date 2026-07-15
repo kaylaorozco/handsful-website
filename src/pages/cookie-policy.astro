@@ -94,19 +94,22 @@ const privacyEmail = EMAILS.privacy;
       </thead>
       <tbody>
         <tr>
-          <td>Consent preference storage</td>
-          <td>Remembers your cookie choice</td>
+          <td><code>handsful_cookie_consent</code> (localStorage, not a cookie)</td>
+          <td>Stores your cookie preference so we don't ask again</td>
           <td>Essential</td>
-          <td>Up to 12 months, after which we ask again</td>
+          <td>12 months, after which we ask again</td>
         </tr>
         <tr>
-          <td>Google Analytics (GA4)</td>
-          <td>Site usage analytics</td>
+          <td><code>_ga</code></td>
+          <td>Distinguishes unique visitors (Google Analytics)</td>
           <td>Analytics — requires consent</td>
-          <td>
-            Per Google's standard GA4 cookie duration (see Google's policy, linked in
-            <a href="#third-party-cookies">Section 5</a>)
-          </td>
+          <td>2 years</td>
+        </tr>
+        <tr>
+          <td><code>_ga_PJC1SRJSPB</code></td>
+          <td>Persists session state (Google Analytics 4)</td>
+          <td>Analytics — requires consent</td>
+          <td>2 years</td>
         </tr>
       </tbody>
     </table>

@@ -1,21 +1,23 @@
 ---
 /**
- * Google Analytics 4 via Google Consent Mode v2.
+ * Google Analytics 4 via Google Consent Mode v2 — "basic" mode.
  *
- * gtag.js loads on every page, but the inline snippet defaults every consent
- * signal to "denied" BEFORE it loads — so GA sets no cookies and stores no
- * identifiers until the visitor consents. Consent comes from the site's own
- * banner (CookieConsentBanner.astro): BaseLayout's bootstrap snippet reads
- * the stored choice into window.__handsfulStoredConsent just before this
- * component's output, and a stored "granted" is re-applied below — after the
- * default, before gtag.js — so returning visitors' very first hit is decided
- * correctly. Live Accept/Decline clicks in the banner fire their own
- * gtag('consent', 'update', …) calls.
+ * gtag.js is NOT loaded (not even requested from the network) until analytics
+ * consent is granted, so before consent — and forever after a Decline —
+ * Google receives nothing at all: no cookies, no cookieless pings, no
+ * IP/user-agent. The inline loader below injects the script when either:
+ *   - BaseLayout's bootstrap found a stored, fresh "granted" choice
+ *     (window.__handsfulStoredConsent), so returning visitors are tracked
+ *     from their very first hit, or
+ *   - the banner (CookieConsentBanner.astro) dispatches
+ *     CONSENT_GRANTED_EVENT on a live Accept click.
+ * The Consent Mode v2 signals are still set before gtag.js executes — ad
+ * signals stay denied; only analytics_storage is ever granted.
  *
  * Renders nothing until PUBLIC_GA_MEASUREMENT_ID is set, so GA stays
  * completely off in envs without the var (local dev, previews if unset).
  *
- * The snippet source lives in src/ga-snippet.ts because astro.config.mjs
+ * The loader source lives in src/ga-snippet.ts because astro.config.mjs
  * hashes the identical string into the CSP script-src header — editing the
  * snippet there keeps script and hash in lockstep automatically.
  */
@@ -24,11 +26,4 @@ import { gaConsentSnippet } from '../ga-snippet';
 const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
 ---
 
-{
-  gaId && (
-    <>
-      <script is:inline set:html={gaConsentSnippet(gaId)} />
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`} />
-    </>
-  )
-}
+{gaId && <script is:inline set:html={gaConsentSnippet(gaId)} />}
