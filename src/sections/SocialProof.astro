@@ -34,7 +34,11 @@ const hasContent = TESTIMONIALS.length > 0 || PRESS.length > 0;
           {PRESS.map((p) => (
             <li>
               <a href={p.url} rel="noopener">
-                {p.logo ? <img src={p.logo} alt={p.outlet} height="28" loading="lazy" /> : p.outlet}
+                {p.logo ? (
+                  <img src={p.logo} alt={p.outlet} width={p.logoWidth} height="28" loading="lazy" />
+                ) : (
+                  p.outlet
+                )}
                 <span class="proof__press-quote">“{p.quote}”</span>
               </a>
             </li>
