@@ -35,7 +35,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      BRAND NOTE: coral inside the hero gradient is a deliberate extension of
      the signature 3-stop, approved by Kayla (2026-07-06). The copy is
      CENTERED (Kayla's call, 2026-07-06), so the glows are pinned to the
-     top-right/bottom-right corners with restrained sweep — white copy must
+     edges/corners with restrained sweep toward the middle — white copy must
      never sit on meaningful coral/butter (their white-text contrast is too
      low; same corner rule the butter stop already follows).
 
@@ -46,6 +46,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     <div class="hero__glow hero__glow--coral"></div>
     <div class="hero__glow hero__glow--coral2"></div>
     <div class="hero__glow hero__glow--butter"></div>
+    <div class="hero__glow hero__glow--butter2"></div>
     <div class="hero__glow hero__glow--sky"></div>
   </div>
 
@@ -125,7 +126,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     );
     animation:
       glow-appear 0.9s ease 0.2s both,
-      drift-coral 11s ease-in-out -4s infinite;
+      drift-coral 8s ease-in-out -4s infinite;
   }
   /* Second coral, top-left: dimmer sibling of the main coral so the warm
      color frames both sides. Its sweep heads down-right into the teal but
@@ -141,7 +142,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     );
     animation:
       glow-appear 0.9s ease 0.5s both,
-      drift-coral2 13s ease-in-out -6s infinite;
+      drift-coral2 9.5s ease-in-out -6s infinite;
   }
   .hero__glow--butter {
     width: clamp(360px, 40vw, 640px);
@@ -154,7 +155,25 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     );
     animation:
       glow-appear 0.9s ease 0.35s both,
-      drift-butter 15s ease-in-out -10s infinite;
+      drift-butter 11s ease-in-out -10s infinite;
+  }
+  /* Second butter, mid-left: warms the left edge (coral + butter otherwise
+     concentrate on the right) — teal-green would vanish against the
+     gradient's own teal mid-band, so butter carries the balance. Dimmer
+     than the bottom-right butter, and mostly off-canvas: only its faint
+     outer falloff approaches the centered copy. */
+  .hero__glow--butter2 {
+    width: clamp(320px, 34vw, 560px);
+    top: 30%;
+    left: -16%;
+    background: radial-gradient(
+      closest-side,
+      rgba(255, 203, 87, 0.38),
+      rgba(255, 203, 87, 0) 70%
+    );
+    animation:
+      glow-appear 0.9s ease 0.8s both,
+      drift-butter2 10.5s ease-in-out -3s infinite;
   }
   /* Faint cool bloom, pinned to the bottom-left corner: its meaningful
      color must stay below/left of the centered form (white small text over
@@ -170,7 +189,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     );
     animation:
       glow-appear 0.9s ease 0.65s both,
-      drift-sky 17s ease-in-out -7s infinite;
+      drift-sky 13s ease-in-out -7s infinite;
   }
 
   @keyframes ambient-breathe {
@@ -190,25 +209,27 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
   /* Lava-lamp wander: closed multi-waypoint loops (not a two-point
      alternate, which reads as a metronome) with asymmetric scale(x, y)
      squish so each blob elongates and settles as it floats. Travel and
-     tempo are deliberately assertive (roughly double the original sweep,
-     11–17s loops) so the drift reads at a glance instead of demanding a
+     tempo are deliberately assertive (~1.3× the previous sweep on faster
+     8–13s loops) so the drift reads at a glance instead of demanding a
      stare — but sweeps toward the teal stay capped: meaningful color must
      remain clear of the centered text column (the falloff hits 0 at 70%
-     radius, so only the faint outer half approaches it). Different periods
-     + offsets keep the four from ever aligning. */
+     radius, so only the faint outer half approaches it). The inward
+     (toward-center) legs grew the least; the vertical and outward legs
+     carry most of the extra travel. Different periods + offsets keep the
+     five from ever aligning. */
   @keyframes drift-coral {
     0%,
     100% {
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     30% {
-      transform: translate3d(-16%, 20%, 0) scale(1.2, 0.9);
+      transform: translate3d(-20%, 27%, 0) scale(1.24, 0.87);
     }
     60% {
-      transform: translate3d(-24%, 7%, 0) scale(1.32, 1.12);
+      transform: translate3d(-28%, 9%, 0) scale(1.38, 1.14);
     }
     80% {
-      transform: translate3d(-8%, -15%, 0) scale(0.95, 1.26);
+      transform: translate3d(-10%, -21%, 0) scale(0.92, 1.3);
     }
   }
   @keyframes drift-coral2 {
@@ -217,13 +238,13 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     35% {
-      transform: translate3d(15%, 17%, 0) scale(1.22, 0.92);
+      transform: translate3d(18%, 23%, 0) scale(1.27, 0.89);
     }
     65% {
-      transform: translate3d(21%, 4%, 0) scale(1.06, 1.3);
+      transform: translate3d(25%, 5%, 0) scale(1.08, 1.36);
     }
     85% {
-      transform: translate3d(6%, -12%, 0) scale(1.28, 0.96);
+      transform: translate3d(8%, -17%, 0) scale(1.33, 0.93);
     }
   }
   @keyframes drift-butter {
@@ -232,13 +253,28 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     25% {
-      transform: translate3d(-18%, -16%, 0) scale(1.25, 0.86);
+      transform: translate3d(-23%, -21%, 0) scale(1.3, 0.83);
     }
     55% {
-      transform: translate3d(-8%, -28%, 0) scale(1, 1.32);
+      transform: translate3d(-10%, -37%, 0) scale(1, 1.38);
     }
     75% {
-      transform: translate3d(14%, -11%, 0) scale(1.28, 1.04);
+      transform: translate3d(18%, -14%, 0) scale(1.34, 1.05);
+    }
+  }
+  @keyframes drift-butter2 {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0) scale(1, 1);
+    }
+    30% {
+      transform: translate3d(15%, 19%, 0) scale(1.24, 0.9);
+    }
+    60% {
+      transform: translate3d(22%, -8%, 0) scale(1.05, 1.32);
+    }
+    80% {
+      transform: translate3d(5%, -22%, 0) scale(1.3, 0.94);
     }
   }
   @keyframes drift-sky {
@@ -247,18 +283,17 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     40% {
-      transform: translate3d(15%, -21%, 0) scale(1.3, 0.95);
+      transform: translate3d(19%, -28%, 0) scale(1.36, 0.92);
     }
     70% {
-      transform: translate3d(24%, -6%, 0) scale(0.9, 1.32);
+      transform: translate3d(29%, -8%, 0) scale(0.88, 1.38);
     }
   }
 
   @media (max-width: 800px) {
     /* Phones: the hero owns the visible screen (svh ignores the URL-bar
        dance) with the copy vertically centered — otherwise the content
-       hugs the top and the tagline's center-stage moment can land under
-       browser chrome / the cookie banner on short viewports. */
+       hugs the top on short viewports. */
     .hero__inner {
       min-height: calc(100vh - 80px); /* fallback; 80px ≈ sticky header */
       min-height: calc(100svh - 80px);
@@ -276,6 +311,9 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     }
     .hero__glow--butter {
       right: -25%;
+    }
+    .hero__glow--butter2 {
+      left: -34%;
     }
     .hero__glow--sky {
       left: -30%;
