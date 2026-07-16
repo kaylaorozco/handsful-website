@@ -155,8 +155,8 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     right: -16%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 115, 87, 0.62),
-      rgba(255, 115, 87, 0) 70%
+      rgba(255, 115, 87, 0.5),
+      rgba(255, 115, 87, 0) 58%
     );
     animation:
       glow-appear 0.9s ease 0.2s both,
@@ -171,8 +171,8 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     left: -14%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 115, 87, 0.42),
-      rgba(255, 115, 87, 0) 70%
+      rgba(255, 115, 87, 0.34),
+      rgba(255, 115, 87, 0) 58%
     );
     animation:
       glow-appear 0.9s ease 0.5s both,
@@ -180,12 +180,15 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
   }
   .hero__glow--butter {
     width: clamp(360px, 40vw, 640px);
-    bottom: -30%;
+    /* Anchored low on purpose: its drift sweeps up-left, and the disclaimer
+       line above must keep >=4.5:1 — the deeper anchor keeps the glow's
+       bright inner falloff below the copy zone at every drift phase. */
+    bottom: -40%;
     right: -8%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 203, 87, 0.52),
-      rgba(255, 203, 87, 0) 70%
+      rgba(255, 203, 87, 0.42),
+      rgba(255, 203, 87, 0) 58%
     );
     animation:
       glow-appear 0.9s ease 0.35s both,
@@ -202,8 +205,8 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     left: -16%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 203, 87, 0.38),
-      rgba(255, 203, 87, 0) 70%
+      rgba(255, 203, 87, 0.31),
+      rgba(255, 203, 87, 0) 58%
     );
     animation:
       glow-appear 0.9s ease 0.8s both,
@@ -218,8 +221,8 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     left: -14%;
     background: radial-gradient(
       closest-side,
-      rgba(62, 166, 194, 0.45),
-      rgba(62, 166, 194, 0) 70%
+      rgba(62, 166, 194, 0.36),
+      rgba(62, 166, 194, 0) 58%
     );
     animation:
       glow-appear 0.9s ease 0.65s both,

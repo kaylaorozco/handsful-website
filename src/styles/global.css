@@ -20,11 +20,23 @@
   --taupe-dark: #5b5148;
 
   /* 1.3 Gradients */
-  /* Signature top stop deepened from the style guide's #3ea6c2 (a11y,
-     2026-07-15): #2b7a90 is the same hue darkened until white text ≥4.9:1
-     against it — and against every blend down to the teal stop — so the
-     hero's white tagline/copy pass AA everywhere they sit. */
-  --gradient-signature: linear-gradient(160deg, #2b7a90 0%, #2f7d6b 55%, #ffcb57 100%);
+  /* Signature gradient, twice adjusted for AA text contrast (2026-07-15):
+     - top stop deepened from the style guide's #3ea6c2 to #2b7a90 — same
+       hue, darkened until white text ≥4.9:1 against it and every blend
+       down to the teal stop;
+     - butter DELAYED behind a teal plateau (55%–84%): white only tolerates
+       ~8% butter blend before dropping under 4.5:1, and the hero's
+       disclaimer line sits around 78% of the axis on desktop — the plateau
+       keeps the whole copy zone on teal, and butter concentrates into the
+       bottom band (the bottom-right butter glow keeps its warmth alive
+       higher up). */
+  /* The sky/teal stops here run slightly deeper than the raw tokens
+     (#297487 vs #2b7a90-ish sky, #2a7260 vs --teal): the drifting hero
+     glows add light on top, and these bases keep white text ≥4.5:1 even
+     under the glows' brightest sweeps (pixel-verified across drift
+     phases). --teal itself is unchanged everywhere else. */
+  --gradient-signature:
+    linear-gradient(160deg, #297487 0%, #2a7260 55%, #2a7260 84%, #ffcb57 100%);
   /* Action gradient's sky stop deepened identically — white text hosted on
      it (final CTA copy/disclaimer, app-peek badge) needs ≥4.5:1 across the
      whole sky→teal run. */
