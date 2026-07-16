@@ -20,7 +20,11 @@
   --taupe-dark: #5b5148;
 
   /* 1.3 Gradients */
-  --gradient-signature: linear-gradient(160deg, #3ea6c2 0%, #2f7d6b 55%, #ffcb57 100%);
+  /* Signature top stop deepened from the style guide's #3ea6c2 (a11y,
+     2026-07-15): #2b7a90 is the same hue darkened until white text ≥4.9:1
+     against it — and against every blend down to the teal stop — so the
+     hero's white tagline/copy pass AA everywhere they sit. */
+  --gradient-signature: linear-gradient(160deg, #2b7a90 0%, #2f7d6b 55%, #ffcb57 100%);
   --gradient-action: linear-gradient(135deg, #3ea6c2 0%, #2f7d6b 100%);
 
   /* Type */

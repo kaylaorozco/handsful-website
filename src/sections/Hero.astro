@@ -42,7 +42,10 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      CENTERED (Kayla's call, 2026-07-06), so the glows are pinned to the
      edges/corners with restrained sweep toward the middle — white copy must
      never sit on meaningful coral/butter (their white-text contrast is too
-     low; same corner rule the butter stop already follows).
+     low; same corner rule the butter stop already follows). The gradient's
+     top stop is deepened from the style guide's sky (#3ea6c2 → #2b7a90,
+     a11y 2026-07-15) so the white tagline passes AA on it; the tagline
+     itself went butter → white in the same fix.
 
      prefers-reduced-motion: no fade, no drift — straight to the static
      hero with the glows present but still. -->
@@ -118,7 +121,11 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     font-size: 15px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--butter);
+    /* White, not butter: butter measured 1.87:1 on the gradient's sky
+       region (15px bold isn't "large text" — needs 4.5:1). White passes
+       ≥4.9:1 everywhere it sits now that the gradient's top stop is
+       deepened (see --gradient-signature). */
+    color: #fff;
     margin-bottom: var(--space-4);
   }
   .hero__title {
