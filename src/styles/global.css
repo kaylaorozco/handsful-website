@@ -103,6 +103,10 @@ html {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Without this, infinite animations (flip-card icon morphs, ambient
+       breathe) re-run their 0.01ms cycle forever and can shimmer — one
+       iteration lands them on their end state and stops. */
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
