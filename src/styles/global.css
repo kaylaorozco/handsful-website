@@ -127,7 +127,10 @@ p {
 }
 
 a {
-  color: var(--sky);
+  /* Teal, not sky: --sky is only 2.64:1 on the warm background (needs
+     4.5:1 for body links — WCAG AA); --teal measures 4.61:1 on warm-bg and
+     4.92:1 on white. Sky stays the brand primary for non-text uses. */
+  color: var(--teal);
 }
 
 img,
