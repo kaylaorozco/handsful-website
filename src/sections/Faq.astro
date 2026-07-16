@@ -13,8 +13,12 @@ import { FAQ_ITEMS } from '../data/faq';
       {
         FAQ_ITEMS.map((item) => (
           <details class="faq__item">
+            {/* No heading inside <summary>: heading semantics inside the
+                summary's button role announce inconsistently across AT. A
+                styled span keeps the visuals; the section h2 remains the
+                landmark, and each question is still reachable as a button. */}
             <summary class="faq__question">
-              <h3 class="faq__question-text">{item.question}</h3>
+              <span class="faq__question-text">{item.question}</span>
               <span class="faq__marker" aria-hidden="true" />
             </summary>
             <p class="faq__answer">{item.answer}</p>
@@ -68,8 +72,10 @@ import { FAQ_ITEMS } from '../data/faq';
     flex-shrink: 0;
     width: 12px;
     height: 12px;
-    border-right: 2px solid var(--sky);
-    border-bottom: 2px solid var(--sky);
+    /* Teal, not sky: the chevron is the only expand indicator, and UI
+       glyphs need 3:1 — sky is 2.64:1 on warm-bg, teal is 4.61:1. */
+    border-right: 2px solid var(--teal);
+    border-bottom: 2px solid var(--teal);
     transform: rotate(45deg);
     transition: transform 150ms ease;
   }
