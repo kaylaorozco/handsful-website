@@ -29,6 +29,11 @@ interface KitFormSubscriberResponse {
 // Pragmatic email shape check (full RFC validation is a fool's errand).
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+// Logs must never carry a full address — Vercel function logs aren't a
+// disclosed storage location for it. 'jane.doe@example.com' → 'j***@example.com'
+// keeps the domain (the useful debugging signal) without the identity.
+const maskEmail = (e: string) => e.replace(/^(.).*?(@.*)$/, '$1***$2');
+
 // Best-effort rate limit: per-IP timestamps in module scope. Vercel's Fluid
 // Compute reuses function instances, so this survives across requests on the
 // same instance — enough to blunt naive abuse without a datastore. It resets
@@ -135,7 +140,10 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
   if (!apiKey || !formId) {
     // Misconfiguration must not fake success — the visitor would wait for a
     // confirmation email that never comes.
-    console.error('[waitlist] KIT_API_KEY / KIT_FORM_ID not set; signup rejected:', email);
+    console.error(
+      '[waitlist] KIT_API_KEY / KIT_FORM_ID not set; signup rejected:',
+      maskEmail(email),
+    );
     return respond({ ok: false, error: 'Signups are briefly unavailable — please try again soon' }, 503);
   }
 
