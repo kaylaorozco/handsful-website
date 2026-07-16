@@ -69,7 +69,7 @@ export default defineConfig({
     },
   },
   // Short aliases: /privacy is the route referenced in launch tickets, and the
-  // Privacy Policy copy cites https://www.handsful.app/cookies verbatim.
+  // Privacy Policy copy cites https://handsful.app/cookies verbatim.
   redirects: {
     '/privacy': '/privacy-policy',
     '/cookies': '/cookie-policy',
