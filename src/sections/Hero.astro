@@ -364,31 +364,35 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       flex-direction: column;
       justify-content: center;
     }
-    /* Narrow screens: copy spans the full width, so push the glows further
-       off-canvas — color stays visible at the edges, never behind text. */
-    /* Small viewports can't host the desktop-scale glows (even their min
-       clamps exceed the viewport width) — cap them at ~1.2x the original
-       mobile sizes and push offsets out proportionally. */
+    /* Small viewports can't host the desktop-scale glows (their min clamps
+       exceed the viewport width) — cap the sizes. And since the copy spans
+       nearly the full width here, the glows sit ABOVE and BELOW the
+       vertically-centered copy band instead of being shoved off the sides:
+       visible orbs in the corners, clear of the text. */
     .hero__glow--coral {
-      width: 450px;
-      right: -46%;
-    }
-    .hero__glow--coral2 {
-      width: 360px;
-      left: -42%;
-    }
-    .hero__glow--butter {
-      width: 430px;
+      width: 460px;
+      top: -21%;
       right: -30%;
     }
-    /* butter2 is hidden on phones: nearly all off-canvas at this width,
-       and its residual wash landed on the copy column. */
+    .hero__glow--coral2 {
+      width: 380px;
+      top: -23%;
+      left: -32%;
+    }
+    .hero__glow--butter {
+      width: 440px;
+      bottom: -32%;
+      right: -28%;
+    }
+    /* butter2 stays hidden on phones: its mid-left slot is text-adjacent
+       at this width — the other four carry the corners. */
     .hero__glow--butter2 {
       display: none;
     }
     .hero__glow--sky {
       width: 400px;
-      left: -36%;
+      bottom: -28%;
+      left: -32%;
     }
   }
 
