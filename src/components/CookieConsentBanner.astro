@@ -234,6 +234,11 @@
   .cookie-banner__actions .btn {
     min-width: 132px;
   }
+  /* The card is ink — the global ink focus ring would vanish on it (1:1).
+     Butter measures 10.8:1 here. */
+  .cookie-banner__actions .btn:focus-visible {
+    outline-color: var(--butter);
+  }
   .cookie-banner__close {
     display: none;
     position: absolute;
