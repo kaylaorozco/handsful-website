@@ -20,38 +20,33 @@
   --taupe-dark: #5b5148;
 
   /* 1.3 Gradients */
-  /* Signature gradient, twice adjusted for AA text contrast (2026-07-15):
-     - top stop deepened from the style guide's #3ea6c2 to #2b7a90 — same
-       hue, darkened until white text ≥4.9:1 against it and every blend
-       down to the teal stop;
-     - butter DELAYED behind a teal plateau (55%–84%): white only tolerates
-       ~8% butter blend before dropping under 4.5:1, and the hero's
-       disclaimer line sits around 78% of the axis on desktop — the plateau
-       keeps the whole copy zone on teal, and butter concentrates into the
-       bottom band (the bottom-right butter glow keeps its warmth alive
-       higher up). */
-  /* The sky/teal stops here run slightly deeper than the raw tokens
-     (#297487 vs #2b7a90-ish sky, #2a7260 vs --teal): the drifting hero
-     glows add light on top, and these bases keep white text ≥4.5:1 even
-     under the glows' brightest sweeps (pixel-verified across drift
-     phases). --teal itself is unchanged everywhere else.
-     The stop list approximates two EASED curves rather than straight
-     ramps: quadratic ease-out into the teal plateau (0–62%) and quadratic
-     ease-in out of it toward butter (76–100%). A flat plateau with linear
-     ramps put slope kinks at its edges, which read as visible diagonal
-     seam lines (Mach bands) — the eased stops remove them. The copy zone
-     (≤ ~80%) stays ≤3% butter blend, preserving the AA contrast fix. */
+  /* Signature gradient, adjusted for AA text contrast (2026-07-15):
+     - top stop deepened from the style guide's #3ea6c2 to #2b7a90 (same
+       hue) and the teal plateau runs a hair deep of --teal (#2e7a68) —
+       together these keep white copy ≥4.5:1 even under the glows'
+       brightest drift sweeps (pixel-verified). Kayla's brightness call:
+       these are the LIGHTEST bases that still verify; don't deepen further,
+       and the bottom-right butter warmth comes from the radial butter glow
+       (which stays clear of the centered copy in both dimensions), not
+       from pulling the butter stop earlier.
+     - butter is DELAYED behind the teal plateau (62–76%): white tolerates
+       only ~8% butter blend, and the disclaimer line sits ~78% down the
+       axis on desktop.
+     - the stop list approximates two EASED curves rather than straight
+       ramps (quadratic ease-out into the plateau, ease-in out toward
+       butter): a flat plateau with linear ramps put slope kinks at its
+       edges that read as visible diagonal seam lines (Mach bands). */
   --gradient-signature:
     linear-gradient(
       160deg,
-      #297487 0%,
-      #297376 15%,
-      #2a736a 30%,
-      #2a7263 45%,
-      #2a7260 62%,
-      #2a7260 76%,
-      #427c5f 84%,
-      #899a5c 92%,
+      #2b7a90 0%,
+      #2c7a7f 15%,
+      #2d7a73 30%,
+      #2e7a6b 45%,
+      #2e7a68 62%,
+      #2e7a68 76%,
+      #458366 84%,
+      #8a9d60 92%,
       #ffcb57 100%
     );
   /* Action gradient's sky stop deepened identically — white text hosted on

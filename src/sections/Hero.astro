@@ -123,8 +123,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     text-transform: uppercase;
     /* White, not butter: butter measured 1.87:1 on the gradient's sky
        region (15px bold isn't "large text" — needs 4.5:1). White passes
-       ≥4.9:1 everywhere it sits now that the gradient's top stop is
-       deepened (see --gradient-signature). */
+       AA everywhere it sits (see --gradient-signature). */
     color: #fff;
     margin-bottom: var(--space-4);
   }
@@ -191,19 +190,19 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
   }
   .hero__glow--butter {
     width: clamp(520px, 56vw, 920px);
-    /* Anchored low on purpose: its drift sweeps up-left, and the disclaimer
-       line above must keep >=4.5:1 — the deeper anchor keeps the glow's
-       bright inner falloff below the copy zone at every drift phase
-       (rescaled with the 1.45x size increase). */
-    bottom: -70%;
-    right: -8%;
+    /* The bottom-right butter bloom carries the corner warmth the original
+       gradient had — a radial source keeps butter far from the centered
+       disclaimer in both dimensions, which the linear ramp can't. Anchor +
+       alpha are tuned against the disclaimer's measured worst drift phase. */
+    bottom: -56%;
+    right: -18%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 203, 87, 0.33) 0%,
-      rgba(255, 203, 87, 0.165) 20%,
-      rgba(255, 203, 87, 0.056) 40%,
-      rgba(255, 203, 87, 0.012) 61%,
-      rgba(255, 203, 87, 0.002) 73%,
+      rgba(255, 203, 87, 0.46) 0%,
+      rgba(255, 203, 87, 0.212) 20%,
+      rgba(255, 203, 87, 0.055) 40%,
+      rgba(255, 203, 87, 0.008) 61%,
+      rgba(255, 203, 87, 0.001) 73%,
       rgba(255, 203, 87, 0) 82%
     );
     animation:
@@ -371,20 +370,21 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
        clamps exceed the viewport width) — cap them at ~1.2x the original
        mobile sizes and push offsets out proportionally. */
     .hero__glow--coral {
-      width: 500px;
-      right: -42%;
+      width: 450px;
+      right: -46%;
     }
     .hero__glow--coral2 {
-      width: 400px;
-      left: -38%;
+      width: 360px;
+      left: -42%;
     }
     .hero__glow--butter {
       width: 430px;
       right: -30%;
     }
+    /* butter2 is hidden on phones: nearly all off-canvas at this width,
+       and its residual wash landed on the copy column. */
     .hero__glow--butter2 {
-      width: 380px;
-      left: -41%;
+      display: none;
     }
     .hero__glow--sky {
       width: 400px;
