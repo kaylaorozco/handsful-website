@@ -172,7 +172,11 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     border-color: rgba(34, 32, 29, 0.15);
   }
   .waitlist-form__input:focus-visible {
-    outline: none;
+    /* Ink ring: 16.3:1 against the white input, 3.3:1 against the darkest
+       hosting gradient region — always ≥3:1 (SC 2.4.7 / 1.4.11). The old
+       butter border alone measured ~1.5:1: invisible to keyboard users. */
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
     border-color: var(--butter);
   }
   .waitlist-form__hp {
