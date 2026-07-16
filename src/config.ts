@@ -27,8 +27,10 @@ export const SITE = {
   url: 'https://handsful.app',
   tagline: TAGLINE_LINES.join(' '),
   title: 'Handsful — Baby Tracker App for Twins, Triplets & Multiples',
+  // Meta description — keep ≤160 chars (Google truncates ~155–160) with the
+  // multiples language and the waitlist CTA up front.
   description:
-    'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, compare side by side, and share with every caregiver. Join the waitlist.',
+    'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap and share with every caregiver. Join the waitlist.',
   contactEmail: EMAILS.hello,
   ogImage: '/images/og.png',
 } as const;
