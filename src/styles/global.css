@@ -183,13 +183,12 @@ svg {
   outline-offset: 2px;
 }
 
-/* Primary button = action gradient (brand rule: on solid backgrounds only) */
-.btn--primary {
-  background: var(--gradient-action);
-  color: #fff;
-}
-
-/* On gradient backgrounds the brand requires solid buttons: Butter + Ink (10.3:1) */
+/* Both button variants share the brand's highest-contrast pairing:
+   Butter + Ink, 10.78:1. .btn--primary previously put white text on the
+   action gradient, which measured only 2.82–3.67:1 depending on gradient
+   position (under AA) — a11y fix 2026-07-15. The two class names stay so
+   markup keeps expressing intent (primary CTA vs on-gradient solid). */
+.btn--primary,
 .btn--solid {
   background: var(--butter);
   color: var(--ink);
