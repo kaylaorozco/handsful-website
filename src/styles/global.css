@@ -34,9 +34,26 @@
      (#297487 vs #2b7a90-ish sky, #2a7260 vs --teal): the drifting hero
      glows add light on top, and these bases keep white text ≥4.5:1 even
      under the glows' brightest sweeps (pixel-verified across drift
-     phases). --teal itself is unchanged everywhere else. */
+     phases). --teal itself is unchanged everywhere else.
+     The stop list approximates two EASED curves rather than straight
+     ramps: quadratic ease-out into the teal plateau (0–62%) and quadratic
+     ease-in out of it toward butter (76–100%). A flat plateau with linear
+     ramps put slope kinks at its edges, which read as visible diagonal
+     seam lines (Mach bands) — the eased stops remove them. The copy zone
+     (≤ ~80%) stays ≤3% butter blend, preserving the AA contrast fix. */
   --gradient-signature:
-    linear-gradient(160deg, #297487 0%, #2a7260 55%, #2a7260 84%, #ffcb57 100%);
+    linear-gradient(
+      160deg,
+      #297487 0%,
+      #297376 15%,
+      #2a736a 30%,
+      #2a7263 45%,
+      #2a7260 62%,
+      #2a7260 76%,
+      #427c5f 84%,
+      #899a5c 92%,
+      #ffcb57 100%
+    );
   /* Action gradient's sky stop deepened identically — white text hosted on
      it (final CTA copy/disclaimer, app-peek badge) needs ≥4.5:1 across the
      whole sky→teal run. */
