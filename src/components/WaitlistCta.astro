@@ -192,7 +192,10 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     line-height: 18px;
   }
   .waitlist-form--on-gradient .waitlist-form__note {
-    color: rgba(255, 255, 255, 0.85);
+    /* Full-opacity white: the 0.85 alpha dropped this 13px text under AA
+       on its gradient hosts; solid white measures ≥4.5:1 at the note's
+       actual positions in the hero and final CTA (pixel-verified). */
+    color: #fff;
   }
   .waitlist-form--on-solid .waitlist-form__note {
     color: var(--taupe);
@@ -203,9 +206,6 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
-  }
-  .waitlist-form--on-gradient .waitlist-form__note a:hover {
-    color: #fff;
   }
   .waitlist-form--on-solid .waitlist-form__note a:hover {
     color: var(--ink);

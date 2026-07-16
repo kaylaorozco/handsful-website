@@ -25,7 +25,10 @@
      against it — and against every blend down to the teal stop — so the
      hero's white tagline/copy pass AA everywhere they sit. */
   --gradient-signature: linear-gradient(160deg, #2b7a90 0%, #2f7d6b 55%, #ffcb57 100%);
-  --gradient-action: linear-gradient(135deg, #3ea6c2 0%, #2f7d6b 100%);
+  /* Action gradient's sky stop deepened identically — white text hosted on
+     it (final CTA copy/disclaimer, app-peek badge) needs ≥4.5:1 across the
+     whole sky→teal run. */
+  --gradient-action: linear-gradient(135deg, #2b7a90 0%, #2f7d6b 100%);
 
   /* Type */
   --font-display: 'Fredoka Variable', 'Fredoka', sans-serif;
