@@ -172,7 +172,11 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     border-color: rgba(34, 32, 29, 0.15);
   }
   .waitlist-form__input:focus-visible {
-    outline: none;
+    /* Ink ring: 16.3:1 against the white input, 3.3:1 against the darkest
+       hosting gradient region — always ≥3:1 (SC 2.4.7 / 1.4.11). The old
+       butter border alone measured ~1.5:1: invisible to keyboard users. */
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
     border-color: var(--butter);
   }
   .waitlist-form__hp {
@@ -188,7 +192,10 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     line-height: 18px;
   }
   .waitlist-form--on-gradient .waitlist-form__note {
-    color: rgba(255, 255, 255, 0.85);
+    /* Full-opacity white: the 0.85 alpha dropped this 13px text under AA
+       on its gradient hosts; solid white measures ≥4.5:1 at the note's
+       actual positions in the hero and final CTA (pixel-verified). */
+    color: #fff;
   }
   .waitlist-form--on-solid .waitlist-form__note {
     color: var(--taupe);
@@ -199,9 +206,6 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
-  }
-  .waitlist-form--on-gradient .waitlist-form__note a:hover {
-    color: #fff;
   }
   .waitlist-form--on-solid .waitlist-form__note a:hover {
     color: var(--ink);

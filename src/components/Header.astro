@@ -62,7 +62,9 @@ const isHome = Astro.url.pathname === '/';
     padding: var(--space-2) 0; /* keep ≥44px effective tap area with line-height */
   }
   .header__nav a:not(.btn):hover {
-    color: var(--sky);
+    /* Teal, not sky — sky is 2.64:1 on the warm header background; hovered
+       text still needs AA contrast (same fix as the global link color). */
+    color: var(--teal);
   }
   .header__cta {
     min-height: 44px;

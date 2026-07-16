@@ -42,7 +42,10 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      CENTERED (Kayla's call, 2026-07-06), so the glows are pinned to the
      edges/corners with restrained sweep toward the middle — white copy must
      never sit on meaningful coral/butter (their white-text contrast is too
-     low; same corner rule the butter stop already follows).
+     low; same corner rule the butter stop already follows). The gradient's
+     top stop is deepened from the style guide's sky (#3ea6c2 → #2b7a90,
+     a11y 2026-07-15) so the white tagline passes AA on it; the tagline
+     itself went butter → white in the same fix.
 
      prefers-reduced-motion: no fade, no drift — straight to the static
      hero with the glows present but still. -->
@@ -118,7 +121,10 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     font-size: 15px;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--butter);
+    /* White, not butter: butter measured 1.87:1 on the gradient's sky
+       region (15px bold isn't "large text" — needs 4.5:1). White passes
+       AA everywhere it sits (see --gradient-signature). */
+    color: #fff;
     margin-bottom: var(--space-4);
   }
   .hero__title {
@@ -143,13 +149,20 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
   /* …while each drifts to its own slow, offset cycle. Both hug the right
      edge, clear of the white copy (contrast rule — see brand note above). */
   .hero__glow--coral {
-    width: clamp(420px, 48vw, 760px);
-    top: -22%;
+    width: clamp(600px, 66vw, 1080px);
+    /* Anchors are rescaled with the 1.45x size growth so each core keeps
+       its previous absolute position — the extra size reads as wider, softer
+       coverage around the same spot, not a repositioned glow. */
+    top: -40%;
     right: -16%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 115, 87, 0.62),
-      rgba(255, 115, 87, 0) 70%
+      rgba(255, 115, 87, 0.4) 0%,
+      rgba(255, 115, 87, 0.2) 20%,
+      rgba(255, 115, 87, 0.068) 40%,
+      rgba(255, 115, 87, 0.014) 61%,
+      rgba(255, 115, 87, 0.002) 73%,
+      rgba(255, 115, 87, 0) 82%
     );
     animation:
       glow-appear 0.9s ease 0.2s both,
@@ -159,26 +172,38 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      color frames both sides. Its sweep heads down-right into the teal but
      stays shy of the centered headline's left edge. */
   .hero__glow--coral2 {
-    width: clamp(340px, 36vw, 600px);
-    top: -16%;
+    width: clamp(480px, 50vw, 860px);
+    top: -30%;
     left: -14%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 115, 87, 0.42),
-      rgba(255, 115, 87, 0) 70%
+      rgba(255, 115, 87, 0.27) 0%,
+      rgba(255, 115, 87, 0.151) 20%,
+      rgba(255, 115, 87, 0.068) 40%,
+      rgba(255, 115, 87, 0.017) 61%,
+      rgba(255, 115, 87, 0.003) 73%,
+      rgba(255, 115, 87, 0) 82%
     );
     animation:
       glow-appear 0.9s ease 0.5s both,
       drift-coral2 9.5s ease-in-out -6s infinite;
   }
   .hero__glow--butter {
-    width: clamp(360px, 40vw, 640px);
-    bottom: -30%;
-    right: -8%;
+    width: clamp(520px, 56vw, 920px);
+    /* The bottom-right butter bloom carries the corner warmth the original
+       gradient had — a radial source keeps butter far from the centered
+       disclaimer in both dimensions, which the linear ramp can't. Anchor +
+       alpha are tuned against the disclaimer's measured worst drift phase. */
+    bottom: -56%;
+    right: -18%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 203, 87, 0.52),
-      rgba(255, 203, 87, 0) 70%
+      rgba(255, 203, 87, 0.46) 0%,
+      rgba(255, 203, 87, 0.212) 20%,
+      rgba(255, 203, 87, 0.055) 40%,
+      rgba(255, 203, 87, 0.008) 61%,
+      rgba(255, 203, 87, 0.001) 73%,
+      rgba(255, 203, 87, 0) 82%
     );
     animation:
       glow-appear 0.9s ease 0.35s both,
@@ -190,13 +215,17 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      than the bottom-right butter, and mostly off-canvas: only its faint
      outer falloff approaches the centered copy. */
   .hero__glow--butter2 {
-    width: clamp(320px, 34vw, 560px);
-    top: 30%;
+    width: clamp(460px, 48vw, 800px);
+    top: 16%;
     left: -16%;
     background: radial-gradient(
       closest-side,
-      rgba(255, 203, 87, 0.38),
-      rgba(255, 203, 87, 0) 70%
+      rgba(255, 203, 87, 0.25) 0%,
+      rgba(255, 203, 87, 0.14) 20%,
+      rgba(255, 203, 87, 0.062) 40%,
+      rgba(255, 203, 87, 0.016) 61%,
+      rgba(255, 203, 87, 0.003) 73%,
+      rgba(255, 203, 87, 0) 82%
     );
     animation:
       glow-appear 0.9s ease 0.8s both,
@@ -206,13 +235,17 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      color must stay below/left of the centered form (white small text over
      a sky-lightened teal would drop under AA). */
   .hero__glow--sky {
-    width: clamp(340px, 38vw, 600px);
-    bottom: -32%;
+    width: clamp(480px, 53vw, 860px);
+    bottom: -47%;
     left: -14%;
     background: radial-gradient(
       closest-side,
-      rgba(62, 166, 194, 0.45),
-      rgba(62, 166, 194, 0) 70%
+      rgba(62, 166, 194, 0.29) 0%,
+      rgba(62, 166, 194, 0.162) 20%,
+      rgba(62, 166, 194, 0.072) 40%,
+      rgba(62, 166, 194, 0.018) 61%,
+      rgba(62, 166, 194, 0.003) 73%,
+      rgba(62, 166, 194, 0) 82%
     );
     animation:
       glow-appear 0.9s ease 0.65s both,
@@ -239,7 +272,9 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      tempo are deliberately assertive (~1.3× the previous sweep on faster
      8–13s loops) so the drift reads at a glance instead of demanding a
      stare — but sweeps toward the teal stay capped: meaningful color must
-     remain clear of the centered text column (the falloff hits 0 at 70%
+     remain clear of the centered text column (the eased quadratic falloff
+     — stops chosen so it fades to 0 with no slope kink, i.e. no visible
+     rim over the flat plateau — is near-zero past ~50%
      radius, so only the faint outer half approaches it). The inward
      (toward-center) legs grew the least; the vertical and outward legs
      carry most of the extra travel. Different periods + offsets keep the
@@ -250,13 +285,13 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     30% {
-      transform: translate3d(-20%, 27%, 0) scale(1.24, 0.87);
+      transform: translate3d(-14%, 19%, 0) scale(1.24, 0.87);
     }
     60% {
-      transform: translate3d(-28%, 9%, 0) scale(1.38, 1.14);
+      transform: translate3d(-19%, 6%, 0) scale(1.38, 1.14);
     }
     80% {
-      transform: translate3d(-10%, -21%, 0) scale(0.92, 1.3);
+      transform: translate3d(-7%, -14%, 0) scale(0.92, 1.3);
     }
   }
   @keyframes drift-coral2 {
@@ -265,13 +300,13 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     35% {
-      transform: translate3d(18%, 23%, 0) scale(1.27, 0.89);
+      transform: translate3d(12%, 16%, 0) scale(1.27, 0.89);
     }
     65% {
-      transform: translate3d(25%, 5%, 0) scale(1.08, 1.36);
+      transform: translate3d(17%, 3%, 0) scale(1.08, 1.36);
     }
     85% {
-      transform: translate3d(8%, -17%, 0) scale(1.33, 0.93);
+      transform: translate3d(6%, -12%, 0) scale(1.33, 0.93);
     }
   }
   @keyframes drift-butter {
@@ -280,13 +315,13 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     25% {
-      transform: translate3d(-23%, -21%, 0) scale(1.3, 0.83);
+      transform: translate3d(-16%, -14%, 0) scale(1.3, 0.83);
     }
     55% {
-      transform: translate3d(-10%, -37%, 0) scale(1, 1.38);
+      transform: translate3d(-7%, -26%, 0) scale(1, 1.38);
     }
     75% {
-      transform: translate3d(18%, -14%, 0) scale(1.34, 1.05);
+      transform: translate3d(12%, -10%, 0) scale(1.34, 1.05);
     }
   }
   @keyframes drift-butter2 {
@@ -295,13 +330,13 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     30% {
-      transform: translate3d(15%, 19%, 0) scale(1.24, 0.9);
+      transform: translate3d(10%, 13%, 0) scale(1.24, 0.9);
     }
     60% {
-      transform: translate3d(22%, -8%, 0) scale(1.05, 1.32);
+      transform: translate3d(15%, -6%, 0) scale(1.05, 1.32);
     }
     80% {
-      transform: translate3d(5%, -22%, 0) scale(1.3, 0.94);
+      transform: translate3d(3%, -15%, 0) scale(1.3, 0.94);
     }
   }
   @keyframes drift-sky {
@@ -310,10 +345,10 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       transform: translate3d(0, 0, 0) scale(1, 1);
     }
     40% {
-      transform: translate3d(19%, -28%, 0) scale(1.36, 0.92);
+      transform: translate3d(13%, -19%, 0) scale(1.36, 0.92);
     }
     70% {
-      transform: translate3d(29%, -8%, 0) scale(0.88, 1.38);
+      transform: translate3d(20%, -6%, 0) scale(0.88, 1.38);
     }
   }
 
@@ -329,22 +364,35 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       flex-direction: column;
       justify-content: center;
     }
-    /* Narrow screens: copy spans the full width, so push the glows further
-       off-canvas — color stays visible at the edges, never behind text. */
+    /* Small viewports can't host the desktop-scale glows (their min clamps
+       exceed the viewport width) — cap the sizes. And since the copy spans
+       nearly the full width here, the glows sit ABOVE and BELOW the
+       vertically-centered copy band instead of being shoved off the sides:
+       visible orbs in the corners, clear of the text. */
     .hero__glow--coral {
-      right: -35%;
+      width: 460px;
+      top: -21%;
+      right: -30%;
     }
     .hero__glow--coral2 {
+      width: 380px;
+      top: -23%;
       left: -32%;
     }
     .hero__glow--butter {
-      right: -25%;
+      width: 440px;
+      bottom: -32%;
+      right: -28%;
     }
+    /* butter2 stays hidden on phones: its mid-left slot is text-adjacent
+       at this width — the other four carry the corners. */
     .hero__glow--butter2 {
-      left: -34%;
+      display: none;
     }
     .hero__glow--sky {
-      left: -30%;
+      width: 400px;
+      bottom: -28%;
+      left: -32%;
     }
   }
 
