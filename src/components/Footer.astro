@@ -38,7 +38,7 @@ const socials = [
     </div>
 
     <nav class="footer__col" aria-label="Product">
-      <h4 class="footer__heading">Product</h4>
+      <h2 class="footer__heading">Product</h2>
       <a href="/#features">Features</a>
       <a href="/#story">Our story</a>
       <a href="/#faq">FAQ</a>
@@ -46,7 +46,7 @@ const socials = [
     </nav>
 
     <nav class="footer__col" aria-label="Legal">
-      <h4 class="footer__heading">Legal</h4>
+      <h2 class="footer__heading">Legal</h2>
       <a href="/privacy-policy">Privacy Policy</a>
       <a href="/cookie-policy">Cookie Policy</a>
       <a href="/terms-of-service">Terms of Service</a>
@@ -58,7 +58,7 @@ const socials = [
     </nav>
 
     <div class="footer__col">
-      <h4 class="footer__heading">Say hi</h4>
+      <h2 class="footer__heading">Say hi</h2>
       <a href={`mailto:${SITE.contactEmail}`}>{SITE.contactEmail}</a>
       <ul class="footer__social" aria-label="Social media">
         {
@@ -116,9 +116,14 @@ const socials = [
   }
   .footer__heading {
     /* Coral's recurring role site-wide: accent headings (hero glows, the
-       flip-card pain labels, here) — ~6:1 on Ink, AA-safe at this size */
+       flip-card pain labels, here) — ~6:1 on Ink, AA-safe at this size.
+       These are h2s (h4 skipped a level in the outline after the page's
+       h2 sections) styled down to the old h4 scale. */
     color: var(--coral);
     margin-bottom: var(--space-3);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 26px;
   }
   .footer__col {
     display: flex;

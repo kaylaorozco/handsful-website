@@ -103,6 +103,10 @@ html {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    /* Without this, infinite animations (flip-card icon morphs, ambient
+       breathe) re-run their 0.01ms cycle forever and can shimmer — one
+       iteration lands them on their end state and stops. */
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
 }
@@ -210,7 +214,13 @@ svg {
 }
 
 .btn:focus-visible {
-  outline: 3px solid var(--butter);
+  /* Ink, not butter: the ring lands on the SURROUNDING surface, and butter
+     measured only ~1.4–1.5:1 on the light backgrounds most buttons sit on
+     (needs 3:1 — SC 1.4.11). Ink measures 15.2:1 on warm-bg, 16.3:1 on
+     white, and ≥3.1:1 on the hero/final-CTA gradient. Dark surfaces that
+     host buttons (the cookie banner's ink card) override this back to
+     butter locally. */
+  outline: 3px solid var(--ink);
   outline-offset: 2px;
 }
 

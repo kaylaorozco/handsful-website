@@ -116,14 +116,25 @@
     });
   }
 
+  // Whatever had focus when the banner was reopened (the footer's "Cookie
+  // preferences" button) — focus returns there on close so keyboard users
+  // aren't dropped to <body>. Stays null for the first-visit auto-open,
+  // which steals no focus and so has nowhere to return it.
+  let reopener: HTMLElement | null = null;
+
   function openBanner(reopened: boolean) {
     // The close button only appears when a prior choice exists to fall back to.
     banner.dataset.canClose = String(reopened && readChoice() !== null);
+    if (reopened && document.activeElement instanceof HTMLElement) {
+      reopener = document.activeElement;
+    }
     banner.hidden = false;
     if (reopened) accept.focus();
   }
   function closeBanner() {
     banner.hidden = true;
+    if (reopener?.isConnected) reopener.focus();
+    reopener = null;
   }
 
   accept.addEventListener('click', () => {
@@ -233,6 +244,11 @@
   /* Equal width too, so neither choice reads as the default. */
   .cookie-banner__actions .btn {
     min-width: 132px;
+  }
+  /* The card is ink — the global ink focus ring would vanish on it (1:1).
+     Butter measures 10.8:1 here. */
+  .cookie-banner__actions .btn:focus-visible {
+    outline-color: var(--butter);
   }
   .cookie-banner__close {
     display: none;
