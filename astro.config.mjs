@@ -77,19 +77,18 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // Legal pages are excluded until the indexing ticket ships (they are
-      // also noindex'd — the Privacy Policy and Terms of Service have final
-      // copy but stay noindex'd deliberately). /privacy, /cookies, and /terms
-      // are redirect stubs; the '/privacy' entry also matches '/privacy-policy',
-      // and '/terms' also matches '/terms-of-service'.
+      // The legal pages (/privacy-policy, /cookie-policy, /terms-of-service)
+      // are indexable and belong in the sitemap; only their redirect stubs
+      // (/privacy, /cookies, /terms — see `redirects` above) are excluded,
+      // matched exactly so '/privacy' can't swallow '/privacy-policy'.
       // The /waitlist-* pages stay excluded permanently — they're only
       // reachable from the double opt-in email link (/waitlist-confirmed) or
       // /api/subscribe's no-JS 303 redirects (-thanks, -error), and all are
-      // noindex'd. '/waitlist-' matches all three.
-      filter: (page) =>
-        !['/privacy', '/cookie-policy', '/cookies', '/terms', '/waitlist-'].some((p) =>
-          page.includes(p),
-        ),
+      // noindex'd.
+      filter: (page) => {
+        const path = new URL(page).pathname.replace(/\/$/, '');
+        return !['/privacy', '/cookies', '/terms'].includes(path) && !path.startsWith('/waitlist-');
+      },
     }),
   ],
 });

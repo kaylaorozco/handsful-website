@@ -1,12 +1,10 @@
 ---
 /**
  * Shared layout for legal pages. While `placeholder` is true the page shows a
- * prominent pending-copy notice. Legal pages stay noindex'd (and excluded from
- * the sitemap — see astro.config.mjs) even after final copy lands: indexing
- * ships as a separate ticket. When final legal copy lands:
- *   1. Replace the page content.
- *   2. Set placeholder={false} and noindex={true} on that page.
- *   3. Leave the sitemap filter alone until the indexing ticket.
+ * prominent pending-copy notice, and the page defaults to noindex — a
+ * placeholder should never be indexed. Pages with final copy set
+ * placeholder={false} and are indexable (and listed in the sitemap — see
+ * astro.config.mjs).
  */
 import BaseLayout from './BaseLayout.astro';
 import { SITE } from '../config';
@@ -15,7 +13,7 @@ interface Props {
   title: string;
   description: string;
   placeholder?: boolean;
-  /** Decoupled from `placeholder` — final-copy pages remain noindex'd until the indexing ticket. */
+  /** Defaults to `placeholder` — override only to noindex a final-copy page. */
   noindex?: boolean;
   lastUpdated?: string;
 }
