@@ -20,6 +20,11 @@ export const FAQ_ITEMS: FaqItem[] = [
       'Yes. Handsful supports any number of babies — twins, triplets, quads and beyond. Logging, side-by-side comparison and exports all scale to however many little ones you’ve got.',
   },
   {
+    question: 'Can I use Handsful if I only have one baby?',
+    answer:
+      'Yes — Handsful works great for a single baby too. You’ll still get fast one-tap logging for feeds, sleep, diapers, and more, plus a full scrollable history you can look back through anytime. Handsful was built specifically for the chaos of caring for multiples, so if you’re expecting twins or already have your hands full with more than one, that’s where it really shines.',
+  },
+  {
     question: 'How is this different from adding a second baby to a regular tracker app?',
     answer:
       'Single-baby trackers make you switch profiles for every log and every question — log baby A, switch, log baby B, switch back. Handsful never makes you switch: simultaneous one-tap logging, true side-by-side comparison views, and per-baby exports are all built in from day one.',
