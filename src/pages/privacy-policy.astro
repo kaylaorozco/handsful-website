@@ -9,6 +9,7 @@ const toc = [
     id: 'sensitive-consumer-health-data',
     title: "Sensitive consumer health data: how we handle your child's care information",
   },
+  { id: 'insights', title: 'Insights: AI-generated summaries' },
   { id: 'how-do-we-process-your-information', title: 'How do we process your information?' },
   {
     id: 'when-and-with-whom-do-we-share',
@@ -46,7 +47,7 @@ const privacyEmail = EMAILS.privacy;
   title="Privacy Policy"
   description="How Handsful collects, uses, and protects your family's data."
   placeholder={false}
-  lastUpdated="July 12, 2026"
+  lastUpdated="August 4, 2026"
 >
   <p>
     This Privacy Notice for MESQUITE &amp; THORN DIGITAL, LLC (doing business as Handsful)
@@ -61,16 +62,17 @@ const privacyEmail = EMAILS.privacy;
     </li>
     <li>Join our waitlist or subscribe to updates</li>
     <li>
-      Download and use our mobile application (Handsful), once available, or any other application
-      of ours that links to this Privacy Notice
+      Download and use our mobile application (Handsful) or any other application of ours that
+      links to this Privacy Notice
     </li>
     <li>
       Use Handsful. Handsful is a mobile app that helps parents of multiples (twins, triplets, and
       more) log and track care activities for each of their children — including feeding, sleep,
       diaper changes, and growth — simultaneously across babies, compare activity side by side,
-      share caregiver access with a partner or family member, and prepare notes for pediatrician
-      visits. The app is intended for use by adults; it is not directed to children and is not
-      intended to be used by children.
+      share access with up to five caregivers per family — partners, family members, or other
+      trusted caregivers — prepare notes for pediatrician visits, and, optionally, generate
+      AI-powered summaries of care patterns (Insights). The app is intended for use by adults; it
+      is not directed to children and is not intended to be used by children.
     </li>
     <li>Engage with us in other related ways, including any marketing or events</li>
   </ul>
@@ -171,18 +173,27 @@ const privacyEmail = EMAILS.privacy;
     <li>Contact and marketing preferences</li>
     <li>Your children's first names</li>
     <li>Your children's dates of birth (used to calculate age-appropriate tracking)</li>
+    <li>Account identifier (a user ID created when you register)</li>
+    <li>
+      Subscription status and purchase history (received from RevenueCat and the app stores; see
+      "Payment Data" below)
+    </li>
+    <li>Crash and diagnostic data (see "Application Data" below)</li>
   </ul>
   <p>
-    <strong>Sensitive Consumer Health Data.</strong> When you use the app (once available), you may
+    <strong>Sensitive Consumer Health Data.</strong> When you use the app, you may
     log care activity data about your child or children, including: feeding times and amounts,
-    sleep periods, diaper changes, growth measurements, and notes tagged for pediatrician visits.
+    sleep periods, diaper changes, growth measurements, free-text notes, and Visit notes recording
+    what happened at medical appointments.
     We treat this data as sensitive consumer health data. See
     <a href="#sensitive-consumer-health-data">Section 2</a> for how we handle it specifically.
   </p>
   <p>
     <strong>Payment Data.</strong> If you subscribe to a paid tier, payment is handled by Apple,
-    RevenueCat, and/or Google Play. We do not store your full payment card details. See their
-    privacy notices:
+    RevenueCat, and/or Google Play. We do not store your full payment card details. We do receive
+    and store your subscription status and purchase history (for example, which plan you purchased
+    and whether your subscription is active), which we use to manage your access to paid features.
+    See their privacy notices:
     <a href="https://www.apple.com/legal/privacy/" rel="noopener noreferrer"
       >https://www.apple.com/legal/privacy/</a
     >,
@@ -196,13 +207,15 @@ const privacyEmail = EMAILS.privacy;
   <p>
     <strong>Social Media Login Data.</strong> If you register using Google Sign-In, we collect the
     profile information provided by that service, as described in
-    <a href="#social-logins">Section 6</a>.
+    <a href="#social-logins">Section 7</a>.
   </p>
   <p>
     <strong>Application Data.</strong> If you use the app, we may collect, with your permission,
     information from your mobile device such as device identifiers, model, operating system and
     version, and information about how you use app features. This is used to maintain security,
-    troubleshoot issues, and for internal analytics.
+    troubleshoot issues, and for internal analytics. If the app crashes, we collect crash and
+    diagnostic data through Firebase Crashlytics, associated with your account, to identify and
+    fix the problem.
   </p>
 
   <h3>Information automatically collected</h3>
@@ -256,22 +269,77 @@ const privacyEmail = EMAILS.privacy;
     </li>
     <li>
       Where we use third-party infrastructure providers to store or process this data (see
-      <a href="#when-and-with-whom-do-we-share">Section 4</a>), those providers are contractually
+      <a href="#when-and-with-whom-do-we-share">Section 5</a>), those providers are contractually
       restricted from using it for any purpose other than providing services to us.
     </li>
     <li>
       You may delete individual entries or your full account's data at any time from within the
-      app. See <a href="#review-update-delete">Section 18</a>.
+      app. See <a href="#review-update-delete">Section 19</a>.
     </li>
   </ul>
   <p>
-    If we ever introduce features that process this data using artificial intelligence or machine
-    learning tools (for example, AI-generated visit-prep summaries), we will update this Privacy
-    Notice to describe that processing, name the provider involved, and obtain any additional
-    consent required by law before that feature is enabled for your account.
+    We have introduced one such feature — Insights, described in
+    <a href="#insights">Section 3</a>. Any future feature that processes this data with AI tools
+    will likewise be described here, with the provider named, before it is enabled for your
+    account.
   </p>
 
-  <h2 id="how-do-we-process-your-information">3. How do we process your information?</h2>
+  <h2 id="insights">3. Insights: AI-generated summaries</h2>
+  <p class="in-short">
+    <em>
+      In Short: Insights is an optional feature that uses Anthropic's Claude to generate short
+      summaries of your child's care patterns. It is off by default, requires both a family-level
+      opt-in and each caregiver's individual consent, never processes Visit notes, and summaries
+      are automatically deleted after 8 weeks.
+    </em>
+  </p>
+  <p>
+    Insights generates plain-language summaries of your child's care patterns using Claude, an AI
+    service provided by Anthropic, PBC ("Anthropic"). When Insights runs, we send the relevant
+    care activity data to Anthropic's API to produce the summary, and the summary is stored in
+    your family's account.
+  </p>
+  <p>
+    <strong>What is sent to Anthropic.</strong> Feeding, sleep, diaper change, and growth
+    entries, and free-text notes, for the child or children being summarized.
+  </p>
+  <p>
+    <strong>What is never sent to Anthropic.</strong> Visit notes — the log type for recording
+    what happened at a pediatrician or other appointment — are never sent to Anthropic,
+    regardless of your Insights settings. Pumping entries are also never included in summaries.
+  </p>
+  <p>
+    <strong>Consent — two layers, both required.</strong> Insights is off by default. It runs
+    only if (1) your family has turned on the Insights setting, and (2) the individual caregiver
+    has given their own consent. Everything logged by a caregiver who has not individually
+    consented — care entries and notes alike — is excluded from the data we send to Anthropic,
+    even when the family setting is on.
+  </p>
+  <p>
+    <strong>Withdrawing consent.</strong> You can turn Insights off for your family, and each
+    caregiver can withdraw their individual consent, at any time in the app's settings.
+    Withdrawal stops all future sending of that data to Anthropic.
+  </p>
+  <p>
+    <strong>Retention.</strong> Insights summaries are automatically deleted 8 weeks after they
+    are generated. The underlying care entries are not affected and remain subject to
+    <a href="#how-long-do-we-keep-your-information">Section 8</a> (How long do we keep your
+    information?).
+  </p>
+  <p>
+    <strong>Anthropic's use of this data.</strong> Anthropic processes this data only to provide
+    the summarization service to us and is contractually restricted from using it for any other
+    purpose. Anthropic retains this data only temporarily — inputs and outputs are automatically
+    deleted from Anthropic's systems within 30 days, except where content is flagged by
+    Anthropic's automated safety systems or retention is required by law. Anthropic does not use
+    this data to train its AI models.
+  </p>
+  <p>
+    As with all sensitive consumer health data, we do not sell data sent to or generated by
+    Insights, and we do not use it for advertising.
+  </p>
+
+  <h2 id="how-do-we-process-your-information">4. How do we process your information?</h2>
   <p class="in-short">
     <em>
       In Short: We process your information to provide, improve, and administer the Services,
@@ -286,7 +354,7 @@ const privacyEmail = EMAILS.privacy;
     <li>Send administrative information about the Services</li>
     <li>
       Send marketing communications, where you've opted in (see
-      <a href="#privacy-rights">Section 10</a>)
+      <a href="#privacy-rights">Section 11</a>)
     </li>
     <li>Protect the Services, including fraud monitoring</li>
     <li>Understand usage trends and improve the Services</li>
@@ -298,7 +366,7 @@ const privacyEmail = EMAILS.privacy;
   </p>
 
   <h2 id="when-and-with-whom-do-we-share">
-    4. When and with whom do we share your personal information?
+    5. When and with whom do we share your personal information?
   </h2>
   <p class="in-short">
     <em>
@@ -307,7 +375,7 @@ const privacyEmail = EMAILS.privacy;
       health data.
     </em>
   </p>
-  <p><strong>Currently live (website):</strong></p>
+  <p><strong>Website:</strong></p>
   <div class="table-scroll">
     <table>
       <thead>
@@ -332,7 +400,7 @@ const privacyEmail = EMAILS.privacy;
       </tbody>
     </table>
   </div>
-  <p><strong>Planned for app launch:</strong></p>
+  <p><strong>App:</strong></p>
   <div class="table-scroll">
     <table>
       <thead>
@@ -344,15 +412,26 @@ const privacyEmail = EMAILS.privacy;
       <tbody>
         <tr>
           <td>User account registration and authentication</td>
-          <td>Firebase Authentication</td>
+          <td>Firebase Authentication (Google)</td>
         </tr>
         <tr>
           <td>App data storage and sync</td>
-          <td>Cloud Firestore / Firebase</td>
+          <td>Cloud Firestore / Firebase (Google)</td>
         </tr>
         <tr>
-          <td>Subscription billing</td>
+          <td>Subscription billing and entitlement management</td>
           <td>RevenueCat, Apple, Google Play</td>
+        </tr>
+        <tr>
+          <td>Crash reporting and diagnostics</td>
+          <td>Firebase Crashlytics (Google)</td>
+        </tr>
+        <tr>
+          <td>AI-generated summaries ("Insights")</td>
+          <td>
+            Anthropic, PBC (Claude API) — receives care activity data only when Insights is
+            enabled and only as described in <a href="#insights">Section 3</a>
+          </td>
         </tr>
         <tr>
           <td>Cloud infrastructure</td>
@@ -362,8 +441,11 @@ const privacyEmail = EMAILS.privacy;
     </table>
   </div>
   <p>
-    We will update this table as additional providers are added, and will note here if any future
-    provider will have access to sensitive consumer health data.
+    Of the providers above, Firebase/Google Cloud (which stores and syncs your data) and
+    Anthropic (which processes care activity data solely to generate Insights summaries, and only
+    when you have enabled Insights) have access to sensitive consumer health data. Each is
+    contractually restricted from using your data for any purpose other than providing services
+    to us. We will update this table as providers change.
   </p>
   <p>
     We also may need to share your personal information in connection with a merger, sale of
@@ -371,7 +453,7 @@ const privacyEmail = EMAILS.privacy;
     health data will remain subject to the protections in this Notice through any such transfer.
   </p>
 
-  <h2 id="cookies-and-tracking">5. Do we use cookies and other tracking technologies?</h2>
+  <h2 id="cookies-and-tracking">6. Do we use cookies and other tracking technologies?</h2>
   <p class="in-short">
     <em>
       In Short: We use cookies and similar technologies on the website for functionality and, with
@@ -390,14 +472,14 @@ const privacyEmail = EMAILS.privacy;
     <a href="/cookies">https://handsful.app/cookies</a> for full details.
   </p>
 
-  <h2 id="social-logins">6. How do we handle your social logins?</h2>
+  <h2 id="social-logins">7. How do we handle your social logins?</h2>
   <p>
     If you register using Google Sign-In, we receive certain profile information (such as name and
     email address) from Google, used only for the purposes described in this Notice. We recommend
     reviewing Google's privacy notice to understand their own data practices.
   </p>
 
-  <h2 id="how-long-do-we-keep-your-information">7. How long do we keep your information?</h2>
+  <h2 id="how-long-do-we-keep-your-information">8. How long do we keep your information?</h2>
   <p class="in-short">
     <em>
       In Short: We keep your information for as long as you have an account, unless a longer
@@ -409,16 +491,18 @@ const privacyEmail = EMAILS.privacy;
     active. When you delete your account, we delete or anonymize your data, except where retention
     is required for legal, tax, or fraud-prevention purposes, or where data exists in backup
     archives, in which case we isolate it from further processing until deletion is possible.
+    Insights summaries are an exception with a shorter life: they are automatically deleted 8
+    weeks after they are generated, as described in <a href="#insights">Section 3</a>.
   </p>
 
-  <h2 id="how-do-we-keep-your-information-safe">8. How do we keep your information safe?</h2>
+  <h2 id="how-do-we-keep-your-information-safe">9. How do we keep your information safe?</h2>
   <p>
     We implement reasonable technical and organizational security measures designed to protect
     personal information, including sensitive consumer health data. No method of transmission or
     storage is 100% secure, and we cannot guarantee absolute security.
   </p>
 
-  <h2 id="information-from-minors">9. Do we collect information from minors?</h2>
+  <h2 id="information-from-minors">10. Do we collect information from minors?</h2>
   <p class="in-short">
     <em>
       In Short: Handsful is designed for use by parents and caregivers 18 years of age or older.
@@ -427,7 +511,10 @@ const privacyEmail = EMAILS.privacy;
   </p>
   <p>
     We do not direct the Services to children and do not knowingly collect personal information
-    directly from a child. Parents and caregivers may log information about their children —
+    directly from a child. In particular, the Services are not directed to children under 13, and
+    we do not knowingly collect personal information directly from anyone under 13. If we learn
+    that we have, we will delete it promptly. Parents and caregivers may log information about
+    their children —
     including first name, date of birth, and care activity data — but this is provided by the
     parent or caregiver, not the child, and is used solely to deliver the tracking features within
     the parent's account. If you believe we have inadvertently collected information directly from
@@ -435,22 +522,22 @@ const privacyEmail = EMAILS.privacy;
     promptly address it.
   </p>
 
-  <h2 id="privacy-rights">10. What are your privacy rights?</h2>
+  <h2 id="privacy-rights">11. What are your privacy rights?</h2>
   <p>
     You may withdraw consent, opt out of marketing communications, and review, update, or delete
     your account information at any time. See
-    <a href="#review-update-delete">Section 18</a> for how to exercise these rights. Sensitive
+    <a href="#review-update-delete">Section 19</a> for how to exercise these rights. Sensitive
     consumer health data can be deleted at the individual entry level or in bulk via account
     deletion within the app.
   </p>
 
-  <h2 id="do-not-track">11. Controls for Do-Not-Track features</h2>
+  <h2 id="do-not-track">12. Controls for Do-Not-Track features</h2>
   <p>
     There is currently no uniform standard for DNT signals, so we do not respond to them at this
     time. If a legal standard is adopted, we will update this Notice accordingly.
   </p>
 
-  <h2 id="us-privacy-rights">12. Do United States residents have specific privacy rights?</h2>
+  <h2 id="us-privacy-rights">13. Do United States residents have specific privacy rights?</h2>
   <p class="in-short">
     <em>
       In Short: Residents of California, Colorado, Connecticut, and other states with
@@ -504,7 +591,7 @@ const privacyEmail = EMAILS.privacy;
     <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
   </p>
 
-  <h2 id="washington-my-health-my-data">13. Washington My Health My Data Act rights</h2>
+  <h2 id="washington-my-health-my-data">14. Washington My Health My Data Act rights</h2>
   <p class="in-short">
     <em>
       In Short: If you are a Washington resident, or your consumer health data was collected in
@@ -532,7 +619,7 @@ const privacyEmail = EMAILS.privacy;
     Washington State Attorney General.
   </p>
 
-  <h2 id="gdpr">14. Do European Union residents have specific privacy rights (GDPR)?</h2>
+  <h2 id="gdpr">15. Do European Union residents have specific privacy rights (GDPR)?</h2>
   <p class="in-short">
     <em>
       In Short: If you are located in the EU/EEA or UK, you have rights under the GDPR, including
@@ -566,7 +653,8 @@ const privacyEmail = EMAILS.privacy;
   </ul>
   <h3>International Data Transfers</h3>
   <p>
-    We and our service providers (including Google and Kit) are based in the United States. Where
+    We and our service providers (including Google, Kit, and — if you enable Insights —
+    Anthropic) are based in the United States. Where
     we transfer personal data from the European Economic Area, United Kingdom, or Switzerland to
     the United States, we rely on appropriate safeguards, including Standard Contractual Clauses.
   </p>
@@ -577,18 +665,19 @@ const privacyEmail = EMAILS.privacy;
     also lodge a complaint with your local data protection authority.
   </p>
 
-  <h2 id="shared-caregiver-access">15. Shared caregiver access</h2>
+  <h2 id="shared-caregiver-access">16. Shared caregiver access</h2>
   <p class="in-short">
     <em>
-      In Short: If you invite another caregiver to your account, they will be able to view and add
-      to your child's care data. If that caregiver's access is later removed, the entries they
+      In Short: If you invite other caregivers to your account, they will be able to view and add
+      to your child's care data. If a caregiver's access is later removed, the entries they
       logged remain in your child's record, but you can choose to anonymize the label showing who
       logged them.
     </em>
   </p>
   <p>
-    Handsful allows you to share access to your child's tracking data with another caregiver (such
-    as a co-parent or family member) that you invite. Once invited and accepted, that caregiver
+    Handsful allows you to share access to your child's tracking data with caregivers you invite
+    — up to five caregivers per family, included with your subscription. Once invited and
+    accepted, a caregiver
     can view and log entries for your child, including sensitive consumer health data, subject to
     the permissions you grant. You are responsible for deciding who to invite.
   </p>
@@ -612,26 +701,26 @@ const privacyEmail = EMAILS.privacy;
     <li>
       A removed caregiver may request deletion of their personal information, including this
       internal attribution record, as described in
-      <a href="#privacy-rights">Section 10</a> (or
-      <a href="#washington-my-health-my-data">Section 13</a> for Washington residents, or
-      <a href="#gdpr">Section 14</a> for EU/EEA and UK residents). Deletion of the internal
+      <a href="#privacy-rights">Section 11</a> (or
+      <a href="#washington-my-health-my-data">Section 14</a> for Washington residents, or
+      <a href="#gdpr">Section 15</a> for EU/EEA and UK residents). Deletion of the internal
       attribution record does not delete the underlying care entries themselves, which remain
       part of your child's record.
     </li>
   </ul>
   <p>
-    To revoke a caregiver's access, use in-app account management once available, or contact us
+    To revoke a caregiver's access, use the caregiver settings in the app, or contact us
     at <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
   </p>
 
-  <h2 id="updates">16. Do we make updates to this notice?</h2>
+  <h2 id="updates">17. Do we make updates to this notice?</h2>
   <p>
     We may update this Notice from time to time, indicated by the "Last updated" date above.
     Material changes will be communicated by prominent notice or direct notification before they
     take effect.
   </p>
 
-  <h2 id="contact">17. How can you contact us about this notice?</h2>
+  <h2 id="contact">18. How can you contact us about this notice?</h2>
   <p>
     MESQUITE &amp; THORN DIGITAL, LLC<br />
     Data Protection Officer<br />
@@ -642,13 +731,19 @@ const privacyEmail = EMAILS.privacy;
   </p>
 
   <h2 id="review-update-delete">
-    18. How can you review, update, or delete the data we collect from you?
+    19. How can you review, update, or delete the data we collect from you?
   </h2>
   <p>
-    You may request access to, correction of, or deletion of your personal information, including
+    You may delete your account and all associated data directly in the app's settings. You may
+    also request access to, correction of, or deletion of your personal information, including
     your child's care activity data, by contacting
-    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a> or, once available, through account
-    settings within the app.
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
+  </p>
+  <p>
+    We complete verified deletion requests promptly, and in any event within 30 days: your data
+    is removed from our production systems when your account is deleted, and from our service
+    providers' systems and backups within the 30-day window, except where a specific retention
+    exception described in <a href="#how-long-do-we-keep-your-information">Section 8</a> applies.
   </p>
 </LegalLayout>
 
