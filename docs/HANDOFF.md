@@ -3,7 +3,7 @@
 Status as of 2026-07-05: site is built, verified locally, and pushed to
 GitHub (`mesquite-thorn/handsful-website`, private). **Not yet deployed.**
 This file is the to-do list from here; `LAUNCH-CHECKLIST.md` covers the
-launch-day flips (store badges, legal copy going final, etc.).
+launch-day flips (badge wording, legal copy going final, etc.).
 
 ## 1. Deploy to Vercel (~3 min)
 
@@ -17,7 +17,7 @@ launch-day flips (store badges, legal copy going final, etc.).
 
 One-time setup in the Kit dashboard:
 
-- [ ] Create the Handsful waitlist form in Kit.
+- [ ] Create the Handsful signup form in Kit.
 - [ ] Enable **double opt-in** on that form (Kit sends the confirmation email).
 - [ ] Set the form's confirmation redirect URL to
       `https://handsful.app/waitlist-confirmed` so confirming stays on-brand.
@@ -27,7 +27,7 @@ Then in Vercel → Project → Settings → Environment Variables:
 
 - [ ] `KIT_API_KEY` — the v4 API key (server-side only; never exposed to the
       client).
-- [ ] `KIT_FORM_ID` — the numeric ID of the waitlist form. Until both are set,
+- [ ] `KIT_FORM_ID` — the numeric ID of the signup form. Until both are set,
       `/api/subscribe` returns a "briefly unavailable" error (it never fakes
       success) — set them before sharing the URL anywhere.
 
@@ -49,7 +49,7 @@ Then in Vercel → Project → Settings → Environment Variables:
 
 ## 5. Verify the live site (once deployed)
 
-- [ ] Submit the waitlist form with a real email → Kit's confirmation email
+- [ ] Submit the signup form with a real email → Kit's confirmation email
       arrives → click the link → land on `/waitlist-confirmed` → the
       subscriber shows as confirmed on the Kit form (referrer notes `hero` or
       `footer-cta`).
@@ -111,5 +111,6 @@ the correct ID deployed.)
 
 ## Then: launch time
 
-Work through `docs/LAUNCH-CHECKLIST.md` (store badges + CTA mode flip,
-legal pages going final, FAQ copy updates, schema additions).
+Work through `docs/LAUNCH-CHECKLIST.md` (Apple badge artwork + the
+pre-order → download badge flip, legal pages going final, FAQ copy updates,
+schema additions).

@@ -48,8 +48,11 @@ npx astro dev --port 4399   # background it; ready in ~2s, http://localhost:4399
 
 - Landing page top-to-bottom (`fullPage` screenshot) — section order and
   alternating warm/white backgrounds.
-- Hero waitlist form: bad email → inline status "That email looks a little
-  off…" (client-side; no network needed). Real submits POST `/api/subscribe`,
+- Hero CTA: the App Store badge (or, while Apple's artwork is missing, the
+  fallback button) — check it links to `CTA.appStoreUrl` and lands in the
+  copy stagger, not before it.
+- Footer email signup (`#updates`): bad email → inline status "That email
+  looks a little off…" (client-side; no network needed). Real submits POST `/api/subscribe`,
   which calls the Kit API and needs `KIT_API_KEY`/`KIT_FORM_ID` — don't drive
   live; stub `window.fetch` to return
   `{ ok: true, status: 'confirmation_sent' | 'already_subscribed' | 'already_pending' }`

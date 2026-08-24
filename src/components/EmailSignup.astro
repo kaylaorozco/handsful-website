@@ -1,20 +1,16 @@
 ---
 /**
- * The primary conversion component. Renders one of two modes from src/config.ts:
+ * Email capture, posting to /api/subscribe (Kit, double opt-in).
  *
- *   CTA.mode === 'waitlist' → email capture form posting to /api/subscribe
- *   CTA.mode === 'stores'   → App Store / Play Store badges (pre-order/launch)
- *
- * The swap is a one-line config change; both modes share the same slot in
- * every section, so no redesign is needed at launch.
+ * Now that the app is on the App Store, the store badge (StoreBadges.astro)
+ * is the site's primary CTA and this form is the secondary one at the foot
+ * of the page: it's how people hear about launch day, the Android release
+ * and what comes after — so the copy talks about updates, not a queue.
  *
  * `variant` adapts styling to its background:
- *   'on-gradient' → hero (solid Butter button per brand content-on-gradient rule)
+ *   'on-gradient' → gradient sections (solid Butter button per brand content-on-gradient rule)
  *   'on-solid'    → cream/white sections (action-gradient button)
  */
-import { CTA } from '../config';
-import StoreBadges from './StoreBadges.astro';
-
 interface Props {
   variant?: 'on-gradient' | 'on-solid';
   /** Unique per instance — keeps input ids/labels valid with multiple forms per page. */
@@ -26,77 +22,74 @@ interface Props {
 const { variant = 'on-solid', formId, source } = Astro.props;
 ---
 
-{
-  CTA.mode === 'stores' ? (
-    <StoreBadges />
-  ) : (
-    <form
-      class={`waitlist-form waitlist-form--${variant}`}
-      method="POST"
-      action="/api/subscribe"
-      data-waitlist-form
-      novalidate
+<form
+  class={`email-signup email-signup--${variant}`}
+  method="POST"
+  action="/api/subscribe"
+  data-email-signup
+  novalidate
+>
+  <div class="email-signup__row">
+    <label class="visually-hidden" for={formId}>
+      Email address
+    </label>
+    <input
+      id={formId}
+      class="email-signup__input"
+      type="email"
+      name="email"
+      placeholder="you@example.com"
+      autocomplete="email"
+      required
+    />
+    {/* Honeypot — humans never see or fill this */}
+    <input
+      class="email-signup__hp"
+      type="text"
+      name="nickname"
+      tabindex="-1"
+      autocomplete="off"
+      aria-hidden="true"
+    />
+    <input type="hidden" name="source" value={source} />
+    <button
+      class={`btn ${variant === 'on-gradient' ? 'btn--solid' : 'btn--primary'}`}
+      type="submit"
     >
-      <div class="waitlist-form__row">
-        <label class="visually-hidden" for={formId}>
-          Email address
-        </label>
-        <input
-          id={formId}
-          class="waitlist-form__input"
-          type="email"
-          name="email"
-          placeholder="you@example.com"
-          autocomplete="email"
-          required
-        />
-        {/* Honeypot — humans never see or fill this */}
-        <input
-          class="waitlist-form__hp"
-          type="text"
-          name="nickname"
-          tabindex="-1"
-          autocomplete="off"
-          aria-hidden="true"
-        />
-        <input type="hidden" name="source" value={source} />
-        <button
-          class={`btn ${variant === 'on-gradient' ? 'btn--solid' : 'btn--primary'}`}
-          type="submit"
-        >
-          Join the waitlist
-        </button>
-      </div>
-      {/* Consent language covers launch news plus occasional updates so the list
-          can be used beyond a single launch announcement. Keep this in sync with
-          the Privacy Policy's marketing section. */}
-      <p class="waitlist-form__note" data-note>
-        By subscribing, you agree to receive emails from Handsful about the app launch and
-        occasional updates. Unsubscribe anytime. See our
-        <a href="/privacy-policy">Privacy Policy</a>.
-      </p>
-      <p class="waitlist-form__status" data-status role="status" aria-live="polite"></p>
-    </form>
-  )
-}
+      Keep me posted
+    </button>
+  </div>
+  {/* Consent language covers launch news plus occasional updates so the list
+      can be used beyond a single launch announcement. Keep this in sync with
+      the Privacy Policy's marketing section. */}
+  <p class="email-signup__note" data-note>
+    By subscribing, you agree to receive emails from Handsful about the app launch and
+    occasional updates. Unsubscribe anytime. See our
+    <a href="/privacy-policy">Privacy Policy</a>.
+  </p>
+  <p class="email-signup__status" data-status role="status" aria-live="polite"></p>
+</form>
 
 <script>
   // Progressive enhancement: without JS the form still POSTs to /api/subscribe,
   // which 303-redirects it to /waitlist-thanks or /waitlist-error; with JS we
   // submit JSON inline and show friendly states without leaving the page.
+  // (Those page routes keep their /waitlist-* paths on purpose — Kit's
+  // double opt-in redirect points at /waitlist-confirmed from the Kit
+  // dashboard, so renaming them there and here has to happen together.)
   //
-  // Success is deliberately "check your inbox", not "you're on the list" —
+  // Success is deliberately "check your inbox", not "you're signed up" —
   // Kit's double opt-in means the signup only counts once they click the
-  // confirmation link (which lands them on /waitlist-confirmed).
+  // confirmation link.
   const DONE_MESSAGES: Record<string, string> = {
     confirmation_sent:
-      'Almost there — check your inbox and click the confirmation link to lock in your spot. 📬',
-    already_subscribed: "Good news: you're already on the list! We'll be in touch. 🎉",
+      'Almost there — check your inbox and click the confirmation link to finish signing up. 📬',
+    already_subscribed: "Good news: you're already signed up! We'll be in touch. 🎉",
     already_pending:
       "You've signed up before but haven't confirmed yet — look for our earlier email (spam folder too) and click the link inside.",
   };
 
-  document.querySelectorAll<HTMLFormElement>('[data-waitlist-form]').forEach((form) => {
+  document.querySelectorAll<HTMLFormElement>('[data-email-signup]').forEach((form) => {
     const status = form.querySelector<HTMLElement>('[data-status]')!;
     const note = form.querySelector<HTMLElement>('[data-note]')!;
     const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
@@ -113,7 +106,7 @@ const { variant = 'on-solid', formId, source } = Astro.props;
 
       button.disabled = true;
       const originalLabel = button.textContent;
-      button.textContent = 'Joining…';
+      button.textContent = 'Signing up…';
       try {
         const res = await fetch(form.action, {
           method: 'POST',
@@ -128,7 +121,7 @@ const { variant = 'on-solid', formId, source } = Astro.props;
           button.textContent = originalLabel;
           return;
         }
-        form.querySelector('.waitlist-form__row')!.setAttribute('hidden', '');
+        form.querySelector('.email-signup__row')!.setAttribute('hidden', '');
         note.hidden = true;
         status.textContent = DONE_MESSAGES[body.status] ?? DONE_MESSAGES.confirmation_sent;
       } catch {
@@ -141,10 +134,10 @@ const { variant = 'on-solid', formId, source } = Astro.props;
 </script>
 
 <style>
-  .waitlist-form {
+  .email-signup {
     max-width: 480px;
   }
-  .waitlist-form__row {
+  .email-signup__row {
     display: flex;
     flex-wrap: wrap;
     /* When the button wraps under the input (narrow screens) it should
@@ -154,10 +147,10 @@ const { variant = 'on-solid', formId, source } = Astro.props;
   }
   /* display:flex above beats the hidden attribute's UA default; on success
      the script hides the row via [hidden], so restore that behavior. */
-  .waitlist-form__row[hidden] {
+  .email-signup__row[hidden] {
     display: none;
   }
-  .waitlist-form__input {
+  .email-signup__input {
     flex: 1 1 220px;
     min-height: 48px;
     padding: var(--space-3) var(--space-4);
@@ -168,10 +161,10 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     font-family: var(--font-body);
     font-size: 15px;
   }
-  .waitlist-form--on-solid .waitlist-form__input {
+  .email-signup--on-solid .email-signup__input {
     border-color: rgba(34, 32, 29, 0.15);
   }
-  .waitlist-form__input:focus-visible {
+  .email-signup__input:focus-visible {
     /* Ink ring: 16.3:1 against the white input, 3.3:1 against the darkest
        hosting gradient region — always ≥3:1 (SC 2.4.7 / 1.4.11). The old
        butter border alone measured ~1.5:1: invisible to keyboard users. */
@@ -179,47 +172,47 @@ const { variant = 'on-solid', formId, source } = Astro.props;
     outline-offset: 2px;
     border-color: var(--butter);
   }
-  .waitlist-form__hp {
+  .email-signup__hp {
     position: absolute;
     left: -9999px;
     width: 1px;
     height: 1px;
     opacity: 0;
   }
-  .waitlist-form__note {
+  .email-signup__note {
     margin-top: var(--space-3);
     font-size: 13px;
     line-height: 18px;
   }
-  .waitlist-form--on-gradient .waitlist-form__note {
+  .email-signup--on-gradient .email-signup__note {
     /* Full-opacity white: the 0.85 alpha dropped this 13px text under AA
        on its gradient hosts; solid white measures ≥4.5:1 at the note's
        actual positions in the hero and final CTA (pixel-verified). */
     color: #fff;
   }
-  .waitlist-form--on-solid .waitlist-form__note {
+  .email-signup--on-solid .email-signup__note {
     color: var(--taupe);
   }
   /* The Privacy Policy link inherits the note's muted color per variant —
      the underline alone marks it as a link on both backgrounds. */
-  .waitlist-form__note a {
+  .email-signup__note a {
     color: inherit;
     text-decoration: underline;
     text-underline-offset: 2px;
   }
-  .waitlist-form--on-solid .waitlist-form__note a:hover {
+  .email-signup--on-solid .email-signup__note a:hover {
     color: var(--ink);
   }
-  .waitlist-form__status {
+  .email-signup__status {
     margin-top: var(--space-3);
     font-weight: 700;
     font-size: 15px;
     line-height: 22px;
   }
-  .waitlist-form--on-gradient .waitlist-form__status {
+  .email-signup--on-gradient .email-signup__status {
     color: #fff;
   }
-  .waitlist-form--on-solid .waitlist-form__status {
+  .email-signup--on-solid .email-signup__status {
     color: var(--teal);
   }
 </style>

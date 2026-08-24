@@ -1,6 +1,6 @@
 ---
 import Wordmark from './Wordmark.astro';
-import { SITE, SOCIAL } from '../config';
+import { SITE, SOCIAL, CTA } from '../config';
 
 const year = new Date().getFullYear();
 
@@ -42,7 +42,8 @@ const socials = [
       <a href="/#features">Features</a>
       <a href="/#story">Our story</a>
       <a href="/#faq">FAQ</a>
-      <a href="/#waitlist">Join the waitlist</a>
+      <a href={CTA.appStoreUrl}>Pre-order on the App Store</a>
+      <a href="/#updates">Get launch updates</a>
     </nav>
 
     <nav class="footer__col" aria-label="Legal">

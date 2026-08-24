@@ -1,9 +1,10 @@
 ---
 /**
- * Post-confirmation landing page. Kit's waitlist form is configured (in the
+ * Post-confirmation landing page. Kit's signup form is configured (in the
  * Kit dashboard, not code) to redirect here after a subscriber clicks the
  * double opt-in link in their email — keeping the confirm moment on-brand
- * instead of on a Kit-hosted page.
+ * instead of on a Kit-hosted page. The /waitlist-confirmed path is what
+ * Kit redirects to, so renaming this route means updating Kit too.
  *
  * Only reachable via that email link, so it's noindex'd and excluded from
  * the sitemap (see astro.config.mjs).
@@ -13,17 +14,18 @@ import { SITE } from '../config';
 ---
 
 <BaseLayout
-  title={`You're on the list — ${SITE.name}`}
-  description="Your spot on the Handsful waitlist is confirmed."
+  title={`You're all set — ${SITE.name}`}
+  description="You're signed up for Handsful launch updates."
   noindex={true}
 >
   <section class="confirmed section">
     <div class="container--narrow">
-      <p class="confirmed__eyebrow">Waitlist confirmed</p>
-      <h1>You're officially on the list! 🎉</h1>
+      <p class="confirmed__eyebrow">Email confirmed</p>
+      <h1>You're on the list! 🎉</h1>
       <p class="confirmed__lead">
-        That's it — no more steps. We'll email you launch news, early access, and the
-        occasional tip for parents of multiples. Until then, go rest those hands.
+        That's it — no more steps. We'll email you launch news, the Android release, and the
+        occasional tip for parents of multiples. Haven't pre-ordered yet? The App Store badge is
+        waiting at the top of the site. Until then, go rest those hands.
       </p>
       <a class="btn btn--primary" href="/">Back to the site</a>
     </div>

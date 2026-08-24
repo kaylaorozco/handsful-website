@@ -7,7 +7,7 @@ import FounderStory from '../sections/FounderStory.astro';
 import SocialProof from '../sections/SocialProof.astro';
 import Faq from '../sections/Faq.astro';
 import FinalCta from '../sections/FinalCta.astro';
-import { SITE } from '../config';
+import { SITE, CTA } from '../config';
 import { FAQ_ITEMS } from '../data/faq';
 
 // --- Structured data ---------------------------------------------------
@@ -26,12 +26,14 @@ const appSchema = {
   '@type': 'SoftwareApplication',
   name: SITE.name,
   applicationCategory: 'LifestyleApplication',
-  operatingSystem: 'iOS, Android',
+  // iOS-first launch — add ', Android' here when the Play release lands.
+  operatingSystem: 'iOS',
   description: SITE.description,
   url: SITE.url,
+  installUrl: CTA.appStoreUrl,
   // Pre-launch: no offers/ratings yet. Add an AggregateRating and Offer
   // (price, priceCurrency) once the app is live and has real reviews.
-  releaseNotes: 'Coming soon — join the waitlist at handsful.app',
+  releaseNotes: 'Available to pre-order on the App Store — launching soon.',
 };
 
 const faqSchema = {

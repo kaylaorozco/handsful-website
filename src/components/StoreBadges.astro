@@ -1,46 +1,113 @@
 ---
 /**
- * App Store / Play Store badges — rendered by WaitlistCta when CTA.mode is
- * 'stores'. Before flipping the mode:
+ * The store CTA: official App Store / Google Play badges linking to the app.
  *
- *  1. Set CTA.appStoreUrl / CTA.playStoreUrl in src/config.ts.
- *  2. Download the OFFICIAL badge artwork (required by both stores' brand rules —
- *     don't redraw them):
- *       Apple:  https://developer.apple.com/app-store/marketing/guidelines/  → "Download on the App Store" SVG
- *       Google: https://play.google.com/intl/en_us/badges/                   → "Get it on Google Play" PNG/SVG
- *  3. Save as public/images/badges/app-store.svg and public/images/badges/google-play.svg.
+ * Both stores REQUIRE their official, unmodified badge artwork — never a
+ * redraw, a re-typeset copy, or a recolored one. Download them here:
+ *   Apple:  https://toolbox.marketingtools.apple.com/en/us/app-store  (SVG, black)
+ *   Google: https://play.google.com/intl/en_us/badges/                (SVG/PNG)
+ * and save them under src/assets/badges/ with the file names in BADGES
+ * below. They live in src/, not public/, so the bundler resolves them:
+ * that's what supplies each badge's intrinsic size here and serves it from
+ * a fingerprinted, long-cached URL.
  *
- * A badge renders only when its URL is set, so iOS-first launches work too.
+ * Until Apple's artwork is in place the link still renders — as a plain
+ * brand button carrying the same words — so the hero is never broken and
+ * never ships unofficial art pretending to be the badge. `npm run build`
+ * warns while that fallback is live.
+ *
+ * Which Apple badge shows is CTA.appleBadge in src/config.ts: 'pre-order'
+ * now, 'download' on launch day. The badge has to match what the visitor
+ * actually gets — a "Download" badge on a pre-order listing reads as a
+ * bait-and-switch and breaks Apple's marketing guidelines.
+ *
+ * A badge renders only when its store URL is set, so an iOS-first launch
+ * simply leaves CTA.playStoreUrl empty.
  */
+import type { ImageMetadata } from 'astro';
 import { CTA } from '../config';
+
+interface Props {
+  /** Styles the no-artwork fallback button for its background. */
+  variant?: 'on-gradient' | 'on-solid';
+}
+
+const { variant = 'on-solid' } = Astro.props;
+
+const BADGES = {
+  'pre-order': { file: 'app-store-pre-order.svg', label: 'Pre-Order on the App Store' },
+  download: { file: 'app-store-download.svg', label: 'Download on the App Store' },
+} as const;
+
+const PLAY = { file: 'google-play.svg', label: 'Get Handsful on Google Play' } as const;
+
+/**
+ * Every badge sitting in src/assets/badges/, resolved by the bundler at
+ * build time — so which artwork exists is decided the same way in `astro
+ * dev`, in CI and on Vercel, with no filesystem or working-directory
+ * assumptions. Each entry carries its own width/height, which the <img>
+ * passes through so the badge reserves the right box (no layout shift) and
+ * can never be handed a shape that distorts it.
+ */
+const artwork = import.meta.glob<{ default: ImageMetadata }>('../assets/badges/*.svg', {
+  eager: true,
+});
+const art = (file: string) => artwork[`../assets/badges/${file}`]?.default ?? null;
+
+const apple = BADGES[CTA.appleBadge];
+const appleArt = art(apple.file);
+const playArt = art(PLAY.file);
+
+if (CTA.appStoreUrl && !appleArt) {
+  console.warn(
+    `[store-badges] src/assets/badges/${apple.file} is missing — falling back to a plain ` +
+      `button. Download the official "${apple.label}" badge from ` +
+      `https://toolbox.marketingtools.apple.com/en/us/app-store before launch.`,
+  );
+}
+if (CTA.playStoreUrl && !playArt) {
+  console.warn(
+    `[store-badges] src/assets/badges/${PLAY.file} is missing — the Play badge is hidden. ` +
+      `Download the official artwork from https://play.google.com/intl/en_us/badges/.`,
+  );
+}
 ---
 
 <div class="store-badges">
   {
-    CTA.appStoreUrl && (
-      <a href={CTA.appStoreUrl} class="store-badges__link">
-        <img
-          src="/images/badges/app-store.svg"
-          alt="Download Handsful on the App Store"
-          width="180"
-          height="60"
-          loading="lazy"
-        />
-      </a>
-    )
+    CTA.appStoreUrl &&
+      (appleArt ? (
+        <a href={CTA.appStoreUrl} class="store-badges__link">
+          <img
+            src={appleArt.src}
+            alt={`${apple.label} — Handsful`}
+            class="store-badges__img"
+            width={appleArt.width}
+            height={appleArt.height}
+          />
+        </a>
+      ) : (
+        <a
+          href={CTA.appStoreUrl}
+          class={`btn ${variant === 'on-gradient' ? 'btn--solid' : 'btn--primary'}`}
+        >
+          {apple.label}
+        </a>
+      ))
   }
   {
-    CTA.playStoreUrl && (
-      <a href={CTA.playStoreUrl} class="store-badges__link">
-        <img
-          src="/images/badges/google-play.svg"
-          alt="Get Handsful on Google Play"
-          width="202"
-          height="60"
-          loading="lazy"
-        />
-      </a>
-    )
+    CTA.playStoreUrl &&
+      playArt && (
+        <a href={CTA.playStoreUrl} class="store-badges__link">
+          <img
+            src={playArt.src}
+            alt={PLAY.label}
+            class="store-badges__img"
+            width={playArt.width}
+            height={playArt.height}
+          />
+        </a>
+      )
   }
 </div>
 
@@ -54,5 +121,21 @@ import { CTA } from '../config';
   .store-badges__link {
     display: inline-block;
     line-height: 0;
+    /* Apple asks for clear space around the badge of at least 10% of its
+       height; the flex gap and the hosts' own spacing cover it. */
+  }
+  .store-badges__img {
+    /* Height-driven so each store's own aspect ratio is preserved exactly —
+       neither badge may be stretched or re-proportioned. 56px gives the
+       badge enough presence under the hero's display-size headline; both
+       sizes clear Apple's 40px web minimum with room to spare. */
+    height: 56px;
+    width: auto;
+  }
+  @media (max-width: 800px) {
+    /* The headline shrinks here, so the badge steps back down with it. */
+    .store-badges__img {
+      height: 48px;
+    }
   }
 </style>

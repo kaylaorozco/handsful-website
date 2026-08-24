@@ -52,7 +52,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'When does Handsful launch, and how much will it cost?',
     answer:
-      'Handsful launches soon on iOS and Android. Join the waitlist and you’ll be the first to know the launch date and pricing — and you’ll get access before everyone else. No spam, ever.',
+      'Handsful is available to pre-order on the App Store now — pre-order and it downloads to your iPhone automatically on launch day. Android follows after iOS. Sign up for updates and you’ll be first to know the launch date and pricing. No spam, ever.',
   },
   {
     question: 'Is my babies’ data private?',
