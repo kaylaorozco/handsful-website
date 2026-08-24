@@ -1,6 +1,6 @@
 # Handsful — marketing site
 
-Pre-launch marketing and waitlist site for [Handsful](https://handsful.app), the baby
+Marketing and pre-order site for [Handsful](https://handsful.app), the baby
 tracker built for twins, triplets & multiples.
 
 Built with [Astro](https://astro.build) (static output, near-zero JS) and deployed on
@@ -22,7 +22,7 @@ npm run build          # generates OG image + static build into dist/
 2. Add environment variables in **Vercel → Project → Settings → Environment Variables**
    (see `.env.example`):
    - `KIT_API_KEY` — Kit (ConvertKit) v4 API key, server-side only
-   - `KIT_FORM_ID` — the Kit form waitlist signups subscribe to
+   - `KIT_FORM_ID` — the Kit form email signups subscribe to
    - `PUBLIC_GA_MEASUREMENT_ID` — GA4 ID; GA stays off entirely until this is set
 3. Point the `handsful.app` domain at the Vercel project.
 
@@ -30,19 +30,19 @@ npm run build          # generates OG image + static build into dist/
 
 ```
 src/
-  config.ts          ← site-wide config: CTA mode, store URLs, socials
+  config.ts          ← site-wide config: store URLs, Apple badge wording, socials
   data/              ← editable content: FAQ, testimonials/press
   layouts/           ← BaseLayout (SEO/meta), LegalLayout
-  components/        ← header, footer, waitlist form, store badges
+  components/        ← header, footer, email signup form, store badges
   sections/          ← homepage sections in page order
-  pages/             ← routes (/, legal pages, /waitlist-* status pages, /api/subscribe)
+  pages/             ← routes (/, legal pages, /waitlist-* signup status pages, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
 brand/               ← source brand assets + style guide (not served)
 scripts/generate-og.mjs ← builds the OG share image from brand assets (npm run og)
 docs/LAUNCH-CHECKLIST.md ← everything to flip at launch time
 ```
 
-## The waitlist pipeline (Kit, double opt-in)
+## The email signup pipeline (Kit, double opt-in)
 
 The form POSTs to `/api/subscribe`, which validates the email (plus a honeypot and
 basic per-IP rate limiting) and adds the subscriber to a Kit (ConvertKit) form via
@@ -54,15 +54,28 @@ branding.
   your inbox" accordingly, and repeat signups get a friendly "already on the list" /
   "check your earlier email" message.
 - **`/waitlist-confirmed`** is the on-brand landing page after they confirm — set it
-  as the confirmation redirect URL in the Kit form's settings.
+  as the confirmation redirect URL in the Kit form's settings. (The three
+  `/waitlist-*` status routes keep those paths even though the copy no longer
+  says "waitlist": the path is configured on Kit's side, so renaming them is a
+  code + Kit change, done together or not at all.)
 - If `KIT_API_KEY` / `KIT_FORM_ID` are unset, `/api/subscribe` returns a
   "briefly unavailable" error (never a fake success) and logs to Vercel function logs.
 
-## Switching the CTA to App Store / Play Store badges
+## Store badges and the two CTAs
 
-One config change, no redesign — see the checklist in
-[`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md) and the notes in
-`src/components/StoreBadges.astro`.
+The site has two calls to action, on purpose:
+
+- **Hero + header — pre-order.** The official Apple badge, linking to
+  `CTA.appStoreUrl` (`src/config.ts`). `CTA.appleBadge` picks which official
+  badge it wears: `'pre-order'` today, `'download'` on launch day.
+- **Foot of the page — email.** `EmailSignup.astro`, for launch news and the
+  Android release.
+
+Both stores require their **official, unmodified** badge artwork. Until
+Apple's SVG is saved at `public/images/badges/app-store-pre-order.svg`, the
+hero renders a plain brand button with the same words and `npm run build`
+prints a warning — see the notes in `src/components/StoreBadges.astro` and
+the checklist in [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).
 
 ## Analytics & cookie consent
 

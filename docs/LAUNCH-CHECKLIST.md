@@ -1,6 +1,22 @@
 # Launch checklist
 
-Everything that changes when Handsful goes from waitlist → live app.
+Everything that changes as Handsful goes pre-order → live app.
+
+## Now: finish the pre-order CTA
+
+The hero and header point at the real App Store listing
+(`CTA.appStoreUrl` in `src/config.ts`), but Apple's badge artwork isn't in the
+repo yet — until it is, the hero shows a plain brand button reading
+"Pre-Order on the App Store" and `npm run build` prints a warning.
+
+- [ ] Download the official **"Pre-Order on the App Store"** badge (SVG, black)
+      from <https://toolbox.marketingtools.apple.com/en/us/app-store>
+- [ ] Save it, unmodified, as `public/images/badges/app-store-pre-order.svg`
+      — the badge replaces the fallback button automatically, no code change
+- [ ] Check the hero on mobile and desktop after the swap
+
+Never redraw, re-typeset, recolor or stretch either store's badge — both
+stores require the official art exactly as supplied.
 
 ## Domain email
 
@@ -8,16 +24,6 @@ Everything that changes when Handsful goes from waitlist → live app.
       provider for every address in `EMAILS` in `src/config.ts`:
       `hello@`, `privacy@`, `support@handsful.app`
 - [ ] Send a test email to each before the pages referencing them go live
-
-## 2–4 weeks out: pre-order / pre-registration goes live
-
-- [ ] Download official badge artwork (both stores require unmodified official art):
-  - Apple: <https://developer.apple.com/app-store/marketing/guidelines/> → save as `public/images/badges/app-store.svg`
-  - Google: <https://play.google.com/intl/en_us/badges/> → save as `public/images/badges/google-play.svg`
-- [ ] In `src/config.ts`: set `CTA.appStoreUrl` and `CTA.playStoreUrl`
-- [ ] In `src/config.ts`: flip `CTA.mode` from `'waitlist'` to `'stores'`
-      (every CTA on the site swaps automatically; a badge only renders if its URL is set)
-- [ ] Email the waitlist announcing pre-order
 
 ## Legal copy lands
 
@@ -31,13 +37,25 @@ Everything that changes when Handsful goes from waitlist → live app.
 - [ ] Add real testimonials to `src/data/testimonials.ts` (section auto-appears)
 - [ ] Add press mentions (+ logos under `public/images/press/`) as they land
 
-## At launch
+## Launch day (the app goes live)
 
-- [ ] Update FAQ answers that reference "launching soon" (`src/data/faq.ts`)
+- [ ] Download the official **"Download on the App Store"** badge and save it as
+      `public/images/badges/app-store-download.svg`
+- [ ] In `src/config.ts`: flip `CTA.appleBadge` from `'pre-order'` to `'download'`
+      (header, hero and footer wording follow automatically)
+- [ ] Email the list announcing the launch
+- [ ] Update FAQ answers that reference pre-order / "launching soon" (`src/data/faq.ts`)
 - [ ] Add `Offer` (price) and later `AggregateRating` to the SoftwareApplication
       schema in `src/pages/index.astro`
-- [ ] Fill in social profile URLs in `src/config.ts` (footer placeholders become links)
 - [ ] Swap the stylized UI mocks (`src/components/AppPeek.astro` and
       `src/components/NotesPeek.astro`, used in `src/sections/SeeItInAction.astro`)
       for real app screenshots once screens are final — and rework their
       captions
+
+## When Android lands
+
+- [ ] Download the official "Get it on Google Play" badge → `public/images/badges/google-play.svg`
+- [ ] Set `CTA.playStoreUrl` in `src/config.ts` — the Play badge then renders
+      beside Apple's everywhere the store CTA appears
+- [ ] Add `Android` back to `operatingSystem` in the app schema (`src/pages/index.astro`)
+- [ ] Update the FAQ and the final-CTA copy, which currently say Android is on the way

@@ -1,5 +1,5 @@
 ---
-import WaitlistCta from '../components/WaitlistCta.astro';
+import StoreBadges from '../components/StoreBadges.astro';
 import { TAGLINE_LINES, HEADLINE } from '../config';
 ---
 
@@ -21,7 +21,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
        0.95–1.6s  …then docks into its slot,
        1.25–2.15s headline fades up (~50% through the dock; its delay is
                   the page's LCP anchor — keep ≤1.5s),
-       1.7–2.75s  the waitlist form completes the stagger.
+       1.7–2.75s  the App Store badge completes the stagger.
      The header and the sections below the hero are deliberately NOT
      animated or delayed: they paint immediately, whatever the copy fade is
      doing.
@@ -49,7 +49,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
 
      prefers-reduced-motion: no fade, no drift — straight to the static
      hero with the glows present but still. -->
-<section class="hero" id="waitlist">
+<section class="hero" id="pre-order">
   <div class="hero__ambient" aria-hidden="true">
     <div class="hero__glow hero__glow--coral"></div>
     <div class="hero__glow hero__glow--coral2"></div>
@@ -66,9 +66,11 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
         {TAGLINE_LINES.map((line, i) => (i > 0 ? <><br />{line}</> : line))}
       </p>
       <h1 class="hero__title">{HEADLINE}</h1>
-      <!-- No subhead: the hero stays sparse (tagline + headline + form);
+      <!-- No subhead: the hero stays sparse (tagline + headline + CTA);
            the one-tap pitch lives in "See it in action" below. -->
-      <WaitlistCta variant="on-gradient" formId="waitlist-email-hero" source="hero" />
+      <!-- Primary CTA: the official Apple badge, pre-order wording until
+           launch day (both are one config value — see StoreBadges.astro). -->
+      <StoreBadges variant="on-gradient" />
     </div>
   </div>
 </section>
@@ -131,6 +133,13 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     color: #fff;
     max-width: 18ch;
     margin-bottom: var(--space-8);
+  }
+  /* The badge row is a flex container, so text-align can't centre it; it
+     also stays as wide as its content so margin-inline:auto lands it in
+     the middle of the copy column. */
+  .hero__copy > :global(.store-badges) {
+    justify-content: center;
+    width: fit-content;
   }
 
   /* ---- Ambient warm regions (permanent) ------------------------------ */
@@ -400,7 +409,7 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
      Tagline center-stage → dock → headline/form stagger, ~2.75s total.
      EVERY timing knob lives in the custom properties below — tune here, the
      rules only reference them. :global() because .hero__copy's children
-     include the WaitlistCta form, which doesn't carry this component's
+     include the StoreBadges markup, which doesn't carry this component's
      scope attribute. */
 
   .hero__copy {
@@ -410,9 +419,9 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     --tagline-dock-dur: 0.65s;
     --headline-at: 1.25s; /* ~50% through the dock; the LCP floor — ≤1.5s */
     --headline-dur: 0.9s;
-    --form-at: 1.7s;
-    --form-dur: 1.05s; /* settles at ~2.75s — keep the banner's
-                          SHOW_DELAY_MS (CookieConsentBanner) in sync */
+    --cta-at: 1.7s;
+    --cta-dur: 1.05s; /* settles at ~2.75s — keep the banner's
+                         SHOW_DELAY_MS (CookieConsentBanner) in sync */
   }
 
   .hero__copy > :global(*) {
@@ -423,8 +432,8 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
     animation-duration: var(--headline-dur);
   }
   .hero__copy > :global(*:nth-child(3)) {
-    animation-delay: var(--form-at);
-    animation-duration: var(--form-dur);
+    animation-delay: var(--cta-at);
+    animation-duration: var(--cta-dur);
   }
 
   @keyframes hero-reveal {

@@ -1,15 +1,16 @@
 ---
-import WaitlistCta from '../components/WaitlistCta.astro';
+import EmailSignup from '../components/EmailSignup.astro';
 ---
 
-<section class="final-cta section">
+<section class="final-cta section" id="updates">
   <div class="container final-cta__inner">
     <h2 class="final-cta__title">Two hands. However many babies.<br />One tracker.</h2>
     <p class="final-cta__sub">
-      Be first in line when Handsful launches — waitlist members get access before everyone else.
+      Pre-orders are open on the App Store, and Android is on the way. Leave your email and we'll
+      tell you the moment Handsful goes live.
     </p>
     <div class="final-cta__form">
-      <WaitlistCta variant="on-gradient" formId="waitlist-email-footer" source="footer-cta" />
+      <EmailSignup variant="on-gradient" formId="signup-email-footer" source="footer-cta" />
     </div>
   </div>
 </section>
@@ -36,7 +37,7 @@ import WaitlistCta from '../components/WaitlistCta.astro';
     max-width: 46ch;
     color: rgba(255, 255, 255, 0.92);
   }
-  .final-cta__form :global(.waitlist-form__row) {
+  .final-cta__form :global(.email-signup__row) {
     justify-content: center;
   }
 </style>
