@@ -2,18 +2,18 @@
 
 Everything that changes as Handsful goes pre-order → live app.
 
-## Now: finish the pre-order CTA
+## Pre-order CTA (done)
 
 The hero and header point at the real App Store listing
-(`CTA.appStoreUrl` in `src/config.ts`), but Apple's badge artwork isn't in the
-repo yet — until it is, the hero shows a plain brand button reading
-"Pre-Order on the App Store" and `npm run build` prints a warning.
+(`CTA.appStoreUrl` in `src/config.ts`), and Apple's official
+"Pre-Order on the App Store" badge is in place at
+`src/assets/badges/app-store-pre-order.svg`. Nothing to do here until launch.
 
-- [ ] Download the official **"Pre-Order on the App Store"** badge (SVG, black)
-      from <https://toolbox.marketingtools.apple.com/en/us/app-store>
-- [ ] Save it, unmodified, as `public/images/badges/app-store-pre-order.svg`
-      — the badge replaces the fallback button automatically, no code change
-- [ ] Check the hero on mobile and desktop after the swap
+Badge artwork lives in `src/assets/badges/`, not `public/` — the bundler
+resolves it there, which is what gives each badge its intrinsic size and a
+fingerprinted URL. Drop a new badge in with the file name the component
+expects and it renders itself; if it's missing, the CTA falls back to a plain
+brand button and `npm run build` says so.
 
 Never redraw, re-typeset, recolor or stretch either store's badge — both
 stores require the official art exactly as supplied.
@@ -40,7 +40,7 @@ stores require the official art exactly as supplied.
 ## Launch day (the app goes live)
 
 - [ ] Download the official **"Download on the App Store"** badge and save it as
-      `public/images/badges/app-store-download.svg`
+      `src/assets/badges/app-store-download.svg`
 - [ ] In `src/config.ts`: flip `CTA.appleBadge` from `'pre-order'` to `'download'`
       (header, hero and footer wording follow automatically)
 - [ ] Email the list announcing the launch
@@ -54,7 +54,7 @@ stores require the official art exactly as supplied.
 
 ## When Android lands
 
-- [ ] Download the official "Get it on Google Play" badge → `public/images/badges/google-play.svg`
+- [ ] Download the official "Get it on Google Play" badge → `src/assets/badges/google-play.svg`
 - [ ] Set `CTA.playStoreUrl` in `src/config.ts` — the Play badge then renders
       beside Apple's everywhere the store CTA appears
 - [ ] Add `Android` back to `operatingSystem` in the app schema (`src/pages/index.astro`)

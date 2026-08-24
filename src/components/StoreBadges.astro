@@ -6,8 +6,10 @@
  * redraw, a re-typeset copy, or a recolored one. Download them here:
  *   Apple:  https://toolbox.marketingtools.apple.com/en/us/app-store  (SVG, black)
  *   Google: https://play.google.com/intl/en_us/badges/                (SVG/PNG)
- * and save them under public/images/badges/ with the file names in BADGES
- * below.
+ * and save them under src/assets/badges/ with the file names in BADGES
+ * below. They live in src/, not public/, so the bundler resolves them:
+ * that's what supplies each badge's intrinsic size here and serves it from
+ * a fingerprinted, long-cached URL.
  *
  * Until Apple's artwork is in place the link still renders — as a plain
  * brand button carrying the same words — so the hero is never broken and
@@ -22,8 +24,7 @@
  * A badge renders only when its store URL is set, so an iOS-first launch
  * simply leaves CTA.playStoreUrl empty.
  */
-import fs from 'node:fs';
-import path from 'node:path';
+import type { ImageMetadata } from 'astro';
 import { CTA } from '../config';
 
 interface Props {
@@ -38,47 +39,35 @@ const BADGES = {
   download: { file: 'app-store-download.svg', label: 'Download on the App Store' },
 } as const;
 
-const apple = BADGES[CTA.appleBadge];
 const PLAY = { file: 'google-play.svg', label: 'Get Handsful on Google Play' } as const;
 
 /**
- * Astro builds this page statically, so these reads happen at build time.
- * Resolved from the project root (Astro's cwd in both `astro dev` and
- * `astro build`), NOT from import.meta.url: this component is bundled
- * before it runs, so its own module path no longer sits in src/components/.
+ * Every badge sitting in src/assets/badges/, resolved by the bundler at
+ * build time — so which artwork exists is decided the same way in `astro
+ * dev`, in CI and on Vercel, with no filesystem or working-directory
+ * assumptions. Each entry carries its own width/height, which the <img>
+ * passes through so the badge reserves the right box (no layout shift) and
+ * can never be handed a shape that distorts it.
  */
-const badgePath = (file: string) => path.join(process.cwd(), 'public/images/badges', file);
-const hasArt = (file: string) => fs.existsSync(badgePath(file));
+const artwork = import.meta.glob<{ default: ImageMetadata }>('../assets/badges/*.svg', {
+  eager: true,
+});
+const art = (file: string) => artwork[`../assets/badges/${file}`]?.default ?? null;
 
-/**
- * The badge's own proportions, read out of the artwork so the <img> reserves
- * the right box (no layout shift) whatever each store supplies — and so
- * nothing here hard-codes, and thereby risks distorting, a badge's shape.
- * Null when the file has no readable dimensions, in which case the <img>
- * simply goes without the hint.
- */
-const intrinsicSize = (file: string) => {
-  const svg = fs.readFileSync(badgePath(file), 'utf8');
-  const [, w, h] =
-    svg.match(/viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/) ??
-    svg.match(/\bwidth="([\d.]+)(?:px)?"[\s\S]{0,80}?\bheight="([\d.]+)(?:px)?"/) ??
-    [];
-  return w && h ? { width: Math.round(Number(w)), height: Math.round(Number(h)) } : null;
-};
+const apple = BADGES[CTA.appleBadge];
+const appleArt = art(apple.file);
+const playArt = art(PLAY.file);
 
-const hasAppleArt = hasArt(apple.file);
-const hasPlayArt = hasArt(PLAY.file);
-
-if (CTA.appStoreUrl && !hasAppleArt) {
+if (CTA.appStoreUrl && !appleArt) {
   console.warn(
-    `[store-badges] public/images/badges/${apple.file} is missing — falling back to a plain ` +
+    `[store-badges] src/assets/badges/${apple.file} is missing — falling back to a plain ` +
       `button. Download the official "${apple.label}" badge from ` +
       `https://toolbox.marketingtools.apple.com/en/us/app-store before launch.`,
   );
 }
-if (CTA.playStoreUrl && !hasPlayArt) {
+if (CTA.playStoreUrl && !playArt) {
   console.warn(
-    `[store-badges] public/images/badges/${PLAY.file} is missing — the Play badge is hidden. ` +
+    `[store-badges] src/assets/badges/${PLAY.file} is missing — the Play badge is hidden. ` +
       `Download the official artwork from https://play.google.com/intl/en_us/badges/.`,
   );
 }
@@ -87,13 +76,14 @@ if (CTA.playStoreUrl && !hasPlayArt) {
 <div class="store-badges">
   {
     CTA.appStoreUrl &&
-      (hasAppleArt ? (
+      (appleArt ? (
         <a href={CTA.appStoreUrl} class="store-badges__link">
           <img
-            src={`/images/badges/${apple.file}`}
+            src={appleArt.src}
             alt={`${apple.label} — Handsful`}
             class="store-badges__img"
-            {...intrinsicSize(apple.file)}
+            width={appleArt.width}
+            height={appleArt.height}
           />
         </a>
       ) : (
@@ -106,16 +96,18 @@ if (CTA.playStoreUrl && !hasPlayArt) {
       ))
   }
   {
-    CTA.playStoreUrl && hasPlayArt && (
-      <a href={CTA.playStoreUrl} class="store-badges__link">
-        <img
-          src={`/images/badges/${PLAY.file}`}
-          alt={PLAY.label}
-          class="store-badges__img"
-          {...intrinsicSize(PLAY.file)}
-        />
-      </a>
-    )
+    CTA.playStoreUrl &&
+      playArt && (
+        <a href={CTA.playStoreUrl} class="store-badges__link">
+          <img
+            src={playArt.src}
+            alt={PLAY.label}
+            class="store-badges__img"
+            width={playArt.width}
+            height={playArt.height}
+          />
+        </a>
+      )
   }
 </div>
 

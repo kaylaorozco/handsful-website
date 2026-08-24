@@ -37,6 +37,7 @@ src/
   sections/          ← homepage sections in page order
   pages/             ← routes (/, legal pages, /waitlist-* signup status pages, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
+  assets/            ← bundled assets: store badges, hero photo
 brand/               ← source brand assets + style guide (not served)
 scripts/generate-og.mjs ← builds the OG share image from brand assets (npm run og)
 docs/LAUNCH-CHECKLIST.md ← everything to flip at launch time
@@ -71,11 +72,13 @@ The site has two calls to action, on purpose:
 - **Foot of the page — email.** `EmailSignup.astro`, for launch news and the
   Android release.
 
-Both stores require their **official, unmodified** badge artwork. Until
-Apple's SVG is saved at `public/images/badges/app-store-pre-order.svg`, the
-hero renders a plain brand button with the same words and `npm run build`
-prints a warning — see the notes in `src/components/StoreBadges.astro` and
-the checklist in [`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).
+Both stores require their **official, unmodified** badge artwork, which lives
+in `src/assets/badges/` (in `src/`, not `public/`, so the bundler resolves it
+and supplies each badge's intrinsic size and a fingerprinted URL). If the file
+a badge expects isn't there, the hero renders a plain brand button with the
+same words and `npm run build` prints a warning — see the notes in
+`src/components/StoreBadges.astro` and the checklist in
+[`docs/LAUNCH-CHECKLIST.md`](docs/LAUNCH-CHECKLIST.md).
 
 ## Analytics & cookie consent
 
