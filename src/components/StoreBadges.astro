@@ -23,6 +23,7 @@
  * simply leaves CTA.playStoreUrl empty.
  */
 import fs from 'node:fs';
+import path from 'node:path';
 import { CTA } from '../config';
 
 interface Props {
@@ -38,16 +39,47 @@ const BADGES = {
 } as const;
 
 const apple = BADGES[CTA.appleBadge];
-/** Astro builds this page statically, so the check runs at build time. */
-const hasAppleArt = fs.existsSync(
-  new URL(`../../public/images/badges/${apple.file}`, import.meta.url),
-);
+const PLAY = { file: 'google-play.svg', label: 'Get Handsful on Google Play' } as const;
+
+/**
+ * Astro builds this page statically, so these reads happen at build time.
+ * Resolved from the project root (Astro's cwd in both `astro dev` and
+ * `astro build`), NOT from import.meta.url: this component is bundled
+ * before it runs, so its own module path no longer sits in src/components/.
+ */
+const badgePath = (file: string) => path.join(process.cwd(), 'public/images/badges', file);
+const hasArt = (file: string) => fs.existsSync(badgePath(file));
+
+/**
+ * The badge's own proportions, read out of the artwork so the <img> reserves
+ * the right box (no layout shift) whatever each store supplies — and so
+ * nothing here hard-codes, and thereby risks distorting, a badge's shape.
+ * Null when the file has no readable dimensions, in which case the <img>
+ * simply goes without the hint.
+ */
+const intrinsicSize = (file: string) => {
+  const svg = fs.readFileSync(badgePath(file), 'utf8');
+  const [, w, h] =
+    svg.match(/viewBox="[\d.]+ [\d.]+ ([\d.]+) ([\d.]+)"/) ??
+    svg.match(/\bwidth="([\d.]+)(?:px)?"[\s\S]{0,80}?\bheight="([\d.]+)(?:px)?"/) ??
+    [];
+  return w && h ? { width: Math.round(Number(w)), height: Math.round(Number(h)) } : null;
+};
+
+const hasAppleArt = hasArt(apple.file);
+const hasPlayArt = hasArt(PLAY.file);
 
 if (CTA.appStoreUrl && !hasAppleArt) {
   console.warn(
     `[store-badges] public/images/badges/${apple.file} is missing — falling back to a plain ` +
       `button. Download the official "${apple.label}" badge from ` +
       `https://toolbox.marketingtools.apple.com/en/us/app-store before launch.`,
+  );
+}
+if (CTA.playStoreUrl && !hasPlayArt) {
+  console.warn(
+    `[store-badges] public/images/badges/${PLAY.file} is missing — the Play badge is hidden. ` +
+      `Download the official artwork from https://play.google.com/intl/en_us/badges/.`,
   );
 }
 ---
@@ -61,7 +93,7 @@ if (CTA.appStoreUrl && !hasAppleArt) {
             src={`/images/badges/${apple.file}`}
             alt={`${apple.label} — Handsful`}
             class="store-badges__img"
-            height="48"
+            {...intrinsicSize(apple.file)}
           />
         </a>
       ) : (
@@ -74,13 +106,13 @@ if (CTA.appStoreUrl && !hasAppleArt) {
       ))
   }
   {
-    CTA.playStoreUrl && (
+    CTA.playStoreUrl && hasPlayArt && (
       <a href={CTA.playStoreUrl} class="store-badges__link">
         <img
-          src="/images/badges/google-play.svg"
-          alt="Get Handsful on Google Play"
+          src={`/images/badges/${PLAY.file}`}
+          alt={PLAY.label}
           class="store-badges__img"
-          height="48"
+          {...intrinsicSize(PLAY.file)}
         />
       </a>
     )
@@ -102,9 +134,16 @@ if (CTA.appStoreUrl && !hasAppleArt) {
   }
   .store-badges__img {
     /* Height-driven so each store's own aspect ratio is preserved exactly —
-       neither badge may be stretched or re-proportioned. 48px clears
-       Apple's 40px web minimum with room to spare. */
-    height: 48px;
+       neither badge may be stretched or re-proportioned. 56px gives the
+       badge enough presence under the hero's display-size headline; both
+       sizes clear Apple's 40px web minimum with room to spare. */
+    height: 56px;
     width: auto;
+  }
+  @media (max-width: 800px) {
+    /* The headline shrinks here, so the badge steps back down with it. */
+    .store-badges__img {
+      height: 48px;
+    }
   }
 </style>
