@@ -111,6 +111,6 @@ the correct ID deployed.)
 
 ## Then: launch time
 
-Work through `docs/LAUNCH-CHECKLIST.md` (Apple badge artwork + the
-pre-order → download badge flip, legal pages going final, FAQ copy updates,
-schema additions).
+Work through `docs/LAUNCH-CHECKLIST.md`. The pre-order → download flip and the
+copy that went with it are done; still open are the "Download on the App Store"
+badge artwork, legal pages going final, and the price/rating schema additions.

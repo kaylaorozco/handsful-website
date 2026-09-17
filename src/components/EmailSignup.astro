@@ -4,8 +4,8 @@
  *
  * Now that the app is on the App Store, the store badge (StoreBadges.astro)
  * is the site's primary CTA and this form is the secondary one at the foot
- * of the page: it's how people hear about launch day, the Android release
- * and what comes after — so the copy talks about updates, not a queue.
+ * of the page: it's how people hear about the Android release and what comes
+ * after — so the copy talks about updates, not a queue.
  *
  * `variant` adapts styling to its background:
  *   'on-gradient' → gradient sections (solid Butter button per brand content-on-gradient rule)
@@ -59,12 +59,12 @@ const { variant = 'on-solid', formId, source } = Astro.props;
       Keep me posted
     </button>
   </div>
-  {/* Consent language covers launch news plus occasional updates so the list
-      can be used beyond a single launch announcement. Keep this in sync with
-      the Privacy Policy's marketing section. */}
+  {/* Deliberately broad — product news plus occasional updates — so the list
+      isn't scoped to one announcement. Keep this in sync with the Privacy
+      Policy's marketing section. */}
   <p class="email-signup__note" data-note>
-    By subscribing, you agree to receive emails from Handsful about the app launch and
-    occasional updates. Unsubscribe anytime. See our
+    By subscribing, you agree to receive emails from Handsful about the app and occasional
+    updates. Unsubscribe anytime. See our
     <a href="/privacy-policy">Privacy Policy</a>.
   </p>
   <p class="email-signup__status" data-status role="status" aria-live="polite"></p>

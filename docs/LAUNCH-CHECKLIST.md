@@ -2,12 +2,19 @@
 
 Everything that changes as Handsful goes pre-order → live app.
 
-## Pre-order CTA (done)
+## Store CTA (launched — one thing outstanding)
 
-The hero and header point at the real App Store listing
-(`CTA.appStoreUrl` in `src/config.ts`), and Apple's official
-"Pre-Order on the App Store" badge is in place at
-`src/assets/badges/app-store-pre-order.svg`. Nothing to do here until launch.
+`CTA.appleBadge` in `src/config.ts` is flipped to `'download'`, so the badge,
+the header button and the footer link all read "Download" and point at the
+real App Store listing (`CTA.appStoreUrl`).
+
+- [ ] **Drop in the artwork.** Save the official "Download on the App Store"
+      badge as `src/assets/badges/app-store-download.svg`. Until it's there
+      the CTA falls back to a plain brand button with the same words, and
+      `npm run build` prints a `[store-badges]` warning saying so.
+
+The old `app-store-pre-order.svg` stays in the folder — it's what the site
+falls back to if `appleBadge` is ever set to `'pre-order'` again.
 
 Badge artwork lives in `src/assets/badges/`, not `public/` — the bundler
 resolves it there, which is what gives each badge its intrinsic size and a
@@ -39,14 +46,21 @@ stores require the official art exactly as supplied.
 
 ## Launch day (the app goes live)
 
+- [x] In `src/config.ts`: flip `CTA.appleBadge` from `'pre-order'` to `'download'`
+      — header, hero and footer wording follow from `CTA_LABEL` in the same file
+- [x] Update the copy that referenced pre-order / "launching soon": the FAQ
+      (`src/data/faq.ts`), the closing CTA (`src/sections/FinalCta.astro`),
+      the confirmation page (`src/pages/waitlist-confirmed.astro`), the meta
+      description and the schema `releaseNotes`
 - [ ] Download the official **"Download on the App Store"** badge and save it as
-      `src/assets/badges/app-store-download.svg`
-- [ ] In `src/config.ts`: flip `CTA.appleBadge` from `'pre-order'` to `'download'`
-      (header, hero and footer wording follow automatically)
+      `src/assets/badges/app-store-download.svg` (see the top of this file)
 - [ ] Email the list announcing the launch
-- [ ] Update FAQ answers that reference pre-order / "launching soon" (`src/data/faq.ts`)
-- [ ] Add `Offer` (price) and later `AggregateRating` to the SoftwareApplication
-      schema in `src/pages/index.astro`
+- [ ] Add `offers` (price, priceCurrency) and later `aggregateRating` to the
+      SoftwareApplication schema in `src/pages/index.astro` — there's a
+      `TODO(launch)` marking the spot. Both must match the App Store listing
+      exactly or Google drops the structured data
+- [ ] Confirm the FAQ's pricing answer ("Current pricing is on the App Store
+      listing") — swap in the real number if you'd rather state it outright
 - [ ] Swap the stylized UI mocks (`src/components/AppPeek.astro` and
       `src/components/NotesPeek.astro`, used in `src/sections/SeeItInAction.astro`)
       for real app screenshots once screens are final — and rework their

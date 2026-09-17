@@ -50,9 +50,9 @@ export const FAQ_ITEMS: FaqItem[] = [
       'Feeds (breast, bottle and pumping), sleep and naps, diapers, growth and milestones — for every baby, together. If it happens in a day with multiples, it’s one tap away.',
   },
   {
-    question: 'When does Handsful launch, and how much will it cost?',
+    question: 'Is Handsful available now, and how much does it cost?',
     answer:
-      'Handsful is available to pre-order on the App Store now — pre-order and it downloads to your iPhone automatically on launch day. Android follows after iOS. Sign up for updates and you’ll be first to know the launch date and pricing. No spam, ever.',
+      'Yes — Handsful is out now on the App Store, so you can download it to your iPhone today. Current pricing is on the App Store listing. Android is next: sign up for updates and you’ll be first to know when it lands. No spam, ever.',
   },
   {
     question: 'Is my babies’ data private?',

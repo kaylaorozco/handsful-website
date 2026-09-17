@@ -68,8 +68,9 @@ import { TAGLINE_LINES, HEADLINE } from '../config';
       <h1 class="hero__title">{HEADLINE}</h1>
       <!-- No subhead: the hero stays sparse (tagline + headline + CTA);
            the one-tap pitch lives in "See it in action" below. -->
-      <!-- Primary CTA: the official Apple badge, pre-order wording until
-           launch day (both are one config value — see StoreBadges.astro). -->
+      <!-- Primary CTA: the official Apple badge. Which badge, and the
+           wording that goes with it, is one config value — see
+           CTA.appleBadge / CTA_LABEL and StoreBadges.astro. -->
       <StoreBadges variant="on-gradient" />
     </div>
   </div>
