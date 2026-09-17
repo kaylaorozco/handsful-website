@@ -66,10 +66,12 @@ branding.
 
 The site has two calls to action, on purpose:
 
-- **Hero + header — pre-order.** The official Apple badge, linking to
+- **Hero + header — the App Store.** The official Apple badge, linking to
   `CTA.appStoreUrl` (`src/config.ts`). `CTA.appleBadge` picks which official
-  badge it wears: `'pre-order'` today, `'download'` on launch day.
-- **Foot of the page — email.** `EmailSignup.astro`, for launch news and the
+  badge it wears — `'download'` now the app has shipped — and the matching
+  `CTA_LABEL` supplies the header button and footer link wording, so the art
+  and the words can't drift apart.
+- **Foot of the page — email.** `EmailSignup.astro`, for product news and the
   Android release.
 
 Both stores require their **official, unmodified** badge artwork, which lives

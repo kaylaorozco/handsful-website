@@ -31,9 +31,11 @@ const appSchema = {
   description: SITE.description,
   url: SITE.url,
   installUrl: CTA.appStoreUrl,
-  // Pre-launch: no offers/ratings yet. Add an AggregateRating and Offer
-  // (price, priceCurrency) once the app is live and has real reviews.
-  releaseNotes: 'Available to pre-order on the App Store — launching soon.',
+  // TODO(launch): add an `offers` block (price, priceCurrency) now that the
+  // app is live, and an `aggregateRating` once there are real reviews to
+  // quote. Both must match the App Store listing exactly — Google drops
+  // structured data that contradicts the destination page.
+  releaseNotes: 'Now available on the App Store.',
 };
 
 const faqSchema = {

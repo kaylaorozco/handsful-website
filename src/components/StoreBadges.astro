@@ -6,8 +6,8 @@
  * redraw, a re-typeset copy, or a recolored one. Download them here:
  *   Apple:  https://toolbox.marketingtools.apple.com/en/us/app-store  (SVG, black)
  *   Google: https://play.google.com/intl/en_us/badges/                (SVG/PNG)
- * and save them under src/assets/badges/ with the file names in BADGES
- * below. They live in src/, not public/, so the bundler resolves them:
+ * and save them under src/assets/badges/ with the file names in APPLE_FILES
+ * and PLAY below. They live in src/, not public/, so the bundler resolves them:
  * that's what supplies each badge's intrinsic size here and serves it from
  * a fingerprinted, long-cached URL.
  *
@@ -16,16 +16,17 @@
  * never ships unofficial art pretending to be the badge. `npm run build`
  * warns while that fallback is live.
  *
- * Which Apple badge shows is CTA.appleBadge in src/config.ts: 'pre-order'
- * now, 'download' on launch day. The badge has to match what the visitor
+ * Which Apple badge shows is CTA.appleBadge in src/config.ts, now that the
+ * app has shipped: 'download'. The badge has to match what the visitor
  * actually gets — a "Download" badge on a pre-order listing reads as a
- * bait-and-switch and breaks Apple's marketing guidelines.
+ * bait-and-switch and breaks Apple's marketing guidelines. The wording on
+ * the header button and the footer link rides the same switch (CTA_LABEL).
  *
  * A badge renders only when its store URL is set, so an iOS-first launch
  * simply leaves CTA.playStoreUrl empty.
  */
 import type { ImageMetadata } from 'astro';
-import { CTA } from '../config';
+import { CTA, CTA_LABEL } from '../config';
 
 interface Props {
   /** Styles the no-artwork fallback button for its background. */
@@ -34,9 +35,10 @@ interface Props {
 
 const { variant = 'on-solid' } = Astro.props;
 
-const BADGES = {
-  'pre-order': { file: 'app-store-pre-order.svg', label: 'Pre-Order on the App Store' },
-  download: { file: 'app-store-download.svg', label: 'Download on the App Store' },
+/** Apple's artwork per badge state; the wording comes from CTA_LABEL. */
+const APPLE_FILES = {
+  'pre-order': 'app-store-pre-order.svg',
+  download: 'app-store-download.svg',
 } as const;
 
 const PLAY = { file: 'google-play.svg', label: 'Get Handsful on Google Play' } as const;
@@ -54,15 +56,15 @@ const artwork = import.meta.glob<{ default: ImageMetadata }>('../assets/badges/*
 });
 const art = (file: string) => artwork[`../assets/badges/${file}`]?.default ?? null;
 
-const apple = BADGES[CTA.appleBadge];
-const appleArt = art(apple.file);
+const appleFile = APPLE_FILES[CTA.appleBadge];
+const appleArt = art(appleFile);
 const playArt = art(PLAY.file);
 
 if (CTA.appStoreUrl && !appleArt) {
   console.warn(
-    `[store-badges] src/assets/badges/${apple.file} is missing — falling back to a plain ` +
-      `button. Download the official "${apple.label}" badge from ` +
-      `https://toolbox.marketingtools.apple.com/en/us/app-store before launch.`,
+    `[store-badges] src/assets/badges/${appleFile} is missing — falling back to a plain ` +
+      `button. Download the official "${CTA_LABEL.long}" badge from ` +
+      `https://toolbox.marketingtools.apple.com/en/us/app-store.`,
   );
 }
 if (CTA.playStoreUrl && !playArt) {
@@ -80,7 +82,7 @@ if (CTA.playStoreUrl && !playArt) {
         <a href={CTA.appStoreUrl} class="store-badges__link">
           <img
             src={appleArt.src}
-            alt={`${apple.label} — Handsful`}
+            alt={`${CTA_LABEL.long} — Handsful`}
             class="store-badges__img"
             width={appleArt.width}
             height={appleArt.height}
@@ -91,7 +93,7 @@ if (CTA.playStoreUrl && !playArt) {
           href={CTA.appStoreUrl}
           class={`btn ${variant === 'on-gradient' ? 'btn--solid' : 'btn--primary'}`}
         >
-          {apple.label}
+          {CTA_LABEL.long}
         </a>
       ))
   }
