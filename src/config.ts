@@ -35,7 +35,7 @@ export const SITE = {
   // Meta description — keep ≤160 chars (Google truncates ~155–160) with the
   // multiples language and the store CTA up front.
   description:
-    'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, and share with every caregiver. Now on the App Store.',
+    'The baby tracker built for twins, triplets & more. Log feeds, naps and diapers for every baby in one tap, and share with every caregiver. Now on iOS & Android.',
   contactEmail: EMAILS.hello,
   ogImage: '/images/og.png',
 } as const;
@@ -57,11 +57,10 @@ export const CTA = {
   appleBadge: 'download' as AppleBadge,
 
   /**
-   * Google Play. Empty = no Play badge renders anywhere (iOS-first launch).
-   * Fill this in when Android pre-registration opens and the badge appears
-   * beside Apple's automatically.
+   * Google Play. Empty = no Play badge renders anywhere. Live since the
+   * Android release; the badge appears beside Apple's automatically.
    */
-  playStoreUrl: '', // e.g. https://play.google.com/store/apps/details?id=app.handsful
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=com.handsful.app',
 } as const;
 
 /**

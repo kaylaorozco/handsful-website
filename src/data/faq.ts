@@ -52,7 +52,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'Is Handsful available now, and how much does it cost?',
     answer:
-      'Yes — Handsful is out now on the App Store, so you can download it to your iPhone today. Current pricing is on the App Store listing. Android is next: sign up for updates and you’ll be first to know when it lands. No spam, ever.',
+      'Yes — Handsful is out now on the App Store and Google Play, so you can download it to your iPhone or Android phone today. Current pricing is on the store listings.',
   },
   {
     question: 'Is my babies’ data private?',

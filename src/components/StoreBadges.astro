@@ -22,8 +22,8 @@
  * bait-and-switch and breaks Apple's marketing guidelines. The wording on
  * the header button and the footer link rides the same switch (CTA_LABEL).
  *
- * A badge renders only when its store URL is set, so an iOS-first launch
- * simply leaves CTA.playStoreUrl empty.
+ * A badge renders only when its store URL is set (and, for Play, when its
+ * artwork is present — there's no plain-button fallback for it).
  */
 import type { ImageMetadata } from 'astro';
 import { CTA, CTA_LABEL } from '../config';

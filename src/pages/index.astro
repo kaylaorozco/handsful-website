@@ -26,16 +26,15 @@ const appSchema = {
   '@type': 'SoftwareApplication',
   name: SITE.name,
   applicationCategory: 'LifestyleApplication',
-  // iOS-first launch — add ', Android' here when the Play release lands.
-  operatingSystem: 'iOS',
+  operatingSystem: 'iOS, Android',
   description: SITE.description,
   url: SITE.url,
   installUrl: CTA.appStoreUrl,
   // TODO(launch): add an `offers` block (price, priceCurrency) now that the
   // app is live, and an `aggregateRating` once there are real reviews to
-  // quote. Both must match the App Store listing exactly — Google drops
+  // quote. Both must match the store listings exactly — Google drops
   // structured data that contradicts the destination page.
-  releaseNotes: 'Now available on the App Store.',
+  releaseNotes: 'Now available on the App Store and Google Play.',
 };
 
 const faqSchema = {

@@ -83,13 +83,15 @@ instead of a JSON body.
 
 The site has two calls to action, on purpose:
 
-- **Hero + header — the App Store.** The official Apple badge, linking to
+- **Hero — the stores.** The official Apple badge, linking to
   `CTA.appStoreUrl` (`src/config.ts`). `CTA.appleBadge` picks which official
   badge it wears — `'download'` now the app has shipped — and the matching
   `CTA_LABEL` supplies the header button and footer link wording, so the art
   and the words can't drift apart.
-- **Foot of the page — email.** `EmailSignup.astro`, for product news and the
-  Android release.
+  The Google Play badge sits beside it, linking to `CTA.playStoreUrl`.
+  The header's Download button scrolls back to these badges (`/#download`)
+  rather than picking a store, so both platforms land on their own badge.
+- **Foot of the page — email.** `EmailSignup.astro`, for product news.
 
 Both stores require their **official, unmodified** badge artwork, which lives
 in `src/assets/badges/` (in `src/`, not `public/`, so the bundler resolves it
