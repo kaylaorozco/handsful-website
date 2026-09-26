@@ -69,7 +69,7 @@ stores require the official art exactly as supplied.
 ## When Android lands
 
 - [ ] Download the official "Get it on Google Play" badge → `src/assets/badges/google-play.svg`
-- [ ] Set `CTA.playStoreUrl` in `src/config.ts` — the Play badge then renders
+- [x] Set `CTA.playStoreUrl` in `src/config.ts` — the Play badge then renders
       beside Apple's everywhere the store CTA appears
-- [ ] Add `Android` back to `operatingSystem` in the app schema (`src/pages/index.astro`)
-- [ ] Update the FAQ and the final-CTA copy, which currently say Android is on the way
+- [x] Add `Android` back to `operatingSystem` in the app schema (`src/pages/index.astro`)
+- [x] Update the FAQ and the final-CTA copy, which currently say Android is on the way
