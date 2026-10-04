@@ -47,7 +47,7 @@ const privacyEmail = EMAILS.privacy;
   title="Privacy Policy"
   description="How Handsful collects, uses, and protects your family's data."
   placeholder={false}
-  lastUpdated="August 4, 2026"
+  lastUpdated="October 3, 2026"
 >
   <p>
     This Privacy Notice for MESQUITE &amp; THORN DIGITAL, LLC (doing business as Handsful)
@@ -102,9 +102,10 @@ const privacyEmail = EMAILS.privacy;
   </p>
   <p>
     <strong>Do we process any sensitive personal information?</strong> Yes. The care activity data
-    you log about your child or children — including feeding, sleep, diaper, growth, and
-    pediatrician visit information — is treated by us as sensitive consumer health data, and we
-    apply heightened protections to it as described in this Notice.
+    you log about your child or children, including feeding, sleep, diaper, growth, sickness
+    (including temperature), medication, vaccine, and pediatrician visit information, is treated
+    by us as sensitive consumer health data, and we apply heightened protections to it as
+    described in this Notice.
   </p>
   <p>
     <strong>Do we collect any information from third parties?</strong> We do not purchase or
@@ -183,7 +184,8 @@ const privacyEmail = EMAILS.privacy;
   <p>
     <strong>Sensitive Consumer Health Data.</strong> When you use the app, you may
     log care activity data about your child or children, including: feeding times and amounts,
-    sleep periods, diaper changes, growth measurements, free-text notes, and Visit notes recording
+    sleep periods, diaper changes, growth measurements, sickness entries (including temperature
+    readings), medication entries, vaccine entries, free-text notes, and Visit notes recording
     what happened at medical appointments.
     We treat this data as sensitive consumer health data. See
     <a href="#sensitive-consumer-health-data">Section 2</a> for how we handle it specifically.
@@ -247,8 +249,8 @@ const privacyEmail = EMAILS.privacy;
   </h2>
   <p class="in-short">
     <em>
-      In Short: Feeding, sleep, diaper, growth, and pediatrician visit data you log about your
-      child is sensitive consumer health data. We collect it only with your consent, use it only
+      In Short: Feeding, sleep, diaper, growth, sickness, medication, vaccine, and pediatrician
+      visit data you log about your child is sensitive consumer health data. We collect it only with your consent, use it only
       to provide the Services you request, and do not sell it or use it for advertising.
     </em>
   </p>
@@ -294,19 +296,26 @@ const privacyEmail = EMAILS.privacy;
     </em>
   </p>
   <p>
-    Insights generates plain-language summaries of your child's care patterns using Claude, an AI
-    service provided by Anthropic, PBC ("Anthropic"). When Insights runs, we send the relevant
-    care activity data to Anthropic's API to produce the summary, and the summary is stored in
-    your family's account.
+    Insights generates plain-language summaries of your child's care patterns, such as weekly
+    recaps and visit-prep summaries, using Claude, an AI service provided by Anthropic, PBC
+    ("Anthropic"). Nothing is sent to Anthropic unless Insights is on. When Insights runs, we send
+    the relevant care activity data to Anthropic's API as text, one child at a time, to produce
+    the summary, and the summary is stored in your family's account.
   </p>
   <p>
-    <strong>What is sent to Anthropic.</strong> Feeding, sleep, diaper change, and growth
-    entries, and free-text notes, for the child or children being summarized.
+    <strong>What is sent to Anthropic.</strong> Feeding, sleep, diaper change, growth, sickness
+    (including temperature), medication, and vaccine entries, and free-text notes, for the child
+    or children being summarized.
   </p>
   <p>
     <strong>What is never sent to Anthropic.</strong> Visit notes — the log type for recording
     what happened at a pediatrician or other appointment — are never sent to Anthropic,
     regardless of your Insights settings. Pumping entries are also never included in summaries.
+  </p>
+  <p>
+    <strong>Translation.</strong> Summaries can be translated between English and Spanish. To
+    translate, we send the generated summary text to Anthropic, which provides the translation.
+    The translated text is stored with the summary and is deleted with it after 8 weeks.
   </p>
   <p>
     <strong>Consent — two layers, both required.</strong> Insights is off by default. It runs
@@ -325,6 +334,11 @@ const privacyEmail = EMAILS.privacy;
     are generated. The underlying care entries are not affected and remain subject to
     <a href="#how-long-do-we-keep-your-information">Section 8</a> (How long do we keep your
     information?).
+  </p>
+  <p>
+    <strong>Not medical advice.</strong> Claude is instructed not to give medical advice or
+    suggest causes or diagnoses, and we check summaries for that kind of language before they are
+    shown. Insights summaries are not medical advice, and the app shows a notice saying so.
   </p>
   <p>
     <strong>Anthropic's use of this data.</strong> Anthropic processes this data only to provide
@@ -429,8 +443,9 @@ const privacyEmail = EMAILS.privacy;
         <tr>
           <td>AI-generated summaries ("Insights")</td>
           <td>
-            Anthropic, PBC (Claude API) — receives care activity data only when Insights is
-            enabled and only as described in <a href="#insights">Section 3</a>
+            Anthropic, PBC (Claude API). Receives care activity data, including health entries,
+            only when Insights is enabled, and translates summaries, as described in
+            <a href="#insights">Section 3</a>
           </td>
         </tr>
         <tr>
@@ -442,7 +457,7 @@ const privacyEmail = EMAILS.privacy;
   </div>
   <p>
     Of the providers above, Firebase/Google Cloud (which stores and syncs your data) and
-    Anthropic (which processes care activity data solely to generate Insights summaries, and only
+    Anthropic (which processes care activity data solely to generate and translate Insights summaries, and only
     when you have enabled Insights) have access to sensitive consumer health data. Each is
     contractually restricted from using your data for any purpose other than providing services
     to us. We will update this table as providers change.
@@ -573,7 +588,10 @@ const privacyEmail = EMAILS.privacy;
         </tr>
         <tr>
           <td>Sensitive personal information</td>
-          <td>Consumer health data (your child's care activity data)</td>
+          <td>
+            Consumer health data (your child's care activity data, including sickness,
+            medication, and vaccine entries)
+          </td>
           <td>YES</td>
         </tr>
       </tbody>
@@ -599,8 +617,8 @@ const privacyEmail = EMAILS.privacy;
     </em>
   </p>
   <p>
-    We treat the care activity data logged in Handsful (feeding, sleep, diaper, growth, and
-    pediatrician visit notes) as "consumer health data" under the Washington My Health My Data
+    We treat the care activity data logged in Handsful (feeding, sleep, diaper, growth, sickness,
+    medication, vaccine, and pediatrician visit notes) as "consumer health data" under the Washington My Health My Data
     Act. In addition to the rights described elsewhere in this Notice, Washington residents have
     the right to:
   </p>
