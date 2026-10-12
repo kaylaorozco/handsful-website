@@ -122,8 +122,8 @@ emphasis:
 
 | Visitor | Badges |
 | --- | --- |
-| iPhone / iPad | App Store badge first; Google Play below it under "Also available on Android" |
-| Android | Google Play badge first; App Store below it under "Also available on iPhone and iPad" |
+| iPhone / iPad | App Store badge first, Google Play directly below it |
+| Android | Google Play badge first, App Store directly below it |
 | Desktop / unknown / no JavaScript | Both side by side with equal weight |
 
 The emphasis is order only. Both badges keep their official artwork at the same
