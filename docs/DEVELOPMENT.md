@@ -48,7 +48,7 @@ src/
   layouts/           ← BaseLayout (SEO/meta), LegalLayout
   components/        ← header, footer, email signup form, store badges
   sections/          ← homepage sections in page order
-  pages/             ← routes (/, legal pages, /waitlist-* signup status pages, /api/subscribe)
+  pages/             ← routes (/, legal pages, /waitlist-* signup status pages, /card QR redirect, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
   assets/            ← bundled assets: store badges, hero photo
 brand/               ← source brand assets + style guide (not served)
@@ -100,6 +100,47 @@ a badge expects isn't there, the hero renders a plain brand button with the
 same words and `npm run build` prints a warning — see the notes in
 `src/components/StoreBadges.astro` and the checklist in
 [`LAUNCH-CHECKLIST.md`](LAUNCH-CHECKLIST.md).
+
+## Business-card QR route (`/card`)
+
+The QR code printed on the business cards encodes **`https://handsful.app/card`**
+and must never change — it is the permanent destination for every card in
+circulation. What a scan does is decided by `src/pages/card.astro`.
+
+**Current campaign: the 14-day free trial the app already offers.** There is no
+extra discount, offer code or redemption step; `/card` sends people to the normal
+store listings and the trial starts in the app as it does for everyone.
+
+| Visitor | What happens |
+| --- | --- |
+| iPhone / iPad | "Opening Handsful…" then a redirect to `CARD.iosUrl` (the App Store listing) |
+| Android | "Opening Handsful…" then a redirect to `CARD.androidUrl` (the Google Play listing) |
+| Desktop / unknown / no JavaScript | No redirect — a small fallback page: "Try Handsful free for 14 days.", both store badges, "No payment required to start." and a link to handsful.app |
+
+**To repurpose the route for a future campaign**, edit `CARD` in `src/config.ts`
+and merge to `main` — the printed QR code stays the same. `CARD.iosUrl` and
+`CARD.androidUrl` are configurable campaign destinations (any https URL, including
+a page on this site); `CARD.headline`, `CARD.lead` and `CARD.note` are the fallback
+page's copy. Anything beyond that (a different layout, different redirect rules)
+is a change to `src/pages/card.astro`.
+
+- The redirect happens once per tab. Coming back to `/card` (Back button, reload)
+  shows the badges instead of redirecting again.
+- UTM parameters on the QR URL (`/card?utm_source=business_card&utm_medium=qr&utm_campaign=launch`)
+  are picked up by GA's page view as usual. While `CARD.androidUrl` is a Play listing
+  URL they are also passed to Google Play as its `referrer`, defaulting to
+  `utm_source=business_card&utm_medium=qr`, so card installs appear in Play Console's
+  acquisition reports. Other destinations are used exactly as written.
+- GA events, all with `source: business_card` and `platform`: `business_card_visit`,
+  one of `business_card_ios` / `business_card_android` / `business_card_desktop`, and
+  `business_card_store_click` (with `store` and `destination`).
+- **GA only sees visitors who have accepted the cookie banner** (see below), and a
+  first-time scan redirects before anyone could. Expect GA to undercount phone scans
+  heavily; the store-side numbers (Play referrer, an App Store Connect campaign link
+  in `CARD.iosUrl`) are the reliable count. Visitors who have accepted are held for
+  at most 700 ms so the events can send; everyone else redirects immediately.
+- The page is `noindex`, left out of the sitemap, and rendered without the site
+  header and footer (`bare` on `BaseLayout`).
 
 ## Analytics & cookie consent
 

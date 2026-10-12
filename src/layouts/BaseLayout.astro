@@ -21,6 +21,9 @@ interface Props {
   noindex?: boolean;
   /** JSON-LD objects to emit for this page. */
   structuredData?: object[];
+  /** Drop the site header and footer — for utility pages (/card) that are a
+      stop on the way somewhere else rather than part of the site. */
+  bare?: boolean;
 }
 
 const {
@@ -28,6 +31,7 @@ const {
   description = SITE.description,
   noindex = false,
   structuredData = [],
+  bare = false,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -91,11 +95,11 @@ const ogImageURL = new URL(SITE.ogImage, Astro.site);
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <Header />
+    {!bare && <Header />}
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    {!bare && <Footer />}
     <CookieConsentBanner />
     <script>
       // The header and footer wordmarks scroll the current page back to the
