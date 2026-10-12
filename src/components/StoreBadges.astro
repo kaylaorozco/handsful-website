@@ -31,9 +31,17 @@ import { CTA, CTA_LABEL } from '../config';
 interface Props {
   /** Styles the no-artwork fallback button for its background. */
   variant?: 'on-gradient' | 'on-solid';
+  /** Link targets, when a page sends people somewhere other than the
+      site-wide store listings (/card's configurable destinations). */
+  appStoreUrl?: string;
+  playStoreUrl?: string;
 }
 
-const { variant = 'on-solid' } = Astro.props;
+const {
+  variant = 'on-solid',
+  appStoreUrl = CTA.appStoreUrl,
+  playStoreUrl = CTA.playStoreUrl,
+} = Astro.props;
 
 /** Apple's artwork per badge state; the wording comes from CTA_LABEL. */
 const APPLE_FILES = {
@@ -60,14 +68,14 @@ const appleFile = APPLE_FILES[CTA.appleBadge];
 const appleArt = art(appleFile);
 const playArt = art(PLAY.file);
 
-if (CTA.appStoreUrl && !appleArt) {
+if (appStoreUrl && !appleArt) {
   console.warn(
     `[store-badges] src/assets/badges/${appleFile} is missing — falling back to a plain ` +
       `button. Download the official "${CTA_LABEL.long}" badge from ` +
       `https://toolbox.marketingtools.apple.com/en/us/app-store.`,
   );
 }
-if (CTA.playStoreUrl && !playArt) {
+if (playStoreUrl && !playArt) {
   console.warn(
     `[store-badges] src/assets/badges/${PLAY.file} is missing — the Play badge is hidden. ` +
       `Download the official artwork from https://play.google.com/intl/en_us/badges/.`,
@@ -77,9 +85,9 @@ if (CTA.playStoreUrl && !playArt) {
 
 <div class="store-badges">
   {
-    CTA.appStoreUrl &&
+    appStoreUrl &&
       (appleArt ? (
-        <a href={CTA.appStoreUrl} class="store-badges__link">
+        <a href={appStoreUrl} class="store-badges__link" data-store="ios">
           <img
             src={appleArt.src}
             alt={`${CTA_LABEL.long} — Handsful`}
@@ -90,7 +98,8 @@ if (CTA.playStoreUrl && !playArt) {
         </a>
       ) : (
         <a
-          href={CTA.appStoreUrl}
+          href={appStoreUrl}
+          data-store="ios"
           class={`btn ${variant === 'on-gradient' ? 'btn--solid' : 'btn--primary'}`}
         >
           {CTA_LABEL.long}
@@ -98,9 +107,9 @@ if (CTA.playStoreUrl && !playArt) {
       ))
   }
   {
-    CTA.playStoreUrl &&
+    playStoreUrl &&
       playArt && (
-        <a href={CTA.playStoreUrl} class="store-badges__link">
+        <a href={playStoreUrl} class="store-badges__link" data-store="android">
           <img
             src={playArt.src}
             alt={PLAY.label}

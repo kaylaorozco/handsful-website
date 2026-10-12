@@ -84,10 +84,13 @@ export default defineConfig({
       // The /waitlist-* pages stay excluded permanently — they're only
       // reachable from the double opt-in email link (/waitlist-confirmed) or
       // /api/subscribe's no-JS 303 redirects (-thanks, -error), and all are
-      // noindex'd.
+      // noindex'd. /card is the business-card QR redirect — also noindex'd.
       filter: (page) => {
         const path = new URL(page).pathname.replace(/\/$/, '');
-        return !['/privacy', '/cookies', '/terms'].includes(path) && !path.startsWith('/waitlist-');
+        return (
+          !['/privacy', '/cookies', '/terms', '/card'].includes(path) &&
+          !path.startsWith('/waitlist-')
+        );
       },
     }),
   ],
