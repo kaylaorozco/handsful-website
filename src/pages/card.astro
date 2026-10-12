@@ -174,33 +174,17 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
     margin-top: var(--space-2);
   }
   /* On a phone or tablet the visitor's own store leads: its badge first, the
-     other store's below a short caption. Both badges keep their official
-     artwork at the same size — neither store allows its badge to be dimmed,
-     recoloured or shown smaller than the other — so the emphasis is order
-     alone. Desktop, unknown devices and no-JS visitors get the two side by
-     side with equal weight. */
+     other store's directly below. Both badges keep their official artwork at
+     the same size — neither store allows its badge to be dimmed, recoloured
+     or shown smaller than the other — so the emphasis is order alone.
+     Desktop, unknown devices and no-JS visitors get the two side by side
+     with equal weight. */
   .card[data-platform='ios'] :global(.store-badges),
   .card[data-platform='android'] :global(.store-badges) {
     flex-direction: column;
-    gap: var(--space-3);
   }
-  .card[data-platform='ios'] :global(.store-badges::before),
-  .card[data-platform='android'] :global(.store-badges::before) {
-    order: 1;
-    margin-top: var(--space-2);
-    color: var(--taupe-dark);
-    font-size: 14px;
-    line-height: 20px;
-  }
-  .card[data-platform='ios'] :global(.store-badges::before) {
-    content: 'Also available on Android';
-  }
-  .card[data-platform='android'] :global(.store-badges::before) {
-    content: 'Also available on iPhone and iPad';
-  }
-  .card[data-platform='ios'] :global(a[data-store='android']),
   .card[data-platform='android'] :global(a[data-store='ios']) {
-    order: 2;
+    order: 1;
   }
   .card__note {
     color: var(--taupe-dark);
