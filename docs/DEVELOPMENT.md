@@ -48,7 +48,7 @@ src/
   layouts/           ← BaseLayout (SEO/meta), LegalLayout
   components/        ← header, footer, email signup form, store badges
   sections/          ← homepage sections in page order
-  pages/             ← routes (/, legal pages, /waitlist-* signup status pages, /card QR redirect, /api/subscribe)
+  pages/             ← routes (/, legal pages, /waitlist-* signup status pages, /card QR landing page, /api/subscribe)
   styles/global.css  ← brand tokens from brand/style-guide.html
   assets/            ← bundled assets: store badges, hero photo
 brand/               ← source brand assets + style guide (not served)
@@ -105,27 +105,38 @@ same words and `npm run build` prints a warning — see the notes in
 
 The QR code printed on the business cards encodes **`https://handsful.app/card`**
 and must never change — it is the permanent destination for every card in
-circulation. What a scan does is decided by `src/pages/card.astro`.
+circulation. What a scan shows is decided by `src/pages/card.astro`.
+
+**`/card` is a landing page on every device.** Everyone who scans stays on the
+page and sees the campaign's message and both store badges, then chooses a
+store. It does not redirect anyone automatically, on iPhone, Android or desktop.
 
 **Current campaign: the 14-day free trial the app already offers.** There is no
-extra discount, offer code or redemption step; `/card` sends people to the normal
-store listings and the trial starts in the app as it does for everyone.
+extra discount, offer code or redemption step; the badges link to the normal
+store listings and the trial starts in the app as it does for everyone. The page
+reads "Try Handsful free for 14 days.", a line about what the app tracks, both
+badges, "No payment required to start." and a link to handsful.app.
 
-| Visitor | What happens |
+Both store badges are always visible. The detected platform only changes the
+emphasis:
+
+| Visitor | Badges |
 | --- | --- |
-| iPhone / iPad | "Opening Handsful…" then a redirect to `CARD.iosUrl` (the App Store listing) |
-| Android | "Opening Handsful…" then a redirect to `CARD.androidUrl` (the Google Play listing) |
-| Desktop / unknown / no JavaScript | No redirect — a small fallback page: "Try Handsful free for 14 days.", both store badges, "No payment required to start." and a link to handsful.app |
+| iPhone / iPad | App Store badge first; Google Play below it under "Also available on Android" |
+| Android | Google Play badge first; App Store below it under "Also available on iPhone and iPad" |
+| Desktop / unknown / no JavaScript | Both side by side with equal weight |
+
+The emphasis is order only. Both badges keep their official artwork at the same
+size, because neither store allows its badge to be dimmed, recoloured or shown
+smaller than the other store's.
 
 **To repurpose the route for a future campaign**, edit `CARD` in `src/config.ts`
 and merge to `main` — the printed QR code stays the same. `CARD.iosUrl` and
 `CARD.androidUrl` are configurable campaign destinations (any https URL, including
-a page on this site); `CARD.headline`, `CARD.lead` and `CARD.note` are the fallback
-page's copy. Anything beyond that (a different layout, different redirect rules)
+a page on this site); `CARD.headline`, `CARD.lead` and `CARD.note` are the page's
+copy. Anything beyond that (a different layout, sending some visitors elsewhere)
 is a change to `src/pages/card.astro`.
 
-- The redirect happens once per tab. Coming back to `/card` (Back button, reload)
-  shows the badges instead of redirecting again.
 - UTM parameters on the QR URL (`/card?utm_source=business_card&utm_medium=qr&utm_campaign=launch`)
   are picked up by GA's page view as usual. While `CARD.androidUrl` is a Play listing
   URL they are also passed to Google Play as its `referrer`, defaulting to
@@ -134,11 +145,12 @@ is a change to `src/pages/card.astro`.
 - GA events, all with `source: business_card` and `platform`: `business_card_visit`,
   one of `business_card_ios` / `business_card_android` / `business_card_desktop`, and
   `business_card_store_click` (with `store` and `destination`).
-- **GA only sees visitors who have accepted the cookie banner** (see below), and a
-  first-time scan redirects before anyone could. Expect GA to undercount phone scans
-  heavily; the store-side numbers (Play referrer, an App Store Connect campaign link
-  in `CARD.iosUrl`) are the reliable count. Visitors who have accepted are held for
-  at most 700 ms so the events can send; everyone else redirects immediately.
+- **GA only sees visitors who have accepted the cookie banner** (see below). Events
+  raised before a visitor accepts are held and sent if they accept while still on
+  the page; otherwise they are never sent. Because nobody is redirected away, a
+  visitor now has time to answer the banner, but GA will still undercount scans.
+  The store-side numbers (Play referrer, an App Store Connect campaign link in
+  `CARD.iosUrl`) are the reliable count.
 - The page is `noindex`, left out of the sitemap, and rendered without the site
   header and footer (`bare` on `BaseLayout`).
 

@@ -4,6 +4,7 @@ import { defineConfig, envField } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 import { loadEnv } from 'vite';
+import { CARD_PLATFORM_SRC } from './src/card-platform.ts';
 import { CONSENT_BOOTSTRAP_SRC } from './src/consent.ts';
 import { gaConsentSnippet } from './src/ga-snippet.ts';
 
@@ -33,14 +34,16 @@ export default defineConfig({
   trailingSlash: 'never',
   experimental: {
     // Hash-based CSP: Astro hashes every script/style it processes itself;
-    // the two is:inline scripts it can't see (consent bootstrap, GA snippet)
-    // are rendered from exported strings and hashed here from those same
-    // strings, so script and hash cannot drift apart.
+    // the is:inline scripts it can't see (consent bootstrap, GA snippet,
+    // /card's platform detection) are rendered from exported strings and
+    // hashed here from those same strings, so script and hash cannot drift
+    // apart.
     csp: {
       scriptDirective: {
         resources: ["'self'", ...(gaId ? ['https://www.googletagmanager.com'] : [])],
         hashes: [
           cspHash(CONSENT_BOOTSTRAP_SRC),
+          cspHash(CARD_PLATFORM_SRC),
           ...(gaId ? [cspHash(gaConsentSnippet(gaId))] : []),
         ],
       },
@@ -84,7 +87,7 @@ export default defineConfig({
       // The /waitlist-* pages stay excluded permanently — they're only
       // reachable from the double opt-in email link (/waitlist-confirmed) or
       // /api/subscribe's no-JS 303 redirects (-thanks, -error), and all are
-      // noindex'd. /card is the business-card QR redirect — also noindex'd.
+      // noindex'd. /card is the business-card QR landing page — also noindex'd.
       filter: (page) => {
         const path = new URL(page).pathname.replace(/\/$/, '');
         return (

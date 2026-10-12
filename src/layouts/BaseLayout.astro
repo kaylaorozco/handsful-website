@@ -21,8 +21,8 @@ interface Props {
   noindex?: boolean;
   /** JSON-LD objects to emit for this page. */
   structuredData?: object[];
-  /** Drop the site header and footer — for utility pages (/card) that are a
-      stop on the way somewhere else rather than part of the site. */
+  /** Drop the site header and footer — for standalone pages (/card) that
+      people arrive at from outside rather than by browsing the site. */
   bare?: boolean;
 }
 

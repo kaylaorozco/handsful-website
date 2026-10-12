@@ -2,27 +2,28 @@
 /**
  * /card — the permanent URL behind the QR code printed on the business cards.
  *
- * The QR code encodes https://handsful.app/card and never changes. Where a
- * scan ends up is decided here, from `CARD` in src/config.ts:
- *   iPhone / iPad  → CARD.iosUrl
- *   Android        → CARD.androidUrl
- *   anything else  → no redirect; this page, with both store badges
+ * The QR code encodes https://handsful.app/card and never changes. This page
+ * is the campaign landing page for everyone who scans it, on every device:
+ * the campaign's message, then both store badges. Nobody is redirected — the
+ * visitor reads the offer and chooses a store.
  *
  * The current campaign promotes the app's existing 14-day free trial, so the
- * destinations are the normal store listings. A later campaign changes the
- * destinations and copy in `CARD` (or this page) — never the printed QR.
+ * badges link to the normal store listings. A later campaign changes the copy
+ * and destinations in `CARD` (src/config.ts), or this page — never the
+ * printed QR.
  *
- * The HTML as served IS the desktop page, so it works with no JavaScript at
- * all. On a phone the script below swaps it for "Opening Handsful…" and
- * redirects, leaving a button behind in case the browser doesn't follow.
+ * The HTML as served is the whole page and works with no JavaScript at all.
+ * The scripts only add emphasis (the visitor's own store first) and
+ * analytics.
  *
- * A QR stop, not a landing page: noindex'd, excluded from the sitemap (see
- * astro.config.mjs), and rendered without the site header and footer.
+ * Kept apart from the rest of the site: noindex'd, excluded from the sitemap
+ * (see astro.config.mjs), and rendered without the site header and footer.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StoreBadges from '../components/StoreBadges.astro';
 import Wordmark from '../components/Wordmark.astro';
 import { CARD, SITE } from '../config';
+import { CARD_PLATFORM_SRC } from '../card-platform';
 import { CONSENT_GRANTED_EVENT } from '../consent';
 ---
 
@@ -32,30 +33,21 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
   noindex={true}
   bare={true}
 >
-  <section
-    class="card"
-    data-card
-    data-ios-url={CARD.iosUrl}
-    data-android-url={CARD.androidUrl}
-    data-consent-event={CONSENT_GRANTED_EVENT}
-  >
+  <section class="card" data-card data-consent-event={CONSENT_GRANTED_EVENT}>
+    <!-- Sets data-platform on this section before the content below is laid
+         out. Rendered verbatim from CARD_PLATFORM_SRC, which astro.config.mjs
+         hashes into the CSP — so it must not be transformed here. -->
+    <script is:inline set:html={CARD_PLATFORM_SRC} />
     <div class="container--narrow card__inner">
       <a href="/" class="card__logo" aria-label="Handsful home">
         <Wordmark />
       </a>
 
-      <div class="card__view" data-card-chooser>
+      <div class="card__view">
         <h1>{CARD.headline}</h1>
         <p class="card__lead">{CARD.lead}</p>
         <StoreBadges appStoreUrl={CARD.iosUrl} playStoreUrl={CARD.androidUrl} />
         <p class="card__note">{CARD.note}</p>
-      </div>
-
-      <div class="card__view" data-card-opening hidden>
-        <h1>Opening Handsful…</h1>
-        <a class="btn btn--primary" href="/" data-card-fallback>
-          Tap here if you’re not redirected
-        </a>
       </div>
 
       <a href="/" class="card__home">Visit handsful.app</a>
@@ -65,27 +57,10 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
 
 <script>
   // No imports, on purpose: a self-contained script this small is inlined
-  // into the page by Astro (and hashed into the CSP), so a phone starts
-  // redirecting without waiting on a second request. Values it needs from
-  // the rest of the site arrive as data attributes on [data-card].
+  // into the page by Astro (and hashed into the CSP), so it runs without
+  // waiting on a second request. Values it needs from the rest of the site
+  // arrive as data attributes on [data-card].
   type Platform = 'ios' | 'android' | 'desktop';
-
-  /** Set just before the automatic redirect, so coming back to this page in
-      the same tab (Back button, reload) shows the badges instead of bouncing
-      the visitor straight out again. */
-  const REDIRECTED_KEY = 'handsful_card_redirected';
-  /** Longest the redirect waits for GA to confirm its events. Only applies to
-      visitors who have already accepted analytics; everyone else goes at once. */
-  const ANALYTICS_WAIT_MS = 700;
-
-  function detectPlatform(): Platform {
-    const ua = navigator.userAgent;
-    if (/android/i.test(ua)) return 'android';
-    if (/iPhone|iPad|iPod/.test(ua)) return 'ios';
-    // iPadOS Safari calls itself a Mac; a touchscreen gives it away.
-    if (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1) return 'ios';
-    return 'desktop';
-  }
 
   /** The scan's UTM parameters (handsful.app/card?utm_source=…), with the
       business-card defaults filled in for a bare /card. */
@@ -123,13 +98,12 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
   // Analytics.astro). Events raised before that wait here and are sent if
   // they accept on this page; otherwise they are never sent.
   const queued: Array<() => void> = [];
-  function track(name: string, params: Record<string, string>, done?: () => void) {
+  function track(name: string, params: Record<string, string>) {
     const send = () =>
       window.gtag?.('event', name, {
         source: 'business_card',
         ...params,
         transport_type: 'beacon',
-        ...(done ? { event_callback: done } : {}),
       });
     if (window.gtag) send();
     else queued.push(send);
@@ -142,83 +116,23 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
       setTimeout(() => queued.splice(0).forEach((send) => send())),
     );
 
-    const platform = detectPlatform();
-    const destinations = {
-      ios: withCampaign(root.dataset.iosUrl ?? ''),
-      android: withCampaign(root.dataset.androidUrl ?? ''),
-    };
+    // Set by the inline script at the top of the section (card-platform.ts),
+    // which the styles below use to put the visitor's own store first.
+    const platform = (root.dataset.platform ?? 'desktop') as Platform;
 
     root.querySelectorAll<HTMLAnchorElement>('a[data-store]').forEach((link) => {
-      const store = link.dataset.store as 'ios' | 'android';
-      link.href = destinations[store] || link.href;
+      link.href = withCampaign(link.href);
       link.addEventListener('click', () =>
-        track('business_card_store_click', { platform, store, destination: link.href }),
+        track('business_card_store_click', {
+          platform,
+          store: link.dataset.store ?? '',
+          destination: link.href,
+        }),
       );
     });
 
-    const destination = platform === 'desktop' ? '' : destinations[platform];
-
-    let alreadyRedirected = false;
-    let canRemember = true;
-    try {
-      alreadyRedirected = sessionStorage.getItem(REDIRECTED_KEY) === '1';
-    } catch {
-      canRemember = false;
-    }
-
-    if (!destination || alreadyRedirected) {
-      // Desktop, an unset destination, or a return visit: the page as served.
-      if (!alreadyRedirected) {
-        track('business_card_visit', { platform });
-        track('business_card_desktop', { platform });
-      }
-    } else {
-      const chooser = root.querySelector<HTMLElement>('[data-card-chooser]');
-      const opening = root.querySelector<HTMLElement>('[data-card-opening]');
-      const fallback = root.querySelector<HTMLAnchorElement>('[data-card-fallback]');
-      if (fallback) {
-        fallback.href = destination;
-        fallback.addEventListener('click', () =>
-          track('business_card_store_click', { platform, store: platform, destination }),
-        );
-      }
-      if (chooser && opening) {
-        chooser.hidden = true;
-        opening.hidden = false;
-      }
-
-      let gone = false;
-      const go = () => {
-        if (gone) return;
-        gone = true;
-        try {
-          sessionStorage.setItem(REDIRECTED_KEY, '1');
-        } catch {
-          canRemember = false;
-        }
-        // Without storage there is nothing to stop a Back press redirecting
-        // again, so keep this page out of history instead.
-        if (canRemember) location.assign(destination);
-        else location.replace(destination);
-      };
-
-      if (window.gtag) {
-        track('business_card_visit', { platform });
-        track(`business_card_${platform}`, { platform, destination }, go);
-        setTimeout(go, ANALYTICS_WAIT_MS);
-      } else {
-        go();
-      }
-
-      // Restored from the back/forward cache: scripts don't re-run, so swap
-      // "Opening…" for the badges here.
-      window.addEventListener('pageshow', (event) => {
-        if (event.persisted && chooser && opening) {
-          opening.hidden = true;
-          chooser.hidden = false;
-        }
-      });
-    }
+    track('business_card_visit', { platform });
+    track(`business_card_${platform}`, { platform });
   }
 </script>
 
@@ -243,7 +157,7 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
   .card__logo :global(.wordmark) {
     height: 48px;
   }
-  .card__view:not([hidden]) {
+  .card__view {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -258,6 +172,35 @@ import { CONSENT_GRANTED_EVENT } from '../consent';
   .card__view :global(.store-badges) {
     justify-content: center;
     margin-top: var(--space-2);
+  }
+  /* On a phone or tablet the visitor's own store leads: its badge first, the
+     other store's below a short caption. Both badges keep their official
+     artwork at the same size — neither store allows its badge to be dimmed,
+     recoloured or shown smaller than the other — so the emphasis is order
+     alone. Desktop, unknown devices and no-JS visitors get the two side by
+     side with equal weight. */
+  .card[data-platform='ios'] :global(.store-badges),
+  .card[data-platform='android'] :global(.store-badges) {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .card[data-platform='ios'] :global(.store-badges::before),
+  .card[data-platform='android'] :global(.store-badges::before) {
+    order: 1;
+    margin-top: var(--space-2);
+    color: var(--taupe-dark);
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .card[data-platform='ios'] :global(.store-badges::before) {
+    content: 'Also available on Android';
+  }
+  .card[data-platform='android'] :global(.store-badges::before) {
+    content: 'Also available on iPhone and iPad';
+  }
+  .card[data-platform='ios'] :global(a[data-store='android']),
+  .card[data-platform='android'] :global(a[data-store='ios']) {
+    order: 2;
   }
   .card__note {
     color: var(--taupe-dark);
