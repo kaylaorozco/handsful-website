@@ -64,22 +64,23 @@ export const CTA = {
 } as const;
 
 /**
- * Where https://handsful.app/card sends people — the URL encoded in the QR
- * code on the printed business cards (src/pages/card.astro) — and what the
- * page says to anyone it doesn't redirect. The QR code never changes; this is
- * the place to edit when the campaign does. Change it, merge to main, and
- * every card already in someone's wallet follows along.
+ * The campaign behind https://handsful.app/card — the URL encoded in the QR
+ * code on the printed business cards (src/pages/card.astro). /card is a
+ * landing page on every device: this copy, then both store badges. The QR
+ * code never changes; this is the place to edit when the campaign does.
+ * Change it, merge to main, and every card already in someone's wallet
+ * follows along.
  *
  * The current campaign promotes the 14-day free trial the app already offers,
  * so both destinations are the normal store listings.
  *
- *   iosUrl / androidUrl — configurable campaign destinations: where iPhone /
- *     iPad and Android visitors are redirected, and where the two store
- *     badges link. Any https URL works, including a page on this site. To
- *     count card installs in App Store Connect, iosUrl can be a campaign link
- *     (the listing URL plus ?pt=…&ct=business_card&mt=8).
- *   headline / lead / note — the copy on the page desktop visitors (and
- *     anyone the redirect doesn't carry off) see above the store badges.
+ *   iosUrl / androidUrl — configurable campaign destinations: where the App
+ *     Store and Google Play badges on /card link. Any https URL works,
+ *     including a page on this site. To count card installs in App Store
+ *     Connect, iosUrl can be a campaign link (the listing URL plus
+ *     ?pt=…&ct=business_card&mt=8).
+ *   headline / lead / note — the page's copy: headline and lead above the
+ *     badges, note below them.
  *
  * While androidUrl is a Play listing URL (/store/apps/details), /card appends
  * the visit's UTM parameters to it as Play's `referrer`, so card installs show
