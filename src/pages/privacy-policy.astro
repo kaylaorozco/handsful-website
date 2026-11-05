@@ -47,7 +47,7 @@ const privacyEmail = EMAILS.privacy;
   title="Privacy Policy"
   description="How Handsful collects, uses, and protects your family's data."
   placeholder={false}
-  lastUpdated="October 3, 2026"
+  lastUpdated="November 4, 2026"
 >
   <p>
     This Privacy Notice for MESQUITE &amp; THORN DIGITAL, LLC (doing business as Handsful)
@@ -212,12 +212,49 @@ const privacyEmail = EMAILS.privacy;
     <a href="#social-logins">Section 7</a>.
   </p>
   <p>
-    <strong>Application Data.</strong> If you use the app, we may collect, with your permission,
-    information from your mobile device such as device identifiers, model, operating system and
-    version, and information about how you use app features. This is used to maintain security,
-    troubleshoot issues, and for internal analytics. If the app crashes, we collect crash and
-    diagnostic data through Firebase Crashlytics, associated with your account, to identify and
-    fix the problem.
+    <strong>Application Data.</strong> If you use the app, we may collect information from your
+    mobile device such as model, operating system and version, and information about how you use
+    app features. This is used to maintain security, troubleshoot issues, and for internal
+    analytics. See <a href="#app-analytics">App analytics</a> below for what the app collects
+    through Google Analytics for Firebase. If the app crashes, we collect crash and diagnostic
+    data through Firebase Crashlytics, associated with your account, to identify and fix the
+    problem.
+  </p>
+
+  <h3 id="app-analytics">App analytics (Google Analytics for Firebase)</h3>
+  <p class="in-short">
+    <em>
+      In Short: The app uses Google Analytics for Firebase to measure basic usage. No baby, log,
+      or health data is sent to it.
+    </em>
+  </p>
+  <p>
+    The Handsful app uses Google Analytics for Firebase, a service provided by Google, to
+    understand how the app is used. It collects:
+  </p>
+  <ul>
+    <li>an app-instance ID (a random identifier created when the app is installed)</li>
+    <li>on Android, the device's Android ID</li>
+    <li>device model</li>
+    <li>operating system version and app version</li>
+    <li>device language</li>
+    <li>approximate country, based on your IP address</li>
+    <li>sessions and the first time the app is opened</li>
+    <li>in-app purchase events</li>
+    <li>screen views</li>
+  </ul>
+  <p>
+    We do not send any baby, log, or health data to Google Analytics. This includes your
+    children's names and dates of birth, care entries, notes, and Insights summaries. The app
+    does not send any custom analytics events.
+  </p>
+  <p>
+    This is separate from the Google Analytics used on our website, described in
+    <a href="#cookies-and-tracking">Section 6</a>. The website's cookie banner does not apply to
+    the app.
+  </p>
+  <p>
+    We added this section on November 4, 2026 to describe analytics the app already used.
   </p>
 
   <h3>Information automatically collected</h3>
@@ -441,6 +478,13 @@ const privacyEmail = EMAILS.privacy;
           <td>Firebase Crashlytics (Google)</td>
         </tr>
         <tr>
+          <td>App usage analytics</td>
+          <td>
+            Google Analytics for Firebase (Google). Receives no baby, log, or health data; see
+            <a href="#app-analytics">"App analytics"</a> in Section 1
+          </td>
+        </tr>
+        <tr>
           <td>AI-generated summaries ("Insights")</td>
           <td>
             Anthropic, PBC (Claude API). Receives care activity data, including health entries,
@@ -477,9 +521,11 @@ const privacyEmail = EMAILS.privacy;
   </p>
   <p>
     We use essential cookies to operate the website. With your consent, given through our cookie
-    banner, we also use Google Analytics to understand website usage. GA4 does not collect or
-    process any information from within the app itself, and never processes your child's care
-    data.
+    banner, we also use Google Analytics (GA4) to understand website usage. Website GA4 does not
+    collect information from within the app and never processes your child's care data. The app
+    uses a separate service, Google Analytics for Firebase, which is not controlled by the
+    website's cookie banner. See <a href="#app-analytics">"App analytics"</a> in Section 1 for
+    what it collects.
   </p>
   <p>
     You can withdraw consent to analytics cookies at any time through the cookie preferences link
@@ -573,7 +619,7 @@ const privacyEmail = EMAILS.privacy;
       <tbody>
         <tr>
           <td>A. Identifiers</td>
-          <td>Name, email, IP address, account name</td>
+          <td>Name, email, IP address, account name, app-instance ID</td>
           <td>YES</td>
         </tr>
         <tr>
@@ -583,7 +629,9 @@ const privacyEmail = EMAILS.privacy;
         </tr>
         <tr>
           <td>F. Internet/network activity</td>
-          <td>Website browsing and interaction data</td>
+          <td>
+            Website browsing and interaction data, and app usage data (sessions, screen views)
+          </td>
           <td>YES</td>
         </tr>
         <tr>
@@ -661,9 +709,11 @@ const privacyEmail = EMAILS.privacy;
       in operating, securing, and maintaining the Service.
     </li>
     <li>
-      Analytics data (such as Google Analytics events): your consent, which you may withdraw at
-      any time via our cookie preferences.
+      Website analytics data (such as Google Analytics events): your consent, which you may
+      withdraw at any time via our cookie preferences.
     </li>
+    {/* No legal basis is stated yet for in-app analytics (Google Analytics for
+        Firebase). Pending the decision in mesquite-thorn/handsful-app#90. */}
     <li>
       Account and app data: performance of our contract with you (providing the Service you
       signed up for).

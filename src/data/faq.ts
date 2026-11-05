@@ -57,6 +57,6 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'Is my babies’ data private?',
     answer:
-      'Your family’s data belongs to your family. Handsful uses it to power your tracking and sharing between the caregivers you invite — never to sell. Full details will be in our Privacy Policy before launch.',
+      'Your family’s data belongs to your family. Handsful uses it to power your tracking and sharing between the caregivers you invite, and never sells it. Full details are in our Privacy Policy at handsful.app/privacy-policy.',
   },
 ];
