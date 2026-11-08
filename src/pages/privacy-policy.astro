@@ -47,7 +47,7 @@ const privacyEmail = EMAILS.privacy;
   title="Privacy Policy"
   description="How Handsful collects, uses, and protects your family's data."
   placeholder={false}
-  lastUpdated="November 4, 2026"
+  lastUpdated="November 7, 2026"
 >
   <p>
     This Privacy Notice for MESQUITE &amp; THORN DIGITAL, LLC (doing business as Handsful)
@@ -234,7 +234,6 @@ const privacyEmail = EMAILS.privacy;
   </p>
   <ul>
     <li>an app-instance ID (a random identifier created when the app is installed)</li>
-    <li>on Android, the device's Android ID</li>
     <li>device model</li>
     <li>operating system version and app version</li>
     <li>device language</li>
@@ -252,6 +251,13 @@ const privacyEmail = EMAILS.privacy;
     This is separate from the Google Analytics used on our website, described in
     <a href="#cookies-and-tracking">Section 6</a>. The website's cookie banner does not apply to
     the app.
+  </p>
+  <p>
+    App analytics data is not used for advertising. We have turned off Google signals and ad
+    personalization, we do not link the app to any Google advertising products, and we do not
+    share analytics data with Google for its own purposes. Analytics events are kept for 2 months
+    and then deleted automatically. They are tied to a random app-instance ID, not to your
+    account.
   </p>
   <p>
     We added this section on November 4, 2026 to describe analytics the app already used.
@@ -312,8 +318,9 @@ const privacyEmail = EMAILS.privacy;
       restricted from using it for any purpose other than providing services to us.
     </li>
     <li>
-      You may delete individual entries or your full account's data at any time from within the
-      app. See <a href="#review-update-delete">Section 19</a>.
+      You may delete individual entries at any time from within the app, and you can delete your
+      account from the app's settings. See <a href="#review-update-delete">Section 19</a> for
+      how account deletion works.
     </li>
   </ul>
   <p>
@@ -549,9 +556,12 @@ const privacyEmail = EMAILS.privacy;
   </p>
   <p>
     We retain personal information, including care activity data, for as long as your account is
-    active. When you delete your account, we delete or anonymize your data, except where retention
-    is required for legal, tax, or fraud-prevention purposes, or where data exists in backup
-    archives, in which case we isolate it from further processing until deletion is possible.
+    active. When you delete your account, we work to remove your data from our systems and our
+    service providers' systems within 30 days, as described in
+    <a href="#review-update-delete">Section 19</a>, except where retention is required for legal,
+    tax, or fraud-prevention purposes, or where data exists in backup archives, in which case we
+    isolate it from further processing until deletion is possible. Analytics events are kept for
+    2 months regardless of account status.
     Insights summaries are an exception with a shorter life: they are automatically deleted 8
     weeks after they are generated, as described in <a href="#insights">Section 3</a>.
   </p>
@@ -587,9 +597,9 @@ const privacyEmail = EMAILS.privacy;
   <p>
     You may withdraw consent, opt out of marketing communications, and review, update, or delete
     your account information at any time. See
-    <a href="#review-update-delete">Section 19</a> for how to exercise these rights. Sensitive
-    consumer health data can be deleted at the individual entry level or in bulk via account
-    deletion within the app.
+    <a href="#review-update-delete">Section 19</a> for how to exercise these rights. You can
+    delete individual entries, including sensitive consumer health data, at any time within the
+    app, and you can delete your account from the app's settings.
   </p>
 
   <h2 id="do-not-track">12. Controls for Do-Not-Track features</h2>
@@ -802,16 +812,23 @@ const privacyEmail = EMAILS.privacy;
     19. How can you review, update, or delete the data we collect from you?
   </h2>
   <p>
-    You may delete your account and all associated data directly in the app's settings. You may
-    also request access to, correction of, or deletion of your personal information, including
-    your child's care activity data, by contacting
+    You can delete individual entries at any time from within the app, and you can delete your
+    account from the app's settings. You may also request access to, correction of, or deletion
+    of your personal information, including your child's care activity data, by contacting
     <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>.
   </p>
   <p>
-    We complete verified deletion requests promptly, and in any event within 30 days: your data
-    is removed from our production systems when your account is deleted, and from our service
-    providers' systems and backups within the 30-day window, except where a specific retention
-    exception described in <a href="#how-long-do-we-keep-your-information">Section 8</a> applies.
+    When you delete your account, we work to remove your account data from our systems and our
+    service providers' systems within 30 days, except where a retention exception described in
+    <a href="#how-long-do-we-keep-your-information">Section 8</a> applies. If you would like
+    confirmation that your data has been deleted, or you believe some of it remains, email us at
+    <a href={`mailto:${privacyEmail}`}>{privacyEmail}</a>. Once we verify your request, we will
+    complete the deletion within 30 days of receiving it.
+  </p>
+  <p>
+    Analytics events are the exception. They are tied to a random app-instance ID rather than to
+    your account, so deleting your account does not remove them. They expire automatically after
+    2 months.
   </p>
 </LegalLayout>
 
